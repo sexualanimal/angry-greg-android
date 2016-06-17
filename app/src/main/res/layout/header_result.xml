@@ -1,0 +1,13 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:padding="@dimen/spacing_small"
+              android:layout_height="match_parent">
+    <TextView
+            android:id="@+id/right_answers_percent"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_large"
+            android:layout_height="wrap_content"/>
+</LinearLayout>
