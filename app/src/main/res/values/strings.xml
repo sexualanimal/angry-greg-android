@@ -39,6 +39,9 @@
         ]]>
     </string>
 
+
+    <string name="users">Users</string>
+
     <string name="ready">Готово</string>
     <string name="next">Следующий</string>
     <string name="back">Назад</string>
@@ -47,4 +50,6 @@
     <string name="login_phone">Phone Number</string>
     <string name="login_password">Password</string>
     <string name="login_continue">Continue</string>
+    <string name="nopoints">no points</string>
+    <string name="points">%d points</string>
 </resources>

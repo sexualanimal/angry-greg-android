@@ -1,7 +1,8 @@
 package com.persilab.angrygregapp.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.*;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;

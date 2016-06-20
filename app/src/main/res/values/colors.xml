@@ -15,9 +15,9 @@
 -->
 <resources>
     <!-- Theme colors -->
-    <color name="primary">@android:color/holo_blue_light</color>
-    <color name="primary_dark">@android:color/holo_blue_dark</color>
-    <color name="accent">@color/light_blue</color>
+    <color name="primary">@android:color/holo_red_light</color>
+    <color name="primary_dark">@android:color/holo_red_dark</color>
+    <color name="accent">@android:color/holo_red_light</color>
 
     <color name="abc_search_url_text_normal">#7fa87f</color>
     <color name="abc_search_url_text_selected">@android:color/black</color>

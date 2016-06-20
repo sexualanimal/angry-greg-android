@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="users">Пользователи</string>
+
+    <string name="login_phone">Номер телефона</string>
+    <string name="login_password">Пароль</string>
+    <string name="login_continue">Продолжить</string>
+    <string name="nopoints">Нет баллов</string>
+    <string name="points">баллы - %d</string>
+</resources>

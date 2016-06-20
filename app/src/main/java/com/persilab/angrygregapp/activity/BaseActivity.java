@@ -21,16 +21,14 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.persilab.angrygregapp.R;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import com.persilab.angrygregapp.database.DatabaseHelper;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.event.Event;
 import com.persilab.angrygregapp.domain.event.FragmentAttachedEvent;
 import com.persilab.angrygregapp.util.FragmentBuilder;
 import com.persilab.angrygregapp.util.GuiUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -51,7 +49,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     @Bind(R.id.main_border)
     protected View mainBorder;
 
-    protected DatabaseHelper databaseHelper = null;
     protected ActionBar actionBar;
     protected ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -142,24 +139,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     }
 
     @Override
-    public void onPause() {
-        if (databaseHelper != null) {
-            OpenHelperManager.releaseHelper();
-            databaseHelper = null;
-        }
-        super.onPause();
-    }
-
-
-    public DatabaseHelper getDatabaseHelper() {
-        if (databaseHelper == null || !databaseHelper.isOpen()) {
-            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
-        }
-        return databaseHelper;
-    }
-
-
-    @Override
     public void onBackPressed() {
         Fragment fr = getCurrentFragment();
         if (fr instanceof BackCallback) {
@@ -197,24 +176,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     @Subscribe
     public abstract void onEvent(FragmentAttachedEvent fragmentAttached);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-       /* getMenuInflater().inflate(R.menu.main, menu);
-        MenuItem searchItem = menu.findItem(R.id.search);
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
-        SearchView searchView = null;
-        if (searchItem != null) {
-            searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-            // searchView.setOnQueryTextListener(this);
-            // MenuItemCompat.setOnActionExpandListener(searchItem, this);
-        }
-        if (searchView != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        } */
-        return super.onCreateOptionsMenu(menu);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

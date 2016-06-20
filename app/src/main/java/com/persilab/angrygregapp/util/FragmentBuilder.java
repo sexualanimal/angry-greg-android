@@ -11,9 +11,10 @@ import android.view.View;
 import com.google.gson.internal.Primitives;
 import com.persilab.angrygregapp.fragments.ErrorFragment;
 
-
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by 0shad on 13.07.2015.

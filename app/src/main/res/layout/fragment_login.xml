@@ -9,7 +9,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_huge"
-            android:src="@drawable/photo2"
+            android:src="@drawable/logo"
             android:id="@+id/login_logo"/>
 
     <LinearLayout

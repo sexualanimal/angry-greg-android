@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.activity.MainActivity;
 
@@ -42,7 +43,7 @@ public class LoginFragment extends BaseFragment {
     @Override
     public void onStop() {
         ((MainActivity) getActivity()).getSupportActionBar().show();
-        ((MainActivity) getActivity()).getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+        ((MainActivity) getActivity()).getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         super.onStop();
     }
 
@@ -51,9 +52,12 @@ public class LoginFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
         bind(rootView);
+        ButterKnife.bind(this, rootView);
         return rootView;
     }
 
-
-
+    @OnClick(R.id.login_continue)
+    public void onClick() {
+        ((MainActivity) getActivity()).replaceFragment(UserListFragment.class);
+    }
 }

@@ -213,7 +213,7 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
         pastVisibleItems = 0;
         isEnd = false;
         if (adapter != null) {
-            adapter.getItems().clear();
+            adapter.clear();
             adapter.notifyDataSetChanged();
         }
     }

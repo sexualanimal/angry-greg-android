@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.ButterKnife;
-import org.greenrobot.eventbus.EventBus;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.activity.BaseActivity;
 import com.persilab.angrygregapp.domain.Constants;
@@ -18,6 +17,9 @@ import com.persilab.angrygregapp.domain.event.Event;
 import com.persilab.angrygregapp.domain.event.FragmentAttachedEvent;
 import com.persilab.angrygregapp.util.FragmentBuilder;
 import com.persilab.angrygregapp.util.GuiUtils;
+import org.greenrobot.eventbus.EventBus;
+
+import java.lang.reflect.Field;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -36,8 +38,8 @@ public class BaseFragment extends Fragment implements BaseActivity.BackCallback 
     }
 
     // Базовые методы
-    protected static <F extends BaseFragment> F show(FragmentBuilder builder, @IdRes int container, Class<F> fragmentClass, String key, Object obj) {
-        return builder.putArg(key, obj).newFragment().replaceFragment(container, fragmentClass);
+    protected static <F extends BaseFragment> F show(FragmentBuilder builder, @IdRes int container, Class<F> fragmentClass) {
+        return builder.newFragment().replaceFragment(container, fragmentClass);
     }
 
     protected static <F extends BaseFragment> F show(FragmentManager manager, @IdRes int container, Class<F> fragmentClass, String key, Object obj) {
@@ -48,9 +50,13 @@ public class BaseFragment extends Fragment implements BaseActivity.BackCallback 
         return new FragmentBuilder(fragment.getFragmentManager()).newFragment().addToBackStack().putArg(key, obj).replaceFragment(fragment, fragmentClass);
     }
 
-    // Подобными методами должны вызыватся наследуемые фрагменты
-    protected static BaseFragment show(FragmentBuilder builder, @IdRes int container, String message) {
-        return show(builder, container, BaseFragment.class, Constants.ArgsName.MESSAGE, message);
+    protected static <F extends BaseFragment> F show(BaseFragment fragment, Class<F> fragmentClass) {
+        return new FragmentBuilder(fragment.getFragmentManager()).newFragment().addToBackStack().replaceFragment(fragment, fragmentClass);
+    }
+
+    // Подобными методами должны вызыватся наследуемые фрагмент(их нужно реализовывать для кажного фрагмента заново)
+    protected static BaseFragment show(FragmentBuilder builder, @IdRes int container) {
+        return show(builder, container, BaseFragment.class);
     }
 
     protected static BaseFragment show(FragmentManager manager, @IdRes int container, String message) {
@@ -82,10 +88,9 @@ public class BaseFragment extends Fragment implements BaseActivity.BackCallback 
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_base, container, false);
-        ButterKnife.bind(this, rootView);
+        bind(rootView);
         String message = getArguments().getString(Constants.ArgsName.MESSAGE, "В разработке...");
         GuiUtils.setText(rootView.findViewById(R.id.test_message), message);
         return rootView;
@@ -127,5 +132,19 @@ public class BaseFragment extends Fragment implements BaseActivity.BackCallback 
         unbind();
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        // Android support bug https://code.google.com/p/android/issues/detail?id=42601
+        try {
+            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+            childFragmentManager.setAccessible(true);
+            childFragmentManager.set(this, null);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

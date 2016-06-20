@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.persilab.angrygregapp.util.GuiUtils;
 
-
 import java.util.*;
 
 /**

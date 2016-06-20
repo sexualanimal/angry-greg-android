@@ -8,7 +8,6 @@ import android.util.SparseArray;
 import android.view.ViewGroup;
 import com.persilab.angrygregapp.fragments.BaseFragment;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

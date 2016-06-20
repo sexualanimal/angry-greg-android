@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="horizontal"
+              android:layout_marginTop="@dimen/spacing_small"
+              android:layout_marginLeft="@dimen/spacing_small"
+              android:layout_marginRight="@dimen/spacing_small"
+              android:layout_width="match_parent"
+              android:layout_height="66dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:src="@drawable/photo2"
+            android:id="@+id/item_user_photo"
+            app:civ_border_width="2dp"
+            app:civ_border_color="#FFFAFA"/>
+    <LinearLayout android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:orientation="vertical"
+                  android:layout_marginLeft="@dimen/text_nano"
+                  android:gravity="center_vertical"
+                  android:layout_height="match_parent">
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="Anonymous"
+                  android:maxLines="1"
+                  android:textColor="@color/black"
+                android:textSize="@dimen/text_super_small"
+                android:id="@+id/item_user_name"/>
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@string/nopoints"
+                  android:textColor="@color/gray"
+                  android:textStyle="bold"
+                  android:textSize="@dimen/text_large"
+                  android:id="@+id/item_user_points"/>
+    </LinearLayout>
+</LinearLayout>

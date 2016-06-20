@@ -3,6 +3,7 @@ package com.persilab.angrygregapp.util;
 import android.annotation.SuppressLint;
 import android.util.Log;
 import org.intellij.lang.annotations.RegExp;
+
 import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;

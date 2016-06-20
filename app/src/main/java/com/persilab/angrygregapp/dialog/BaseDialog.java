@@ -5,9 +5,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import butterknife.ButterKnife;
-import org.greenrobot.eventbus.EventBus;
 import com.persilab.angrygregapp.domain.event.Event;
 import com.persilab.angrygregapp.util.FragmentBuilder;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by Dmitry on 20.10.2015.

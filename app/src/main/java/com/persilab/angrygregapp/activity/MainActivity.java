@@ -1,22 +1,24 @@
 package com.persilab.angrygregapp.activity;
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import com.persilab.angrygregapp.fragments.LoginFragment;
-import org.greenrobot.eventbus.Subscribe;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.database.SuggestionProvider;
-import com.persilab.angrygregapp.domain.event.FragmentAttachedEvent;
 import com.persilab.angrygregapp.domain.Constants;
-import com.persilab.angrygregapp.fragments.BaseFragment;
-import com.persilab.angrygregapp.fragments.DirectoryChooserFragment;
+import com.persilab.angrygregapp.domain.event.FragmentAttachedEvent;
+import com.persilab.angrygregapp.fragments.LoginFragment;
+import org.greenrobot.eventbus.Subscribe;
 
 
 public class MainActivity extends BaseActivity {
@@ -47,6 +49,26 @@ public class MainActivity extends BaseActivity {
             suggestions.saveRecentQuery(query, null);
            // SearchFragment.show(getCurrentFragment(), query); // Implement SearchFragment
         }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        MenuItem searchItem = menu.findItem(R.id.search);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+        SearchView searchView = null;
+        if (searchItem != null) {
+            searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+            // searchView.setOnQueryTextListener(this);
+            // MenuItemCompat.setOnActionExpandListener(searchItem, this);
+        }
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        }
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

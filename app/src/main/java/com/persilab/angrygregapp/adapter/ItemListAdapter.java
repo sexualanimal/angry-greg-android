@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.persilab.angrygregapp.domain.Findable;
 import com.persilab.angrygregapp.util.GuiUtils;
 
-
 import java.util.*;
 
 /**
@@ -91,6 +90,11 @@ public abstract class ItemListAdapter<I> extends RecyclerView.Adapter<ItemListAd
 
     public List<I> getItems() {
         return this.items;
+    }
+
+    public void clear() {
+        originalItems = null;
+        items.clear();
     }
 
     public List<I> getOriginalItems() {
