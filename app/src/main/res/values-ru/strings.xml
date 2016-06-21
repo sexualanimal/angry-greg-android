@@ -8,4 +8,17 @@
     <string name="login_continue">Продолжить</string>
     <string name="nopoints">Нет баллов</string>
     <string name="points">баллы - %d</string>
+    <string name="city">Город</string>
+    <string name="address">Адрес</string>
+    <string name="name">ФИО</string>
+    <string name="gender">Пол</string>
+    <string name="male">М</string>
+    <string name="female">Ж</string>
+    <string name="birthdate_pattern">%1$02d-%2$02d-%3$04d</string>
+    <string name="birthdate">Дата Рождения</string>
+    <string name="save">Сохранить</string>
+    <string name="profile_save_success">Профиль обновлен!</string>
+    <string name="email">Email</string>
+    <string name="phone_number">Нормер телефона</string>
+    <string name="share">Поделится</string>
 </resources>

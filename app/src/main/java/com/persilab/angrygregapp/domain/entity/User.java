@@ -33,11 +33,15 @@ public class User implements Serializable, Findable {
     public User() {
         SystemClock.sleep(100);
         name = "Ivanov Ivan " + (System.currentTimeMillis() - point);
-        phone = "+79998883232";
+        Random random = new Random(System.currentTimeMillis());
+        phone = "+7";
+        for (int i = 0; i < 10; i++) {
+            phone += random.nextInt(10);
+        }
         Calendar calendar = Calendar.getInstance();
         calendar.roll(Calendar.YEAR, -18);
         birthDate = calendar.getTime();
-        rate = new Random(point).nextInt(11);
+        rate = random.nextInt(11);
     }
 
     @Override

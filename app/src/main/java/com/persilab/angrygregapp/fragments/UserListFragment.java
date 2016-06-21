@@ -79,5 +79,11 @@ public class UserListFragment extends ListFragment<User>{
                 GuiUtils.setText(root, R.id.item_user_points, R.string.points, item.getRate());
             }
         }
+
+        @Override
+        public boolean onClick(View view, @Nullable User item) {
+            UserFragment.show(UserListFragment.this, item);
+            return true;
+        }
     }
 }

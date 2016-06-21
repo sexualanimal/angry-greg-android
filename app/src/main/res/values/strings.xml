@@ -41,6 +41,8 @@
 
 
     <string name="users">Users</string>
+    <string name="user">User</string>
+
 
     <string name="ready">Готово</string>
     <string name="next">Следующий</string>
@@ -52,4 +54,20 @@
     <string name="login_continue">Continue</string>
     <string name="nopoints">no points</string>
     <string name="points">%d points</string>
+    <string name="city">City</string>
+    <string name="address">Address</string>
+    <string name="name">Name</string>
+    <string name="gender">Gender</string>
+    <string name="male">M</string>
+    <string name="female">F</string>
+    <string name="birthdate_pattern">%1$02d-%2$02d-%3$04d</string>
+    <string name="birthdate">Birthdate</string>
+    <string name="save">Save</string>
+    <string name="profile_save_success">Profile saved!</string>
+    <string name="email">Email</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="share">Share</string>
+    <string name="user_show_qr">Show this QR-code to collect points</string>
+    <string name="user_full">You can get free coffee!</string>
+    <string name="user_points">You have %1$d points, %2$d left to get free coffee</string>
 </resources>

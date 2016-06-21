@@ -21,6 +21,7 @@ public class Constants {
         public static final String INDEX = "index";
         public static final String TITLE = "title";
         public static final String MESSAGE = "message";
+        public static final String USER = "user";
         public static final String RESOURCE_ID = "resource_id";
         public static final String CONFIG_CHANGE = "config_change";
     }
