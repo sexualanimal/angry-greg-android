@@ -123,6 +123,7 @@ dependencies {
     compile "uk.co.chrisjenx:calligraphy:2.1.0"
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.github.whinc:ratingbar:1.1.1'
+    compile 'com.github.dmytrodanylyk.shadow-layout:library:1.0.3'
 
     // Code sugar and annotations
     compile "com.annimon:stream:1.0.2"

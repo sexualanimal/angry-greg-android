@@ -82,7 +82,11 @@ public class UserListFragment extends ListFragment<User>{
 
         @Override
         public boolean onClick(View view, @Nullable User item) {
-            UserFragment.show(UserListFragment.this, item);
+            if(item.getRate() == 10) {
+                FreeCoffeeFragment.show(UserListFragment.this);
+            } else {
+                UserFragment.show(UserListFragment.this, item);
+            }
             return true;
         }
     }
