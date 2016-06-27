@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:orientation="vertical"
+            android:fillViewport="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    <LinearLayout android:orientation="vertical"
+                  android:gravity="center_horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+        <LinearLayout android:orientation="vertical"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+            <android.support.percent.PercentRelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <ImageView android:id="@+id/edit_user_tick"
+                           android:layout_width="match_parent"
+                           android:src="@drawable/tick_yes"
+                           android:layout_centerHorizontal="true"
+                           android:scaleType="centerCrop"
+                           android:adjustViewBounds="true"
+                           android:layout_height="wrap_content"
+                           app:layout_widthPercent="70%"
+                           app:layout_aspectRatio="100%"/>
+            </android.support.percent.PercentRelativeLayout>
+        </LinearLayout>
+
+
+        <LinearLayout android:orientation="vertical"
+                      android:layout_width="match_parent"
+                      android:layout_marginRight="@dimen/spacing_medium"
+                      android:layout_marginLeft="@dimen/spacing_medium"
+                      android:layout_marginTop="@dimen/spacing_medium"
+                      android:gravity="center_horizontal"
+                      android:layout_height="wrap_content">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:gravity="center"
+                      android:textSize="@dimen/text_large"
+                      android:text="@string/edit_user_points"
+                      android:id="@+id/edit_user_points"/>
+            <com.whinc.widget.ratingbar.RatingBar
+                    android:id="@+id/edit_user_rating"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_margin="0dp"
+                    app:rb_max_count="10"
+                    app:rb_count="0"
+                    app:rb_empty="@drawable/gray_star"
+                    app:rb_fill="@drawable/red_star"
+                    app:rb_space="0dp"
+                    app:rb_click_rating="false"
+                    app:rb_touch_rating="false"/>
+
+            <android.support.v7.widget.CardView android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:clickable="true"
+                                                app:cardUseCompatPadding="true"
+                                                app:cardPreventCornerOverlap="true"
+                                                app:cardCornerRadius="6dip"
+                                                app:cardElevation="4dip">
+                <TextView android:id="@+id/edit_user_add"
+                          android:layout_width="200dp"
+                          android:layout_height="50dp"
+                          android:text="Add points"
+                          android:clickable="true"
+                          android:background="@drawable/rounded_blue_button"
+                          style="@style/button"/>
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

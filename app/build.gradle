@@ -24,7 +24,7 @@ ext {
     buildToolsProjectVersion = '23.0.2'
     supportLibraryVersion = '23.1.1'
     versionProjectCode = 1
-    versionProjectName = "0.0.2"
+    versionProjectName = "0.0.4"
     baseScheme = 'http'
     baseHost = 's1.vshost.info:5002/'
     betaDistributionEmails = "kl@persilab.com"
@@ -144,7 +144,8 @@ dependencies {
     compile "com.evernote:android-job:1.0.3"
     compile 'net.vrallev.android:cat:1.0.3'
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'com.github.kenglxn.QRGen:android:2.1.0'
+    compile 'com.github.kenglxn.QRGen:android:2.2.0'
+    compile 'me.dm7.barcodescanner:zxing:1.8.4'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.7@aar') {
         transitive = true;
     }

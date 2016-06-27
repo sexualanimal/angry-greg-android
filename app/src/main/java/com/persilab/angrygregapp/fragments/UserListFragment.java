@@ -3,9 +3,11 @@ package com.persilab.angrygregapp.fragments;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.persilab.angrygregapp.R;
@@ -26,6 +28,7 @@ import java.util.List;
  */
 public class UserListFragment extends ListFragment<User>{
 
+    FloatingActionButton button;
 
     private List<User> users = new ArrayList<>();
 
@@ -40,7 +43,16 @@ public class UserListFragment extends ListFragment<User>{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().setTitle(R.string.users);
-        return super.onCreateView(inflater, container, savedInstanceState);
+        RelativeLayout root = (RelativeLayout) super.onCreateView(inflater, container, savedInstanceState);
+        button = (FloatingActionButton) inflater.inflate(R.layout.list_floating_button, root, false);
+        root.addView(button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                QRScannerFragment.show(UserListFragment.this);
+            }
+        });
+        return  root;
     }
 
     @Override

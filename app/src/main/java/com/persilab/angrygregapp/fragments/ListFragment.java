@@ -10,6 +10,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.*;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import com.persilab.angrygregapp.R;
@@ -62,6 +63,7 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
     protected MoveTask moveToIndex;
     protected FilterEvent lastSearchQuery;
     protected boolean enableFiltering = false;
+    protected boolean enableScrollbar = true;
     protected long lastFilteringTime = 0;
 
     public ListFragment() {
@@ -354,7 +356,7 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
                 }
             }
         });
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && enableScrollbar) {
             scroller = (VerticalRecyclerViewFastScroller) rootView.findViewById(R.id.fast_scroller);
             scroller.setRecyclerView(itemList);
             GuiUtils.fadeOut(scroller, 0, 100);
@@ -367,6 +369,8 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
                     GuiUtils.fadeOut(scroller, 2000, 1000);
                 }
             });
+        } else {
+            ((RelativeLayout)rootView).removeView(rootView.findViewById(R.id.fast_scroller));
         }
         if (adapter != null) {
            firstLoad(true);
