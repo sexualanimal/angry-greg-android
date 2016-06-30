@@ -26,7 +26,7 @@ public class QRScannerFragment extends BaseFragment implements ZXingScannerView.
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.empty, menu);
+        menu.clear();
     }
 
     @Override

@@ -22,7 +22,6 @@ import org.greenrobot.eventbus.Subscribe;
  */
 public class EditUserFragment extends BaseFragment {
 
-
     @Bind(R.id.edit_user_add)
     TextView editUserAdd;
 
@@ -41,7 +40,7 @@ public class EditUserFragment extends BaseFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.empty, menu);
+        menu.clear();
     }
 
 

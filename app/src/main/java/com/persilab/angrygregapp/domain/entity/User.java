@@ -1,6 +1,7 @@
 package com.persilab.angrygregapp.domain.entity;
 
 import android.os.SystemClock;
+import com.persilab.angrygregapp.adapter.ItemListAdapter;
 import com.persilab.angrygregapp.domain.Findable;
 
 import com.persilab.angrygregapp.fragments.ListFragment;
@@ -27,6 +28,7 @@ public class User implements Serializable, Findable {
     String id;
     String name;
     String phone;
+    String password;
     Date birthDate;
     Integer rate;
 
@@ -45,11 +47,7 @@ public class User implements Serializable, Findable {
     }
 
     @Override
-    public boolean find(Object query) {
-        if(query instanceof ListFragment.FilterEvent) {
-            ListFragment.FilterEvent event = (ListFragment.FilterEvent) query;
-            return name.toLowerCase().contains(event.query.toString().toLowerCase());
-        }
-        return false;
+    public boolean find(ItemListAdapter.FilterEvent event) {
+        return name.toLowerCase().contains(event.query.toLowerCase()) || phone.toLowerCase().contains(event.query.toLowerCase());
     }
 }

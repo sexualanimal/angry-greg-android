@@ -9,19 +9,18 @@ import java.math.BigDecimal;
  */
 public class BigDecimalConverter implements Converter<BigDecimal, String>{
 
-
     @Override
-    public Class<BigDecimal> mappedType() {
+    public Class<BigDecimal> getMappedType() {
         return BigDecimal.class;
     }
 
     @Override
-    public Class<String> persistedType() {
+    public Class<String> getPersistedType() {
         return String.class;
     }
 
     @Override
-    public Integer persistedSize() {
+    public Integer getPersistedSize() {
         return null;
     }
 
