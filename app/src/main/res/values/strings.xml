@@ -50,10 +50,14 @@
     <string name="back_to_exit">Нажмите назад для выхода</string>
     <string name="choose_file">Выберите Файл</string>
     <string name="login_phone">Phone Number</string>
+    <string name="login_phone_error">Need phone</string>
     <string name="login_password">Password</string>
+    <string name="login_password_error">Need password</string>
     <string name="login_continue">Continue</string>
+    <string name="login_wrong">Wrong phone or password!</string>
     <string name="nopoints">no points</string>
     <string name="points">%d points</string>
+    <string name="points_cups">%1$d points, %2$d cups</string>
     <string name="city">City</string>
     <string name="address">Address</string>
     <string name="name">Name</string>
@@ -70,7 +74,9 @@
     <string name="user_show_qr">Show this QR-code to collect points</string>
     <string name="user_full">You can get free coffee!</string>
     <string name="user_points">You have %1$d points, %2$d left to get free coffee</string>
+    <string name="user_points_and_cups">You have %1$d points and %2$d cups of coffee, %3$d left to get free coffee</string>
     <string name="edit_user_points">Current points %d</string>
+    <string name="edit_user_points_and_cups">Current points %1$d and %2$d cups of coffee</string>
     <string name="qr_scanner_camera_not_found">Camera not found</string>
     <string name="qr_scanner_qr_not_found">QR not found</string>
 </resources>

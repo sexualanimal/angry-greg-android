@@ -14,8 +14,10 @@ import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.adapter.ItemListAdapter;
 import com.persilab.angrygregapp.adapter.LazyItemListAdapter;
 import com.persilab.angrygregapp.domain.entity.User;
+import com.persilab.angrygregapp.job.TokenUpdateJob;
 import com.persilab.angrygregapp.lister.DataSource;
 import com.persilab.angrygregapp.lister.ListDataSource;
+import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.GuiUtils;
 
 import java.io.IOException;
@@ -66,12 +68,24 @@ public class UserListFragment extends ListFragment<User>{
             @Override
             public List<User> getItems(int skip, int size) throws IOException {
                 if(users.isEmpty()) {
+                     users = RestClient
+                             .serviceApi()
+                             .accounts(TokenUpdateJob.getToken().getAccessToken(), null, null).execute().body();
+
+                }
+                return Stream.of(users).skip(skip).limit(size).collect(Collectors.toList());
+            }
+
+
+           /* @Override
+            public List<User> getItems(int skip, int size) throws IOException {
+                if(users.isEmpty()) {
                     for (int i = 0; i < 60; i++) {
                         users.add(new User());
                     }
                 }
                 return Stream.of(users).skip(skip).limit(size).collect(Collectors.toList());
-            }
+            } */
         };
     }
 
@@ -85,16 +99,18 @@ public class UserListFragment extends ListFragment<User>{
         public void onBindHolder(ViewHolder holder, @Nullable User item) {
             ViewGroup root = (ViewGroup) holder.getItemView();
             GuiUtils.setText(root, R.id.item_user_name, item.getName());
-            if(item.getRate() == 0) {
+            if(item.getAmountOfPoints() == 0) {
                 GuiUtils.setText(root, R.id.item_user_points, R.string.nopoints, 0);
+            } else if(item.getAmountOfFreeCoffe() == 0) {
+                GuiUtils.setText(root, R.id.item_user_points, R.string.points, item.getAmountOfPoints());
             } else {
-                GuiUtils.setText(root, R.id.item_user_points, R.string.points, item.getRate());
+                GuiUtils.setText(root, R.id.item_user_points, R.string.points_cups, item.getAmountOfPoints(), item.getAmountOfFreeCoffe());
             }
         }
 
         @Override
         public boolean onClick(View view, @Nullable User item) {
-            if(item.getRate() == 10) {
+            if(item.getAmountOfFreeCoffe() == 1) {
                 FreeCoffeeFragment.show(UserListFragment.this);
             } else {
                 UserFragment.show(UserListFragment.this, item);

@@ -70,4 +70,11 @@
               android:layout_marginTop="@dimen/spacing_large"
               android:layout_marginBottom="@dimen/spacing_large"
               android:layout_height="wrap_content"/>
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:id="@+id/login_message"
+              android:visibility="gone"
+              android:textColor="@color/red_dark"
+            android:text="@string/login_wrong"/>
 </LinearLayout>

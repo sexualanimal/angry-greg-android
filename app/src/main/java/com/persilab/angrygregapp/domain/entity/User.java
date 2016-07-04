@@ -30,7 +30,8 @@ public class User implements Serializable, Findable {
     String phone;
     String password;
     Date birthDate;
-    Integer rate;
+    Integer amountOfFreeCoffe;
+    Integer amountOfPoints;
 
     public User() {
         SystemClock.sleep(100);
@@ -43,7 +44,7 @@ public class User implements Serializable, Findable {
         Calendar calendar = Calendar.getInstance();
         calendar.roll(Calendar.YEAR, -18);
         birthDate = calendar.getTime();
-        rate = random.nextInt(11);
+        amountOfPoints = random.nextInt(11);
     }
 
     @Override

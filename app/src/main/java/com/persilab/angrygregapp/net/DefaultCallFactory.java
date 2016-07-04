@@ -1,16 +1,13 @@
 package com.persilab.angrygregapp.net;
 
-import com.persilab.shoppingbox.util.ReflectionUtils;
+
+import com.persilab.angrygregapp.util.ReflectionUtils;
 import retrofit2.CallAdapter;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.concurrent.Executor;
 
 /**
  * Created by 0shad on 28.02.2016.

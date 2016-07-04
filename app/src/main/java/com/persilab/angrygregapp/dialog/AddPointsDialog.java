@@ -13,25 +13,32 @@ import butterknife.ButterKnife;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.event.AddRateEvent;
+import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.GuiUtils;
 
 
 /**
  * Created by 0shad on 18.03.2016.
  */
-public class PickerDialog extends BaseDialog {
+public class AddPointsDialog extends BaseDialog {
 
+    private String userId;
 
-    public static void show(FragmentManager fragmentManager) {
-        PickerDialog dialog = (PickerDialog) fragmentManager.findFragmentByTag(PickerDialog.class.getSimpleName());
+    public static void show(FragmentManager fragmentManager, User user) {
+        AddPointsDialog dialog = (AddPointsDialog) fragmentManager.findFragmentByTag(AddPointsDialog.class.getSimpleName());
         if (dialog == null) {
-            dialog = new PickerDialog();
-            dialog.show(fragmentManager, PickerDialog.class.getSimpleName());
+            dialog = new AddPointsDialog();
+            dialog.setUserId(user.getId());
+            dialog.show(fragmentManager, AddPointsDialog.class.getSimpleName());
         }
     }
 
     @Bind(R.id.dialog_picker_numberPicker)
     NumberPicker numberPicker;
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     @NonNull
     @Override
@@ -51,7 +58,7 @@ public class PickerDialog extends BaseDialog {
 
     @Override
     public void onButtonPositive(DialogInterface dialog) {
-        postEvent(new AddRateEvent(numberPicker.getValue()));
+        RestClient.serviceApi().addPoints(userId, numberPicker.getValue()).enqueue();
     }
 
 }

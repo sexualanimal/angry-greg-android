@@ -600,32 +600,26 @@ public class GuiUtils {
         }
     }
 
-    public static String setText(View textView, @StringRes int format, Object... args) {
-        return setText(textView, Locale.getDefault(), format, args);
-    }
-
-    public static String setText(View textView, Locale locale, @StringRes int format, Object... args) {
+    public static String setText(TextView textView, Locale locale, @StringRes int format, Object... args) {
         if (textView != null) {
             if (args != null) {
-                if (textView instanceof TextView) {
-                    String formatted = String.format(locale, textView.getContext().getString(format), args);
-                    DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
-                    if (decimalSeparator != null) {
-                        formatted = formatted.replace(String.valueOf(symbols.getDecimalSeparator()), decimalSeparator);
-                    }
-                    if (thousandSeparator != null) {
-                        Pattern pattern = Pattern.compile("\\d{3}(?=\\d)");
-                        Matcher digitsMatcher = pattern.matcher(formatted);
-                        StringBuffer buffer = new StringBuffer();
-                        while (digitsMatcher.find()) {
-                            digitsMatcher.appendReplacement(buffer, digitsMatcher.group() + thousandSeparator);
-                        }
-                        digitsMatcher.appendTail(buffer);
-                        formatted = buffer.toString();
-                    }
-                    ((TextView) textView).setText(formatted);
-                    return formatted;
+                String formatted = String.format(locale, textView.getContext().getString(format), args);
+                DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
+                if (decimalSeparator != null) {
+                    formatted = formatted.replace(String.valueOf(symbols.getDecimalSeparator()), decimalSeparator);
                 }
+                if (thousandSeparator != null) {
+                    Pattern pattern = Pattern.compile("\\d{3}(?=\\d)");
+                    Matcher digitsMatcher = pattern.matcher(formatted);
+                    StringBuffer buffer = new StringBuffer();
+                    while (digitsMatcher.find()) {
+                        digitsMatcher.appendReplacement(buffer, digitsMatcher.group() + thousandSeparator);
+                    }
+                    digitsMatcher.appendTail(buffer);
+                    formatted = buffer.toString();
+                }
+                ((TextView) textView).setText(formatted);
+                return formatted;
             }
         }
         return null;
@@ -634,13 +628,17 @@ public class GuiUtils {
     public static String setText(ViewGroup root, @IdRes int textViewId, @StringRes int format, Object... args) {
         TextView textView = getView(root, textViewId);
         if (textView != null) {
-            return setText(textView, format, args);
+            if (args.length == 1) {
+                return setText(textView, format, new Object[]{args[0]});
+            } else {
+                return setText(textView, format, args);
+            }
         }
         return null;
     }
 
-    public static String setText(ViewGroup root, @IdRes int textViewId, @StringRes int format, Object arg) {
-        return setText(root, textViewId, format, new Object[]{arg});
+    public static String setText(TextView textView, @StringRes int format, Object... args) {
+        return setText(textView, Locale.getDefault(), format, args);
     }
 
     public static void setVisibility(int code, View... views) {

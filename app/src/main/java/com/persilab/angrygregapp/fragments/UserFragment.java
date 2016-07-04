@@ -49,9 +49,14 @@ public class UserFragment extends BaseFragment {
             int offColor = Color.TRANSPARENT;
             int onColor = Color.BLACK;
             int width = GuiUtils.getScreenSize(getContext()).y;
-            cardQr.setImageBitmap(QRCode.from(user.getPhone()).withCharset("UTF-8").withColor(onColor, offColor).withSize(width, width).bitmap());
-            ratingBar.setCount(user.getRate());
-            GuiUtils.setText(userPoints, R.string.user_points, user.getRate(), ratingBar.getMaxCount());
+            cardQr.setImageBitmap(QRCode.from(user.getId()).withCharset("UTF-8").withColor(onColor, offColor).withSize(width, width).bitmap());
+            if(user.getAmountOfFreeCoffe() == 0)  {
+                GuiUtils.setText(userPoints, R.string.user_points, user.getAmountOfPoints(), ratingBar.getMaxCount());
+            } else {
+                GuiUtils.setText(userPoints, R.string.user_points_and_cups, user.getAmountOfPoints(), user.getAmountOfFreeCoffe(), ratingBar.getMaxCount());
+            }
+            ratingBar.setCount(user.getAmountOfPoints());
+
         }
 
         return rootView;

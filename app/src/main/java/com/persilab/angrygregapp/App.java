@@ -3,9 +3,11 @@ package com.persilab.angrygregapp;
 import android.app.Application;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
+import com.evernote.android.job.JobManager;
 import com.persilab.angrygregapp.database.BigDecimalConverter;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.Models;
+import com.persilab.angrygregapp.job.AppJobCreator;
 import io.fabric.sdk.android.Fabric;
 import io.requery.Persistable;
 import io.requery.android.DefaultMapping;
@@ -45,6 +47,7 @@ public class App extends Application {
                 .setDefaultFontPath(Constants.Assets.ROBOTO_FONT_PATH)
                 .setFontAttrId(R.attr.fontPath)
                 .build());
+        JobManager.create(this).addJobCreator(new AppJobCreator());
     }
 
     @Override

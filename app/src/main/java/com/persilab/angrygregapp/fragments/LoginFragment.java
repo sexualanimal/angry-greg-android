@@ -1,6 +1,7 @@
 package com.persilab.angrygregapp.fragments;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,16 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.activity.MainActivity;
+import com.persilab.angrygregapp.domain.entity.User;
+import com.persilab.angrygregapp.domain.event.NetworkEvent;
+import com.persilab.angrygregapp.domain.event.ResponseEvent;
+import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
+import com.persilab.angrygregapp.job.TokenUpdateJob;
+import com.persilab.angrygregapp.net.RestClient;
+import com.persilab.angrygregapp.util.GuiUtils;
+import com.persilab.angrygregapp.util.TextUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by 0shad on 17.06.2016.
@@ -27,15 +38,13 @@ public class LoginFragment extends BaseFragment {
     EditText loginPassword;
     @Bind(R.id.login_continue)
     TextView loginContinue;
-
-
-    public LoginFragment() {
-        super();
-    }
+    @Bind(R.id.login_message)
+    TextView loginMessage;
 
     @Override
     public void onStart() {
         super.onStart();
+        EventBus.getDefault().register(this);
         ((MainActivity) getActivity()).getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         ((MainActivity) getActivity()).getSupportActionBar().hide();
     }
@@ -44,6 +53,7 @@ public class LoginFragment extends BaseFragment {
     public void onStop() {
         ((MainActivity) getActivity()).getSupportActionBar().show();
         ((MainActivity) getActivity()).getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        EventBus.getDefault().unregister(this);
         super.onStop();
     }
 
@@ -53,11 +63,35 @@ public class LoginFragment extends BaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
         bind(rootView);
         ButterKnife.bind(this, rootView);
+        if (TokenUpdateJob.getToken() != null && TokenUpdateJob.getUser() != null) {
+            ((MainActivity) getActivity()).replaceFragment(UserListFragment.class);
+        }
         return rootView;
     }
 
     @OnClick(R.id.login_continue)
     public void onClick() {
-        ((MainActivity) getActivity()).replaceFragment(UserListFragment.class);
+        User user = new User();
+        if (TextUtils.isEmpty(loginPhone.getText())) {
+            loginPhone.setError(getString(R.string.login_phone_error));
+        } else if (TextUtils.isEmpty(loginPassword.getText())) {
+            loginPassword.setError(getString(R.string.login_password_error));
+        } else {
+            RestClient.serviceApi().accessToken(loginPhone.getText().toString(), loginPassword.getText().toString()).enqueue();
+        }
+    }
+
+    @Subscribe
+    public void onEvent(TokenUpdateEvent updateEvent) {
+        if (updateEvent.status.equals(ResponseEvent.Status.SUCCESS)) {
+            User user = new User();
+            user.setPassword(loginPassword.getText().toString());
+            user.setPhone(loginPhone.getText().toString());
+            TokenUpdateJob.start(user, updateEvent.message);
+            ((MainActivity) getActivity()).replaceFragment(UserListFragment.class);
+        }
+        if (updateEvent.status.equals(ResponseEvent.Status.FAILURE)) {
+            loginMessage.setVisibility(View.VISIBLE);
+        }
     }
 }

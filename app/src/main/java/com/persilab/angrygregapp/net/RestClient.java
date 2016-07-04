@@ -12,7 +12,6 @@ import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.event.ResponseEvent;
 import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
 import com.persilab.angrygregapp.net.adapter.BigDecimalTypeAdapter;
-import com.persilab.angrygregapp.net.adapter.StateTypeAdapter;
 import com.persilab.angrygregapp.net.adapter.UriTypeAdapter;
 import com.snappydb.SnappydbException;
 import okhttp3.*;
@@ -36,19 +35,23 @@ public class RestClient {
 
     public interface RestServiceApi {
 
-        @GET("account")
-        Call account(@Header("Authentication") String authentication,
-                     @Query("state") String name,
-                     @Query("gender") String phone);
+        @GET("accounts")
+        Call<List<User>> accounts(@Header("Authentication") String authentication,
+                     @Query("phone") String phone,
+                     @Query("name") String name);
+
+        @GET("accounts/{id}")
+        Call<User> account(@Path("id") String id);
 
         @POST("auth/access")
-        Call<Token> accessToken(@Query("username") String username,
+        Call<Token> accessToken(@Query("phone") String phone,
                                 @Query("password") String password);
 
         @POST("auth/refresh/{refreshToken}")
         Call<Token> refreshToken(@Path("refreshToken") String refreshToken);
 
-
+        @PUT("/accounts/{id}/addpoints/{amountOfPoints}")
+        Call<User> addPoints(@Path("id") String userId, @Path("amountOfPoints") Integer amount);
     }
 
     private final static RestServiceApi service = buildApi();
@@ -96,20 +99,6 @@ public class RestClient {
                     .create(RestServiceApi.class);
         }
         return service;
-    }
-
-    public static void updateToken(final User user, final Context context) {
-        serviceApi().accessToken(user.getPhone(), user.getPassword()).enqueue(new DefaultCallback<Token>((response, callback) -> {
-            SnappyHelper helper = new SnappyHelper(context);
-            try {
-                helper.storeSerializable(response.body());
-            } catch (SnappydbException e) {
-                Log.e(TAG, "Unknown exception", e);
-            } finally {
-                helper.close();
-            }
-            EventBus.getDefault().post(new TokenUpdateEvent(ResponseEvent.Status.SUCCESS, response.body()));
-        }));
     }
 
 }

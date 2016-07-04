@@ -2,9 +2,9 @@ package com.persilab.angrygregapp.net;
 
 import android.util.Log;
 import com.google.gson.Gson;
-import com.persilab.shoppingbox.domain.entity.JsonError;
-import com.persilab.shoppingbox.domain.event.NetworkEvent;
-import com.persilab.shoppingbox.util.ReflectionUtils;
+
+import com.persilab.angrygregapp.domain.entity.json.JsonError;
+import com.persilab.angrygregapp.domain.event.NetworkEvent;
 import org.greenrobot.eventbus.EventBus;
 import retrofit2.Callback;
 import retrofit2.Response;

@@ -26,7 +26,7 @@ ext {
     versionProjectCode = 1
     versionProjectName = "0.0.4"
     baseScheme = 'http'
-    baseHost = 's1.vshost.info:5002/'
+    baseHost = 's1.vshost.info:5003/'
     betaDistributionEmails = "kl@persilab.com"
     betaDistributionReleaseNotes = "Default Release Notes."
 }

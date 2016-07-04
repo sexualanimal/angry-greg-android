@@ -9,11 +9,14 @@ import com.evernote.android.job.JobRequest;
 import com.persilab.angrygregapp.database.SnappyHelper;
 import com.persilab.angrygregapp.domain.entity.Token;
 import com.persilab.angrygregapp.domain.entity.User;
+import com.persilab.angrygregapp.domain.entity.json.JsonError;
 import com.persilab.angrygregapp.domain.event.Event;
 import com.persilab.angrygregapp.domain.event.ResponseEvent;
 import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
 import com.persilab.angrygregapp.net.RestClient;
+import net.vrallev.android.cat.Cat;
 import org.greenrobot.eventbus.EventBus;
+import retrofit2.Response;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -25,6 +28,7 @@ public class TokenUpdateJob extends Job {
 
     private static final String TAG = TokenUpdateJob.class.getSimpleName();
     private static User user;
+    private static Token token;
     private SnappyHelper snappyHelper = null;
     public static int jobId = -1;
 
@@ -40,22 +44,30 @@ public class TokenUpdateJob extends Job {
             token = getSnappyHelper().getSerializable(Token.class);
             if (token == null || token.isRefreshExpired()) {
                 //TODO: Call login fragment if user is not found
-                token = RestClient.serviceApi().accessToken(user.getPhone(), user.getPassword()).execute().body();
-                getSnappyHelper().storeSerializable(token);
+                Response response = RestClient.serviceApi().accessToken(user.getPhone(), user.getPassword()).execute();
+                if(response.body() instanceof JsonError) {
+                    postEvent(new TokenUpdateEvent(ResponseEvent.Status.FAILURE, null));
+                }
+                if(response.body() instanceof Token) {
+                    token = (Token) response.body();
+                    TokenUpdateJob.token = token;
+                    getSnappyHelper().storeSerializable(token);
+                    postEvent(new TokenUpdateEvent(ResponseEvent.Status.SUCCESS, token));
+                }
             } else {
                 Token refreshToken = RestClient.serviceApi().refreshToken(token.getRefreshToken()).execute().body();
                 token.setAccessExpires(refreshToken.getAccessExpires());
                 token.setAccessToken(refreshToken.getAccessToken());
+                TokenUpdateJob.token = token;
                 getSnappyHelper().storeSerializable(token);
             }
         } catch (Exception e) {
-            Log.e(TAG, "Unknown exception", e);
+            Cat.e("Unknown exception", e);
             postEvent(new TokenUpdateEvent(ResponseEvent.Status.FAILURE, null));
             return Result.FAILURE;
         } finally {
             SnappyHelper.close(getSnappyHelper());
         }
-        postEvent(new TokenUpdateEvent(ResponseEvent.Status.SUCCESS, token));
         return Result.SUCCESS;
     }
 
@@ -67,22 +79,16 @@ public class TokenUpdateJob extends Job {
         return snappyHelper;
     }
 
-    protected void postEvent(Event event) {
-        EventBus.getDefault().post(event);
+    public static User getUser() {
+        return user;
     }
 
-    public static Token updateToken(Context context, User user) {
-        SnappyHelper snappyHelper = new SnappyHelper(context);
-        try {
-            TokenUpdateJob.user = user;
-            start();
-            return snappyHelper.getSerializable(Token.class);
-        } catch (Exception e) {
-            Log.e(TAG, "Unknown exception", e);
-        } finally {
-            SnappyHelper.close(snappyHelper);
-        }
-        return null;
+    public static Token getToken() {
+        return token;
+    }
+
+    protected void postEvent(Event event) {
+        EventBus.getDefault().post(event);
     }
 
     public static void stop() {
@@ -91,7 +97,9 @@ public class TokenUpdateJob extends Job {
         }
     }
 
-    public static void start() {
+    public static void start(User user, Token current) {
+        TokenUpdateJob.token = current;
+        TokenUpdateJob.user = user;
         jobId = AppJobCreator.request(JobType.UPDATE_TOKEN)
                 .setPeriodic(200000)
                 .setUpdateCurrent(true)

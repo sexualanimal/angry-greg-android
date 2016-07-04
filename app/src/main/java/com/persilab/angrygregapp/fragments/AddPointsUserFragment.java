@@ -5,13 +5,13 @@ import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.persilab.angrygregapp.R;
-import com.persilab.angrygregapp.dialog.PickerDialog;
+import com.persilab.angrygregapp.dialog.AddPointsDialog;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.event.AddRateEvent;
+import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.GuiUtils;
 import com.whinc.widget.ratingbar.RatingBar;
 import org.greenrobot.eventbus.EventBus;
@@ -20,13 +20,13 @@ import org.greenrobot.eventbus.Subscribe;
 /**
  * Created by 0shad on 21.06.2016.
  */
-public class EditUserFragment extends BaseFragment {
+public class AddPointsUserFragment extends BaseFragment {
 
     @Bind(R.id.edit_user_add)
     TextView editUserAdd;
 
-    public static EditUserFragment show(BaseFragment baseFragment, User user) {
-        return show(baseFragment, EditUserFragment.class, Constants.ArgsName.USER, user);
+    public static AddPointsUserFragment show(BaseFragment baseFragment, User user) {
+        return show(baseFragment, AddPointsUserFragment.class, Constants.ArgsName.USER, user);
     }
 
     @Bind(R.id.edit_user_points)
@@ -49,27 +49,26 @@ public class EditUserFragment extends BaseFragment {
         bind(rootView);
         getActivity().setTitle("");
         setHasOptionsMenu(true);
-        user = (User) getArguments().getSerializable(Constants.ArgsName.USER);
-
-        if (user != null) {
-            ratingBar.setCount(user.getRate());
-            GuiUtils.setText(userPoints, R.string.edit_user_points, user.getRate());
-        }
-
-        ButterKnife.bind(this, rootView);
+        updateUi((User) getArguments().getSerializable(Constants.ArgsName.USER));
         return rootView;
 
     }
 
     @Subscribe
     public void onEventMainThread(AddRateEvent event) {
-        Integer rate = event.rate + user.getRate();
-        if (rate > 10) {
-            rate = 10;
+        user = event.message;
+        updateUi(user);
+    }
+
+    private void updateUi(User user) {
+        if (user != null) {
+            if(user.getAmountOfFreeCoffe() == 0) {
+                GuiUtils.setText(userPoints, R.string.edit_user_points, user.getAmountOfPoints());
+            } else {
+                GuiUtils.setText(userPoints, R.string.edit_user_points_and_cups, user.getAmountOfPoints(), user.getAmountOfFreeCoffe());
+            }
+            ratingBar.setCount(user.getAmountOfPoints());
         }
-        user.setRate(rate);
-        GuiUtils.setText(userPoints, R.string.edit_user_points, user.getRate());
-        ratingBar.setCount(rate);
     }
 
     @Override
@@ -84,14 +83,8 @@ public class EditUserFragment extends BaseFragment {
         super.onStop();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
-
     @OnClick(R.id.edit_user_add)
     public void onClick() {
-         PickerDialog.show(getFragmentManager());
+         AddPointsDialog.show(getFragmentManager(), user);
     }
 }
