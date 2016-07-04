@@ -12,6 +12,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.activity.BaseActivity;
+import com.persilab.angrygregapp.activity.MainActivity;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.event.Event;
 import com.persilab.angrygregapp.domain.event.FragmentAttachedEvent;
@@ -130,6 +131,10 @@ public class BaseFragment extends Fragment implements BaseActivity.BackCallback 
     public void onDestroyView() {
         super.onDestroyView();
         unbind();
+    }
+
+    public MainActivity getMainActivity(){
+        return (MainActivity) getActivity();
     }
 
     @Override

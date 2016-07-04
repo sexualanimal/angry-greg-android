@@ -42,6 +42,17 @@ public class SnappyHelper implements Closeable {
         return storeSerializable(value.getClass().getCanonicalName(), value);
     }
 
+    public SnappyHelper storeString(String key, String value) throws SnappydbException {
+        open();
+        snappyDB.put(key, value);
+        return this;
+    }
+
+    public String getString(String key) throws SnappydbException {
+        open();
+        return snappyDB.get(key);
+    }
+
     public SnappyHelper storeSerializable(String key, Serializable value) throws SnappydbException {
         open();
         snappyDB.put(key, value);

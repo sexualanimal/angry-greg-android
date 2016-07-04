@@ -50,7 +50,7 @@ public class RestClient {
         @POST("auth/refresh/{refreshToken}")
         Call<Token> refreshToken(@Path("refreshToken") String refreshToken);
 
-        @PUT("/accounts/{id}/addpoints/{amountOfPoints}")
+        @PUT("accounts/{id}/addpoints/{amountOfPoints}")
         Call<User> addPoints(@Path("id") String userId, @Path("amountOfPoints") Integer amount);
     }
 

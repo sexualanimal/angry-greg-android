@@ -48,12 +48,7 @@ public class UserListFragment extends ListFragment<User>{
         RelativeLayout root = (RelativeLayout) super.onCreateView(inflater, container, savedInstanceState);
         button = (FloatingActionButton) inflater.inflate(R.layout.list_floating_button, root, false);
         root.addView(button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                QRScannerFragment.show(UserListFragment.this);
-            }
-        });
+        button.setOnClickListener(v -> QRScannerFragment.show(UserListFragment.this));
         return  root;
     }
 
@@ -64,28 +59,14 @@ public class UserListFragment extends ListFragment<User>{
 
     @Override
     protected DataSource<User> getDataSource() throws Exception {
-        return new DataSource<User>() {
-            @Override
-            public List<User> getItems(int skip, int size) throws IOException {
-                if(users.isEmpty()) {
-                     users = RestClient
-                             .serviceApi()
-                             .accounts(TokenUpdateJob.getToken().getAccessToken(), null, null).execute().body();
+        return (skip, size) -> {
+            if(users.isEmpty()) {
+                 users = RestClient
+                         .serviceApi()
+                         .accounts(TokenUpdateJob.getToken().getAccessToken(), null, null).execute().body();
 
-                }
-                return Stream.of(users).skip(skip).limit(size).collect(Collectors.toList());
             }
-
-
-           /* @Override
-            public List<User> getItems(int skip, int size) throws IOException {
-                if(users.isEmpty()) {
-                    for (int i = 0; i < 60; i++) {
-                        users.add(new User());
-                    }
-                }
-                return Stream.of(users).skip(skip).limit(size).collect(Collectors.toList());
-            } */
+            return Stream.of(users).skip(skip).limit(size).collect(Collectors.toList());
         };
     }
 

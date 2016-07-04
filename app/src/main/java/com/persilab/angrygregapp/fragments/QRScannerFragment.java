@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.view.*;
 import com.google.zxing.Result;
 import com.persilab.angrygregapp.R;
+import com.persilab.angrygregapp.activity.MainActivity;
 import com.persilab.angrygregapp.domain.event.QRUserFoundEvent;
 import com.persilab.angrygregapp.domain.event.ResponseEvent;
 import com.persilab.angrygregapp.net.RestClient;
@@ -12,6 +13,7 @@ import com.persilab.angrygregapp.util.GuiUtils;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by 0shad on 27.06.2016.
@@ -67,16 +69,12 @@ public class QRScannerFragment extends BaseFragment implements ZXingScannerView.
         super.onStop();
     }
 
+    @Subscribe
     public void onEvent(QRUserFoundEvent event) {
         if(event.status.equals(ResponseEvent.Status.SUCCESS)) {
             AddPointsUserFragment.show(QRScannerFragment.this, event.message);
             Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mScannerView.resumeCameraPreview(QRScannerFragment.this);
-                }
-            }, 2000);
+            handler.postDelayed(() -> mScannerView.resumeCameraPreview(QRScannerFragment.this), 2000);
         } else {
             GuiUtils.toast(getContext(), R.string.qr_scanner_qr_not_found);
         }
