@@ -7,13 +7,11 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.OnClick;
 import com.persilab.angrygregapp.R;
-import com.persilab.angrygregapp.activity.MainActivity;
 import com.persilab.angrygregapp.dialog.AddPointsDialog;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.event.AddRateEvent;
 import com.persilab.angrygregapp.net.RestClient;
-import com.persilab.angrygregapp.util.FragmentBuilder;
 import com.persilab.angrygregapp.util.GuiUtils;
 import com.whinc.widget.ratingbar.RatingBar;
 import org.greenrobot.eventbus.EventBus;
@@ -27,10 +25,8 @@ public class AddPointsUserFragment extends BaseFragment {
     @Bind(R.id.edit_user_add)
     TextView editUserAdd;
 
-    public static void show(BaseFragment baseFragment, User user) {
-        FragmentBuilder builder = new FragmentBuilder(baseFragment.getFragmentManager());
-        builder.putArg(Constants.ArgsName.USER, user);
-        baseFragment.getMainActivity().replaceFragment(AddPointsUserFragment.class, builder);
+    public static AddPointsUserFragment show(BaseFragment baseFragment, User user) {
+        return show(baseFragment, AddPointsUserFragment.class, Constants.ArgsName.USER, user);
     }
 
     @Bind(R.id.edit_user_points)
@@ -57,6 +53,12 @@ public class AddPointsUserFragment extends BaseFragment {
         updateUi(user);
         return rootView;
 
+    }
+
+    @Override
+    public boolean allowBackPress() {
+        getMainActivity().replaceFragment(UserListFragment.class);
+        return false;
     }
 
     @Subscribe

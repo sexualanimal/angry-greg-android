@@ -58,6 +58,12 @@ public class UserListFragment extends ListFragment<User>{
     }
 
     @Override
+    public void refreshData(boolean showProgress) {
+        users.clear();
+        super.refreshData(showProgress);
+    }
+
+    @Override
     protected DataSource<User> getDataSource() throws Exception {
         return (skip, size) -> {
             if(users.isEmpty()) {
@@ -80,7 +86,7 @@ public class UserListFragment extends ListFragment<User>{
         public void onBindHolder(ViewHolder holder, @Nullable User item) {
             ViewGroup root = (ViewGroup) holder.getItemView();
             GuiUtils.setText(root, R.id.item_user_name, item.getName());
-            if(item.getAmountOfPoints() == 0) {
+            if(item.getAmountOfPoints() == 0 && item.getAmountOfFreeCoffe() == 0) {
                 GuiUtils.setText(root, R.id.item_user_points, R.string.nopoints, 0);
             } else if(item.getAmountOfFreeCoffe() == 0) {
                 GuiUtils.setText(root, R.id.item_user_points, R.string.points, item.getAmountOfPoints());

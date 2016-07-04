@@ -51,14 +51,12 @@ public class LoginFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        ((MainActivity) getActivity()).getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         ((MainActivity) getActivity()).getSupportActionBar().hide();
     }
 
     @Override
     public void onStop() {
         ((MainActivity) getActivity()).getSupportActionBar().show();
-        ((MainActivity) getActivity()).getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
