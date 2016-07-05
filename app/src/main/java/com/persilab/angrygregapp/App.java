@@ -41,7 +41,7 @@ public class App extends Application {
         singleton = this;
         Fabric.with(this, new Crashlytics.Builder()
                 .core(new CrashlyticsCore.Builder()
-                        .disabled(BuildConfig.DEBUG)
+                        .disabled(true)
                         .build()).build(), new Crashlytics());
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath(Constants.Assets.ROBOTO_FONT_PATH)

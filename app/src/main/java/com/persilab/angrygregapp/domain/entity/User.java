@@ -33,6 +33,8 @@ public class User implements Serializable, Findable {
     Integer amountOfFreeCoffe;
     Integer amountOfPoints;
 
+    transient boolean delete = false;
+
     public User() {
         SystemClock.sleep(100);
         name = "Ivanov Ivan " + (System.currentTimeMillis() - point);

@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.SearchRecentSuggestions;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,18 +19,16 @@ import com.persilab.angrygregapp.database.SuggestionProvider;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.Token;
 import com.persilab.angrygregapp.domain.entity.User;
+import com.persilab.angrygregapp.domain.entity.json.JsonEntity;
 import com.persilab.angrygregapp.domain.entity.json.JsonError;
 import com.persilab.angrygregapp.domain.event.*;
 import com.persilab.angrygregapp.fragments.BaseFragment;
 import com.persilab.angrygregapp.fragments.ErrorFragment;
 import com.persilab.angrygregapp.fragments.LoginFragment;
-import com.persilab.angrygregapp.job.TokenUpdateJob;
 import com.persilab.angrygregapp.net.RestClient;
 import net.vrallev.android.cat.Cat;
 import org.greenrobot.eventbus.Subscribe;
 import retrofit2.Response;
-
-import static com.persilab.angrygregapp.R.string.user;
 
 
 public class MainActivity extends BaseActivity {
@@ -104,28 +100,43 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(NetworkEvent networkEvent) {
         System.out.println(networkEvent.message.toString());
+        String path = networkEvent.request.url().encodedPath().substring(5);
+        String method = networkEvent.request.method();
         if (networkEvent.status == NetworkEvent.Status.FAILURE) {
             Cat.e(networkEvent.message.toString());
             if(networkEvent.message instanceof JsonError) {
                 JsonError error = (JsonError) networkEvent.message;
-                if(error.getAction().equals("authAccess")) {
-                    postEvent(new TokenUpdateEvent(ResponseEvent.Status.FAILURE, null));
+                if(path.contains(RestClient.AUTH)) {
+                    postEvent(new TokenUpdateEvent(networkEvent.status, null));
                     return;
                 }
-                if(error.getAction().equals("showAccount")) {
-                    postEvent(new QRUserFoundEvent(ResponseEvent.Status.FAILURE, null));
+                if(path.matches(RestClient.ACCOUNTS + "/[a-z0-9]+")) {
+                    if(method.equals("GET")) {
+                        postEvent(new UserFoundEvent(networkEvent.status, null));
+                    }
+                    if(method.equals("DELETE")) {
+                        postEvent(new UserDeletedEvent(networkEvent.status, null));
+                    }
                 }
             }
             ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error_network);
-        }
-        if(networkEvent.message instanceof Response) {
-            Response response = (Response) networkEvent.message;
-            if(response.body() instanceof Token) {
-                postEvent(new TokenUpdateEvent(ResponseEvent.Status.SUCCESS, (Token) response.body()));
-            }
-            if(response.body() instanceof User) {
-                postEvent(new QRUserFoundEvent(ResponseEvent.Status.SUCCESS, (User) response.body()));
-                postEvent(new AddRateEvent(ResponseEvent.Status.SUCCESS, (User) response.body()));
+        } else {
+            if (networkEvent.message instanceof Response) {
+                Response response = (Response) networkEvent.message;
+                if (response.body() instanceof Token) {
+                    postEvent(new TokenUpdateEvent(networkEvent.status, (Token) response.body()));
+                }
+                if (path.contains("addpoints")) {
+                    postEvent(new AddRateEvent(networkEvent.status, (User) response.body()));
+                }
+                if(path.matches(RestClient.ACCOUNTS + "/[a-z0-9]+")) {
+                    if(method.equals("GET")) {
+                        postEvent(new UserFoundEvent(networkEvent.status, (User) response.body()));
+                    }
+                    if(method.equals("DELETE")) {
+                        postEvent(new UserDeletedEvent(networkEvent.status, path.substring(path.indexOf('/') + 1)));
+                    }
+                }
             }
         }
     }

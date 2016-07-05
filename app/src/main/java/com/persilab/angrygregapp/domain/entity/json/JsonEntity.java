@@ -7,7 +7,7 @@ import lombok.Data;
  */
 
 @Data
-public abstract class JsonEntity {
+public class JsonEntity {
     private ServerInformation serverInformation;
     private RequesterInformation requesterInformation;
 }

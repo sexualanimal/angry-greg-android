@@ -51,24 +51,26 @@ public class DefaultCallback<T> implements Callback<T> {
     public void onResponse(Response<T> response) {
         if (response.code() == HttpURLConnection.HTTP_OK && response.body() != null) {
             if (onSuccess != null) onSuccess.response(response, this);
-            else postResponseEvent(response);
+            else postResponseEvent(response, response.raw().request());
         } else if (response.errorBody() != null) {
             try {
                 JsonError error = new Gson().fromJson(response.errorBody().string(), JsonError.class);
-                error.setAction(error.getRequesterInformation().getReceivedParams().get("action"));
-                postErrorEvent(error);
+                if (error.getRequesterInformation() != null) {
+                    error.setAction(error.getRequesterInformation().getReceivedParams().get("action"));
+                }
+                postErrorEvent(error, response.raw().request());
             } catch (IOException e) {
                 Log.e(TAG, "Cant read error", e);
             }
         } else if (response.code() == HttpURLConnection.HTTP_FORBIDDEN) {
             System.out.println("Forbidden!");
-            postErrorEvent(response);
+            postErrorEvent(response, response.raw().request());
         } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND) {
             System.out.println("Not found :(");
-            postErrorEvent(response);
+            postErrorEvent(response, response.raw().request());
             // TODO: think about adding other stuff here
         } else {
-            postErrorEvent(response);
+            postErrorEvent(response, response.raw().request());
         }
     }
 
@@ -76,15 +78,15 @@ public class DefaultCallback<T> implements Callback<T> {
     public void onFailure(Throwable throwable) {
         System.out.println(errorMsg + ": " + throwable.getLocalizedMessage());
         if (onSuccess != null) onFailure.response(throwable, this);
-        else postErrorEvent(throwable);
+        else postErrorEvent(throwable, null);
     }
 
-    public void postErrorEvent(Object response) {
-        EventBus.getDefault().post(new NetworkEvent<>(NetworkEvent.Status.FAILURE, response));
+    public void postErrorEvent(Object response, okhttp3.Request request) {
+        EventBus.getDefault().post(new NetworkEvent<>(NetworkEvent.Status.FAILURE, response, request));
     }
 
-    public void postResponseEvent(Response<T> response) {
-        EventBus.getDefault().post(new NetworkEvent<>(NetworkEvent.Status.SUCCESS, response));
+    public void postResponseEvent(Response<T> response, okhttp3.Request request) {
+        EventBus.getDefault().post(new NetworkEvent<>(NetworkEvent.Status.SUCCESS, response, request));
     }
 
 }

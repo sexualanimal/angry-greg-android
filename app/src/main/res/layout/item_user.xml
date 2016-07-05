@@ -6,7 +6,9 @@
               android:layout_marginLeft="@dimen/spacing_small"
               android:layout_marginRight="@dimen/spacing_small"
               android:background="@drawable/clickable"
+              android:gravity="center_vertical"
               android:focusable="true"
+              android:id="@+id/item_user_layout"
               android:layout_width="match_parent"
               android:layout_height="66dp">
 
@@ -38,4 +40,9 @@
                   android:textSize="@dimen/text_large"
                   android:id="@+id/item_user_points"/>
     </LinearLayout>
+
+    <CheckBox android:id="@+id/item_user_checkbox"
+              android:layout_marginRight="@dimen/spacing_small"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"/>
 </LinearLayout>

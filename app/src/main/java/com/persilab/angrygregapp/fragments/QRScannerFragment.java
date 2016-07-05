@@ -5,8 +5,7 @@ import android.os.Handler;
 import android.view.*;
 import com.google.zxing.Result;
 import com.persilab.angrygregapp.R;
-import com.persilab.angrygregapp.activity.MainActivity;
-import com.persilab.angrygregapp.domain.event.QRUserFoundEvent;
+import com.persilab.angrygregapp.domain.event.UserFoundEvent;
 import com.persilab.angrygregapp.domain.event.ResponseEvent;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.GuiUtils;
@@ -48,7 +47,7 @@ public class QRScannerFragment extends BaseFragment implements ZXingScannerView.
 
     @Override
     public void handleResult(Result result) {
-        RestClient.serviceApi().account(result.getText()).enqueue();
+        RestClient.serviceApi().getAccount(result.getText()).enqueue();
     }
 
     @Override
@@ -70,7 +69,7 @@ public class QRScannerFragment extends BaseFragment implements ZXingScannerView.
     }
 
     @Subscribe
-    public void onEvent(QRUserFoundEvent event) {
+    public void onEvent(UserFoundEvent event) {
         if(event.status.equals(ResponseEvent.Status.SUCCESS)) {
             AddPointsUserFragment.show(QRScannerFragment.this, event.message);
             Handler handler = new Handler();

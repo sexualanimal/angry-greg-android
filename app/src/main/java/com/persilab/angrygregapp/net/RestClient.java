@@ -1,25 +1,18 @@
 package com.persilab.angrygregapp.net;
 
-import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import com.google.gson.*;
-import com.persilab.angrygregapp.database.SnappyHelper;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.Token;
 import com.persilab.angrygregapp.domain.entity.User;
 
-import com.persilab.angrygregapp.domain.event.ResponseEvent;
-import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
+import com.persilab.angrygregapp.domain.entity.json.JsonEntity;
 import com.persilab.angrygregapp.net.adapter.BigDecimalTypeAdapter;
 import com.persilab.angrygregapp.net.adapter.UriTypeAdapter;
-import com.snappydb.SnappydbException;
 import okhttp3.*;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
-import org.greenrobot.eventbus.EventBus;
 import retrofit2.*;
-import retrofit2.Response;
 import retrofit2.http.*;
 
 import java.lang.reflect.Modifier;
@@ -32,25 +25,42 @@ import java.util.List;
 public class RestClient {
 
     private static final String TAG = RestClient.class.getSimpleName();
+    public static final String ACCOUNTS = "accounts";
+    public static final String AUTH = "auth";
 
     public interface RestServiceApi {
 
-        @GET("accounts")
+        @GET(ACCOUNTS)
         Call<List<User>> accounts(@Header("Authentication") String authentication,
                      @Query("phone") String phone,
                      @Query("name") String name);
 
-        @GET("accounts/{id}")
-        Call<User> account(@Path("id") String id);
+        @GET(ACCOUNTS + "/{id}")
+        Call<User> getAccount(@Path("id") String id);
 
-        @POST("auth/access")
+        @DELETE(ACCOUNTS + "/{id}")
+        Call<JsonEntity> deleteAccount(@Path("id") String id);
+
+        @PUT(ACCOUNTS + "/{id}")
+        Call<User> changeAccount(@Path("id") String id,
+                           @Query("name") String name,
+                           @Query("phone") String phone,
+                           @Query("birthday") String birthday);
+
+        @PUT(ACCOUNTS)
+        Call<User> createAccount(@Query("name") String name,
+                           @Query("phone") String phone,
+                           @Query("password") String password,
+                           @Query("birthday") String birthday);
+
+        @POST(AUTH + "/access")
         Call<Token> accessToken(@Query("phone") String phone,
                                 @Query("password") String password);
 
-        @POST("auth/refresh/{refreshToken}")
+        @POST(AUTH + "/refresh/{refreshToken}")
         Call<Token> refreshToken(@Path("refreshToken") String refreshToken);
 
-        @PUT("accounts/{id}/addpoints/{amountOfPoints}")
+        @PUT(ACCOUNTS + "/{id}/addpoints/{amountOfPoints}")
         Call<User> addPoints(@Path("id") String userId, @Path("amountOfPoints") Integer amount);
     }
 
