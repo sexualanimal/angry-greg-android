@@ -72,6 +72,7 @@ public class LoginFragment extends BaseFragment {
             String phone = helper.getString(PHONE);
             if (phone != null) {
                 loginPhone.setText(phone);
+                loginPassword.requestFocus();
             }
         } catch (SnappydbException e) {
             Cat.e("Unknown exception", e);

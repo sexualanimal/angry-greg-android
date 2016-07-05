@@ -24,7 +24,7 @@ ext {
     buildToolsProjectVersion = '23.0.3'
     supportLibraryVersion = '23.1.1'
     versionProjectCode = 1
-    versionProjectName = "0.0.5"
+    versionProjectName = "0.0.6"
     baseScheme = 'http'
     baseHost = 's1.vshost.info:5003/'
     betaDistributionEmails = "kl@persilab.com"
@@ -78,16 +78,29 @@ android {
         variant.buildConfigField "String", "BASE_HOST", "\"$baseHost\""
     }
 
+    signingConfigs {
+        release {
+            storeFile file("app.keystore")
+            storePassword "1qa2ws3ed"
+            keyAlias "app"
+            keyPassword "1qa2ws3ed"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
         debug {
             minifyEnabled false
+            signingConfig signingConfigs.release
         }
     }
+
+
 
     sourceSets {
         main {
