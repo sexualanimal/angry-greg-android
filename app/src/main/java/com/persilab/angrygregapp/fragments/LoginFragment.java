@@ -16,12 +16,14 @@ import butterknife.OnClick;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.activity.MainActivity;
 import com.persilab.angrygregapp.database.SnappyHelper;
+import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.event.NetworkEvent;
 import com.persilab.angrygregapp.domain.event.ResponseEvent;
 import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
 import com.persilab.angrygregapp.job.TokenUpdateJob;
 import com.persilab.angrygregapp.net.RestClient;
+import com.persilab.angrygregapp.util.FragmentBuilder;
 import com.persilab.angrygregapp.util.GuiUtils;
 import com.persilab.angrygregapp.util.TextUtils;
 import com.snappydb.SnappydbException;
@@ -113,7 +115,13 @@ public class LoginFragment extends BaseFragment {
             } finally {
                 helper.close();
             }
-            ((MainActivity) getActivity()).replaceFragment(UserListFragment.class);
+            if(updateEvent.message.getAccount().getIs_admin()) {
+                getMainActivity().replaceFragment(UserListFragment.class);
+            } else {
+                FragmentBuilder builder = new FragmentBuilder(getFragmentManager());
+                builder.putArg(Constants.ArgsName.USER, updateEvent.message.getAccount());
+                getMainActivity().replaceFragment(UserFragment.class);
+            }
         }
         if (updateEvent.status.equals(ResponseEvent.Status.FAILURE)) {
             loginMessage.setVisibility(View.VISIBLE);

@@ -30,6 +30,7 @@ public class User implements Serializable, Findable {
     String phone;
     String password;
     Date birthDate;
+    Boolean is_admin;
     Integer amountOfFreeCoffe;
     Integer amountOfPoints;
 

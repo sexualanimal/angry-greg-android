@@ -11,7 +11,6 @@ import com.persilab.angrygregapp.dialog.AddPointsDialog;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.event.AddRateEvent;
-import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.GuiUtils;
 import com.whinc.widget.ratingbar.RatingBar;
 import org.greenrobot.eventbus.EventBus;
@@ -45,7 +44,7 @@ public class AddPointsUserFragment extends BaseFragment {
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_edit_user, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_add_points_user, container, false);
         bind(rootView);
         user = (User) getArguments().getSerializable(Constants.ArgsName.USER);
         getActivity().setTitle("");

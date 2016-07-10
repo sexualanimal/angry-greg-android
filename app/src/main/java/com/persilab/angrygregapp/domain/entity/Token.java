@@ -19,7 +19,7 @@ public class Token extends JsonEntity implements Serializable, Validatable {
     private String refreshToken;
     private Date accessExpires;
     private Date refreshExpires;
-
+    private User account;
 
     @Override
     public boolean isValid() {

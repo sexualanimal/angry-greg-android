@@ -171,13 +171,7 @@ public class UserListFragment extends ListFragment<User> {
 
         @Override
         public boolean onClick(View view, @Nullable User item) {
-            if(!editMode) {
-                if (item.getAmountOfFreeCoffe() == 1) {
-                    FreeCoffeeFragment.show(UserListFragment.this);
-                } else {
-                    UserFragment.show(UserListFragment.this, item);
-                }
-            }
+            AddPointsUserFragment.show(UserListFragment.this, item);
             return true;
         }
 
@@ -189,9 +183,6 @@ public class UserListFragment extends ListFragment<User> {
             return true;
         }
 
-        private void enterEditMode(ItemListAdapter listAdapter, View view) {
-
-        }
     }
 
 
