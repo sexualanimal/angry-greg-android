@@ -50,7 +50,7 @@
     <string name="error_network">Проврьте соединение с\nинтернетом...</string>
     <string name="edit_user_points">Текущие очки %d</string>
     <string name="edit_user_points_and_cups">Текущие очки %1$d и %2$d чашки коффе</string>
-    <string name="profile">Редактирование пользователья</string>
+    <string name="profile">Редактирование</string>
     <string name="error">Произошла ошибка!</string>
     <string name="edit">Редактировать</string>
     <string name="free_coffee_got_it">Понял</string>
