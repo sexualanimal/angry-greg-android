@@ -30,6 +30,7 @@ import com.snappydb.SnappydbException;
 import net.vrallev.android.cat.Cat;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by 0shad on 17.06.2016.
@@ -106,7 +107,7 @@ public class LoginFragment extends BaseFragment {
         }
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(TokenUpdateEvent updateEvent) {
         if (updateEvent.status.equals(ResponseEvent.Status.SUCCESS)) {
             User user = new User();

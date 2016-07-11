@@ -29,26 +29,12 @@ public class User implements Serializable, Findable {
     String name;
     String phone;
     String password;
-    Date birthDate;
-    Boolean is_admin = false;
+    Date birthday;
+    Boolean is_admin = true;
     Integer amountOfFreeCoffe = 0;
     Integer amountOfPoints = 0;
 
     transient boolean delete = false;
-
-    public User() {
-        SystemClock.sleep(100);
-        name = "Ivanov Ivan " + (System.currentTimeMillis() - point);
-        Random random = new Random(System.currentTimeMillis());
-        phone = "+7";
-        for (int i = 0; i < 10; i++) {
-            phone += random.nextInt(10);
-        }
-        Calendar calendar = Calendar.getInstance();
-        calendar.roll(Calendar.YEAR, -18);
-        birthDate = calendar.getTime();
-        amountOfPoints = random.nextInt(11);
-    }
 
     @Override
     public boolean find(ItemListAdapter.FilterEvent event) {

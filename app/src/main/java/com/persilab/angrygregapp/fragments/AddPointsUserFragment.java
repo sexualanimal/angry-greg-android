@@ -39,9 +39,17 @@ public class AddPointsUserFragment extends BaseFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
+        inflater.inflate(R.menu.addpoints, menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.addpoints_edit) {
+            ProfileFragment.show(AddPointsUserFragment.this, user);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_points_user, container, false);
@@ -61,7 +69,7 @@ public class AddPointsUserFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onEven(AddRateEvent event) {
+    public void onEvent(AddRateEvent event) {
         user = event.message;
         GuiUtils.runInUI(getContext(), var -> updateUi(user));
     }

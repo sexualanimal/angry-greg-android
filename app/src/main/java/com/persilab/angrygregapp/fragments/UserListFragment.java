@@ -171,7 +171,9 @@ public class UserListFragment extends ListFragment<User> {
 
         @Override
         public boolean onClick(View view, @Nullable User item) {
-            AddPointsUserFragment.show(UserListFragment.this, item);
+            if(!editMode) {
+                AddPointsUserFragment.show(UserListFragment.this, item);
+            }
             return true;
         }
 
