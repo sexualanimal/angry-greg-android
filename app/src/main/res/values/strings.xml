@@ -86,4 +86,6 @@
     <string name="profile_save_success">User saved!</string>
     <string name="profile_save">Save</string>
     <string name="save">Save</string>
+    <string name="edit_user_add_points">Add points</string>
+    <string name="free_coffee_got_it">Got it</string>
 </resources>

@@ -53,4 +53,6 @@
     <string name="profile">Редактирование пользователья</string>
     <string name="error">Произошла ошибка!</string>
     <string name="edit">Редактировать</string>
+    <string name="free_coffee_got_it">Понял</string>
+    <string name="edit_user_add_points">Добавить очки</string>
 </resources>
