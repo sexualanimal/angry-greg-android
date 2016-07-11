@@ -19,13 +19,13 @@ import com.persilab.angrygregapp.database.SuggestionProvider;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.Token;
 import com.persilab.angrygregapp.domain.entity.User;
-import com.persilab.angrygregapp.domain.entity.json.JsonEntity;
 import com.persilab.angrygregapp.domain.entity.json.JsonError;
 import com.persilab.angrygregapp.domain.event.*;
 import com.persilab.angrygregapp.fragments.BaseFragment;
 import com.persilab.angrygregapp.fragments.ErrorFragment;
 import com.persilab.angrygregapp.fragments.LoginFragment;
 import com.persilab.angrygregapp.net.RestClient;
+import com.persilab.angrygregapp.util.GuiUtils;
 import net.vrallev.android.cat.Cat;
 import org.greenrobot.eventbus.Subscribe;
 import retrofit2.Response;
@@ -60,26 +60,6 @@ public class MainActivity extends BaseActivity {
             suggestions.saveRecentQuery(query, null);
            // SearchFragment.show(getCurrentFragment(), query); // Implement SearchFragment
         }
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        MenuItem searchItem = menu.findItem(R.id.search);
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
-        SearchView searchView = null;
-        if (searchItem != null) {
-            searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-            // searchView.setOnQueryTextListener(this);
-            // MenuItemCompat.setOnActionExpandListener(searchItem, this);
-        }
-        if (searchView != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        }
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -155,7 +135,7 @@ public class MainActivity extends BaseActivity {
             }
 
             this.doubleBackToExitPressedOnce = true;
-            Snackbar.make(container, R.string.back_to_exit, Snackbar.LENGTH_LONG).show();
+            GuiUtils.showSnackbar(container,  R.string.back_to_exit);
             new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
         } else {
             super.onBackPressed();

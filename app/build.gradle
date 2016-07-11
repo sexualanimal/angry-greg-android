@@ -163,6 +163,8 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'com.github.kenglxn.QRGen:android:2.2.0'
     compile 'me.dm7.barcodescanner:zxing:1.8.4'
+    compile 'io.cine:primus:0.0.4'
+    compile 'com.neovisionaries:nv-websocket-client:1.28'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.7@aar') {
         transitive = true;
     }

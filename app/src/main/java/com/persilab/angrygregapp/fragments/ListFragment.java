@@ -1,5 +1,7 @@
 package com.persilab.angrygregapp.fragments;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.graphics.PointF;
 import android.os.*;
 import android.support.v4.view.MenuItemCompat;
@@ -107,7 +109,7 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        if(lastSearchQuery == null) {
+        if (lastSearchQuery == null) {
             lastSearchQuery = getNewFilterEvent(query);
         } else {
             lastSearchQuery.query = query;
@@ -140,8 +142,12 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.search, menu);
         MenuItem searchItem = menu.findItem(R.id.search);
         if (searchItem != null) {
+            searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+            SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
             searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
             if (enableFiltering) {
                 searchView.setQueryHint(getString(R.string.filter_hint));
@@ -370,10 +376,10 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
                 }
             });
         } else {
-            ((RelativeLayout)rootView).removeView(rootView.findViewById(R.id.fast_scroller));
+            ((RelativeLayout) rootView).removeView(rootView.findViewById(R.id.fast_scroller));
         }
         if (adapter != null) {
-           firstLoad(true);
+            firstLoad(true);
         }
         return rootView;
     }
@@ -439,7 +445,7 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
                 currentCount = adapter.getAbsoluteItemCount();
                 isLoading = false;
                 dataTask = null;
-                if(needMore <= 0) {
+                if (needMore <= 0) {
                     if (onElementsLoadedTask != null) {
                         onElementsLoadedTask.execute(LoadedTaskParams);
                     }

@@ -44,15 +44,17 @@ public class TokenUpdateJob extends Job {
             token = getSnappyHelper().getSerializable(Token.class);
             if (token == null || token.isRefreshExpired()) {
                 //TODO: Call login fragment if user is not found
-                Response response = RestClient.serviceApi().accessToken(user.getPhone(), user.getPassword()).execute();
-                if(response.body() instanceof JsonError) {
-                    postEvent(new TokenUpdateEvent(ResponseEvent.Status.FAILURE, null));
-                }
-                if(response.body() instanceof Token) {
-                    token = (Token) response.body();
-                    TokenUpdateJob.token = token;
-                    getSnappyHelper().storeSerializable(token);
-                    postEvent(new TokenUpdateEvent(ResponseEvent.Status.SUCCESS, token));
+                if(user != null) {
+                    Response response = RestClient.serviceApi().accessToken(user.getPhone(), user.getPassword()).execute();
+                    if (response.body() instanceof JsonError) {
+                        postEvent(new TokenUpdateEvent(ResponseEvent.Status.FAILURE, null));
+                    }
+                    if (response.body() instanceof Token) {
+                        token = (Token) response.body();
+                        TokenUpdateJob.token = token;
+                        getSnappyHelper().storeSerializable(token);
+                        postEvent(new TokenUpdateEvent(ResponseEvent.Status.SUCCESS, token));
+                    }
                 }
             } else {
                 Token refreshToken = RestClient.serviceApi().refreshToken(token.getRefreshToken()).execute().body();

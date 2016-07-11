@@ -83,7 +83,13 @@ public class LoginFragment extends BaseFragment {
         }
 
         if (TokenUpdateJob.getToken() != null && TokenUpdateJob.getUser() != null) {
-            ((MainActivity) getActivity()).replaceFragment(UserListFragment.class);
+             if(TokenUpdateJob.getToken().getAccount().getIs_admin()) {
+                 getMainActivity().replaceFragment(UserListFragment.class);
+             } else {
+                 FragmentBuilder builder = new FragmentBuilder(getFragmentManager());
+                 builder.putArg(Constants.ArgsName.USER, TokenUpdateJob.getToken().getAccount());
+                 getMainActivity().replaceFragment(UserFragment.class, builder);
+             }
         }
         return rootView;
     }
@@ -120,7 +126,7 @@ public class LoginFragment extends BaseFragment {
             } else {
                 FragmentBuilder builder = new FragmentBuilder(getFragmentManager());
                 builder.putArg(Constants.ArgsName.USER, updateEvent.message.getAccount());
-                getMainActivity().replaceFragment(UserFragment.class);
+                getMainActivity().replaceFragment(UserFragment.class, builder);
             }
         }
         if (updateEvent.status.equals(ResponseEvent.Status.FAILURE)) {

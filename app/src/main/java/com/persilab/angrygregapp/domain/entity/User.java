@@ -30,9 +30,9 @@ public class User implements Serializable, Findable {
     String phone;
     String password;
     Date birthDate;
-    Boolean is_admin;
-    Integer amountOfFreeCoffe;
-    Integer amountOfPoints;
+    Boolean is_admin = false;
+    Integer amountOfFreeCoffe = 0;
+    Integer amountOfPoints = 0;
 
     transient boolean delete = false;
 
