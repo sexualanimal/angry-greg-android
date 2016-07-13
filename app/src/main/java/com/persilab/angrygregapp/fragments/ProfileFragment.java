@@ -104,7 +104,7 @@ public class ProfileFragment extends BaseFragment {
 
     @OnClick(R.id.profile_save)
     public void onClick() {
-        String date = new SimpleDateFormat(Constants.Pattern.REVERSE_DATA_PATTERN).format(user.getBirthday());
+        String date = new SimpleDateFormat(Constants.Pattern.DATA_ISO_8601_24H_FULL_FORMAT).format(user.getBirthday());
         RestClient.serviceApi().changeAccount(user.getId(), user.getName(), user.getPhone(), date).enqueue();
         saveUser.setVisibility(View.GONE);
     }

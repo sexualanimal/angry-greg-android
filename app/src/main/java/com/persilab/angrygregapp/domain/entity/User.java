@@ -26,7 +26,7 @@ public class User implements Serializable, Findable {
 
     @Key
     String id;
-    String name;
+    String name = "Anonymous";
     String phone;
     String password;
     Date birthday;

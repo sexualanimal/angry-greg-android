@@ -1,6 +1,8 @@
 package com.persilab.angrygregapp.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.view.*;
@@ -80,7 +82,7 @@ public class UserListFragment extends ListFragment<User> {
     }
 
     @Override
-    protected ItemListAdapter<User> getAdapter() {
+    protected ItemListAdapter<User> newAdapter() {
         return new UserListAdapter();
     }
 
@@ -96,7 +98,7 @@ public class UserListFragment extends ListFragment<User> {
             if (users.isEmpty()) {
                 users = RestClient
                         .serviceApi()
-                        .accounts(TokenUpdateJob.getToken().getAccessToken(), null, null).execute().body();
+                        .accounts(TokenUpdateJob.getToken().getAccessToken(), null, null, false, null, null).execute().body();
 
             }
             return Stream.of(users).skip(skip).limit(size).collect(Collectors.toList());

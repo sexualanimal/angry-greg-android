@@ -18,10 +18,8 @@ import butterknife.Bind;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.adapter.ItemListAdapter;
 import com.persilab.angrygregapp.adapter.MultiItemListAdapter;
-import com.persilab.angrygregapp.domain.event.Event;
 import com.persilab.angrygregapp.lister.DataSource;
 import com.persilab.angrygregapp.util.GuiUtils;
-import com.persilab.angrygregapp.util.TextUtils;
 import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
 
 import java.io.IOException;
@@ -94,7 +92,7 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
         }
     }
 
-    protected ItemListAdapter.FilterEvent getNewFilterEvent(String query) {
+    protected ItemListAdapter.FilterEvent newFilterEvent(String query) {
         return new ItemListAdapter.FilterEvent(query);
     }
 
@@ -110,7 +108,7 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
     @Override
     public boolean onQueryTextSubmit(String query) {
         if (lastSearchQuery == null) {
-            lastSearchQuery = getNewFilterEvent(query);
+            lastSearchQuery = newFilterEvent(query);
         } else {
             lastSearchQuery.query = query;
         }
@@ -126,9 +124,13 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
         adapter.enterFilteringMode();
         if (filterTask == null) {
             lastSearchQuery = null;
-            filterTask = new FilterTask(filterEvent);
+            filterTask = newFilterTask(filterEvent);
             getActivity().runOnUiThread(filterTask);
         }
+    }
+
+    public FilterTask newFilterTask(ItemListAdapter.FilterEvent filterEvent) {
+        return new FilterTask(filterEvent);
     }
 
     protected void onSearchViewClose(SearchView searchView) {
@@ -210,7 +212,7 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
         loadItems(count, showProgress, null, null);
     }
 
-    protected abstract ItemListAdapter<I> getAdapter();
+    protected abstract ItemListAdapter<I> newAdapter();
 
     protected DataSource<I> getDataSource() throws Exception {
         return dataSource;
@@ -332,10 +334,12 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
         swipeRefresh.setOnRefreshListener(() -> {
             if (!isLoading) {
                 refreshData(false);
+            } else {
+                swipeRefresh.setRefreshing(false);
             }
         });
         if (adapter == null) {
-            adapter = getAdapter();
+            adapter = newAdapter();
         }
         try {
             setDataSource(getDataSource());
@@ -478,7 +482,7 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
 
     public class FilterTask implements Runnable {
 
-        private final ItemListAdapter.FilterEvent query;
+        protected final ItemListAdapter.FilterEvent query;
 
         public FilterTask(ItemListAdapter.FilterEvent query) {
             this.query = query;

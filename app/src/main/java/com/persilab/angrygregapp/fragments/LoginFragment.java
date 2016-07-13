@@ -50,6 +50,8 @@ public class LoginFragment extends BaseFragment {
     @Bind(R.id.login_message)
     TextView loginMessage;
 
+    private boolean acceptEvents = false;
+
     @Override
     public void onStart() {
         super.onStart();
@@ -103,35 +105,39 @@ public class LoginFragment extends BaseFragment {
         } else if (TextUtils.isEmpty(loginPassword.getText())) {
             loginPassword.setError(getString(R.string.login_password_error));
         } else {
+            acceptEvents = true;
             RestClient.serviceApi().accessToken(loginPhone.getText().toString(), loginPassword.getText().toString()).enqueue();
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(TokenUpdateEvent updateEvent) {
-        if (updateEvent.status.equals(ResponseEvent.Status.SUCCESS)) {
-            User user = new User();
-            user.setPassword(loginPassword.getText().toString());
-            user.setPhone(loginPhone.getText().toString());
-            TokenUpdateJob.start(user, updateEvent.message);
-            SnappyHelper helper = new SnappyHelper(getContext(), "login");
-            try {
-                 helper.storeString(PHONE, loginPhone.getText().toString());
-            } catch (SnappydbException e) {
-                Cat.e("Unknown exception", e);
-            } finally {
-                helper.close();
+        if(acceptEvents) {
+            acceptEvents = false;
+            if (updateEvent.status.equals(ResponseEvent.Status.SUCCESS)) {
+                User user = new User();
+                user.setPassword(loginPassword.getText().toString());
+                user.setPhone(loginPhone.getText().toString());
+                TokenUpdateJob.start(user, updateEvent.message);
+                SnappyHelper helper = new SnappyHelper(getContext(), "login");
+                try {
+                    helper.storeString(PHONE, loginPhone.getText().toString());
+                } catch (SnappydbException e) {
+                    Cat.e("Unknown exception", e);
+                } finally {
+                    helper.close();
+                }
+                if (updateEvent.message.getAccount().getIs_admin()) {
+                    getMainActivity().replaceFragment(UserListFragment.class);
+                } else {
+                    FragmentBuilder builder = new FragmentBuilder(getFragmentManager());
+                    builder.putArg(Constants.ArgsName.USER, updateEvent.message.getAccount());
+                    getMainActivity().replaceFragment(UserFragment.class, builder);
+                }
             }
-            if(updateEvent.message.getAccount().getIs_admin()) {
-                getMainActivity().replaceFragment(UserListFragment.class);
-            } else {
-                FragmentBuilder builder = new FragmentBuilder(getFragmentManager());
-                builder.putArg(Constants.ArgsName.USER, updateEvent.message.getAccount());
-                getMainActivity().replaceFragment(UserFragment.class, builder);
+            if (updateEvent.status.equals(ResponseEvent.Status.FAILURE)) {
+                loginMessage.setVisibility(View.VISIBLE);
             }
-        }
-        if (updateEvent.status.equals(ResponseEvent.Status.FAILURE)) {
-            loginMessage.setVisibility(View.VISIBLE);
         }
     }
 }

@@ -32,8 +32,11 @@ public class RestClient {
 
         @GET(ACCOUNTS)
         Call<List<User>> accounts(@Header("Authentication") String authentication,
-                     @Query("phone") String phone,
-                     @Query("name") String name);
+                                  @Query("phone") String phone,
+                                  @Query("name") String name,
+                                  @Query("is_admin") Boolean admin,
+                                  @Query("offset") Integer offset,
+                                  @Query("limit") Integer limit);
 
         @GET(ACCOUNTS + "/{id}")
         Call<User> getAccount(@Path("id") String id);
@@ -43,15 +46,15 @@ public class RestClient {
 
         @PUT(ACCOUNTS + "/{id}")
         Call<User> changeAccount(@Path("id") String id,
-                           @Query("name") String name,
-                           @Query("phone") String phone,
-                           @Query("birthday") String birthday);
+                                 @Query("name") String name,
+                                 @Query("phone") String phone,
+                                 @Query("birthday") String birthday);
 
         @PUT(ACCOUNTS)
         Call<User> createAccount(@Query("name") String name,
-                           @Query("phone") String phone,
-                           @Query("password") String password,
-                           @Query("birthday") String birthday);
+                                 @Query("phone") String phone,
+                                 @Query("password") String password,
+                                 @Query("birthday") String birthday);
 
         @POST(AUTH + "/access")
         Call<Token> accessToken(@Query("phone") String phone,
