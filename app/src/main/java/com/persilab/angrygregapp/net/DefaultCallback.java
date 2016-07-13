@@ -77,7 +77,7 @@ public class DefaultCallback<T> implements Callback<T> {
     @Override
     public void onFailure(Throwable throwable) {
         System.out.println(errorMsg + ": " + throwable.getLocalizedMessage());
-        if (onSuccess != null) onFailure.response(throwable, this);
+        if (onFailure != null) onFailure.response(throwable, this);
         else postErrorEvent(throwable, null);
     }
 

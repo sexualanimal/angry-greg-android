@@ -80,6 +80,10 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(NetworkEvent networkEvent) {
         System.out.println(networkEvent.message.toString());
+        if(networkEvent.request == null) {
+            ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error_network);
+            return;
+        }
         String path = networkEvent.request.url().encodedPath().substring(5);
         String method = networkEvent.request.method();
         if (networkEvent.status == NetworkEvent.Status.FAILURE) {
@@ -99,7 +103,7 @@ public class MainActivity extends BaseActivity {
                     }
                 }
             }
-            ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error_network);
+            ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error);
         } else {
             if (networkEvent.message instanceof Response) {
                 Response response = (Response) networkEvent.message;
