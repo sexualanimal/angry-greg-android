@@ -62,14 +62,14 @@ public class UserFragment extends BaseFragment {
             int width = GuiUtils.getScreenSize(getContext()).y;
             cardQr.setImageBitmap(QRCode.from(user.getId()).withCharset("UTF-8").withColor(onColor, offColor).withSize(width, width).bitmap());
             getActivity().setTitle(user.getName());
-            initPoints(user);
+            initPoints();
         }
         connect();
         return rootView;
 
     }
 
-    private void initPoints(User user) {
+    private void initPoints() {
         int left = ratingBar.getMaxCount() - user.getAmountOfPoints();
         if (user.getAmountOfFreeCoffe() == 0) {
             GuiUtils.setText(userPoints, R.string.user_points, user.getAmountOfPoints(), left);
@@ -77,7 +77,6 @@ public class UserFragment extends BaseFragment {
             GuiUtils.setText(userPoints, R.string.user_points_and_cups, user.getAmountOfPoints(), user.getAmountOfFreeCoffe(), left);
         }
         ratingBar.setCount(user.getAmountOfPoints());
-
     }
 
     // Start the connection. Should be called in a new thread
@@ -107,11 +106,16 @@ public class UserFragment extends BaseFragment {
         public void onTextMessage(WebSocket websocket, String message) throws Exception {
             User user = new Gson().fromJson(message, WebSockedResponse.class).data;
             if(user != null) {
-                UserFragment.this.user = user;
-                handler.post(() -> initPoints(user));
-                if(user.getAmountOfFreeCoffe() > 0 && user.getAmountOfPoints() == 0) {
-                    FreeCoffeeFragment.show(UserFragment.this);
-                }
+                final User current = UserFragment.this.user;
+                current.setAmountOfFreeCoffe(user.getAmountOfFreeCoffe());
+                current.setAmountOfPoints(user.getAmountOfPoints());
+                getArguments().putSerializable(Constants.ArgsName.USER, current);
+                handler.post(() -> {
+                    initPoints();
+                    if(current.getAmountOfFreeCoffe() > 0 && current.getAmountOfPoints() == 0) {
+                        FreeCoffeeFragment.show(UserFragment.this);
+                    }
+                });
             }
             Cat.i("String message from server: " + message);
         }
