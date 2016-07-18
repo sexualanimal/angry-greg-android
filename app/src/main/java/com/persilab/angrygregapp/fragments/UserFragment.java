@@ -107,12 +107,13 @@ public class UserFragment extends BaseFragment {
             User user = new Gson().fromJson(message, WebSockedResponse.class).data;
             if(user != null) {
                 final User current = UserFragment.this.user;
+                final int coffee = current.getAmountOfFreeCoffe();
                 current.setAmountOfFreeCoffe(user.getAmountOfFreeCoffe());
                 current.setAmountOfPoints(user.getAmountOfPoints());
                 getArguments().putSerializable(Constants.ArgsName.USER, current);
                 handler.post(() -> {
                     initPoints();
-                    if(current.getAmountOfFreeCoffe() > 0 && current.getAmountOfPoints() == 0) {
+                    if(coffee > 0 && !current.getAmountOfFreeCoffe().equals(coffee)) {
                         FreeCoffeeFragment.show(UserFragment.this);
                     }
                 });

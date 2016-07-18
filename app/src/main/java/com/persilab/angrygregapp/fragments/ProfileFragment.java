@@ -89,7 +89,11 @@ public class ProfileFragment extends BaseFragment {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        GuiUtils.setText(birthdate, R.string.profile_birthdate_pattern, day, month + 1, year);
+        if(user.getBirthday() != null) {
+            GuiUtils.setText(birthdate, R.string.profile_birthdate_pattern, day, month + 1, year);
+        } else {
+            GuiUtils.setText(birthdate, "");
+        }
         datePickerDialog = new DatePickerDialog(getContext(),
                 (view, newYear, newMonth, newDay) -> {
                     Calendar cal = Calendar.getInstance();
@@ -104,8 +108,13 @@ public class ProfileFragment extends BaseFragment {
 
     @OnClick(R.id.profile_save)
     public void onClick() {
-        String date = new SimpleDateFormat(Constants.Pattern.DATA_ISO_8601_24H_FULL_FORMAT).format(user.getBirthday());
-        RestClient.serviceApi().changeAccount(user.getId(), user.getName(), user.getPhone(), date).enqueue();
+        if(user.getBirthday() != null) {
+            String date = new SimpleDateFormat(Constants.Pattern.DATA_ISO_8601_24H_FULL_FORMAT).format(user.getBirthday());
+            RestClient.serviceApi().changeAccount(user.getId(), user.getName(), user.getPhone(), date).enqueue();
+        } else {
+            RestClient.serviceApi().changeAccount(user.getId(), user.getName(), user.getPhone(), null).enqueue();
+        }
+
         saveUser.setVisibility(View.GONE);
     }
 
