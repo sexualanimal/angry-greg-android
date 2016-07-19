@@ -120,6 +120,14 @@ public class MainActivity extends BaseActivity {
                     if(method.equals("DELETE")) {
                         postEvent(new UserDeletedEvent(networkEvent.status, path.substring(path.indexOf('/') + 1)));
                     }
+                    if (method.equals("PUT")) {
+                        GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
+                    }
+                }
+                if(path.matches(RestClient.ACCOUNTS)) {
+                    if (method.equals("POST")) {
+                        GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
+                    }
                 }
             }
         }

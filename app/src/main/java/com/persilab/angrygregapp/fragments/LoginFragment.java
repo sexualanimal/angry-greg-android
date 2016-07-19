@@ -85,7 +85,8 @@ public class LoginFragment extends BaseFragment {
             helper.close();
         }
 
-        if (TokenUpdateJob.getToken() != null && TokenUpdateJob.getUser() != null) {
+        if (TokenUpdateJob.getToken(getContext()) != null && !TokenUpdateJob.getToken().isAccessExpired()) {
+            TokenUpdateJob.start(null, null);
              if(TokenUpdateJob.getToken().getAccount().getIs_admin()) {
                  getMainActivity().replaceFragment(UserListFragment.class);
              } else {
@@ -118,7 +119,7 @@ public class LoginFragment extends BaseFragment {
                 User user = new User();
                 user.setPassword(loginPassword.getText().toString());
                 user.setPhone(loginPhone.getText().toString());
-                TokenUpdateJob.start(user, updateEvent.message);
+                TokenUpdateJob.start(updateEvent.message, user);
                 SnappyHelper helper = new SnappyHelper(getContext(), "login");
                 try {
                     helper.storeString(PHONE, loginPhone.getText().toString());

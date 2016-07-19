@@ -239,6 +239,10 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     }
 
 
+    public ActionBarDrawerToggle getActionBarDrawerToggle() {
+        return actionBarDrawerToggle;
+    }
+
     // Использовать при изменении ориентации экрана.
     public <F extends Fragment> void replaceFragment(Class<F> fragmentClass) {
         replaceFragment(fragmentClass, new FragmentBuilder(getSupportFragmentManager()));

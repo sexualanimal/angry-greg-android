@@ -43,8 +43,8 @@
 
     <string name="users">Users</string>
     <string name="user">User</string>
-    <string name="profile">User edit</string>
-
+    <string name="profile_edit">User edit</string>
+    <string name="profile_create">Create</string>
 
     <string name="ready">Ready</string>
     <string name="next">Следующий</string>
@@ -67,14 +67,18 @@
     <string name="user_full">You can get free coffee!</string>
     <string name="user_points">You have %1$d points, %2$d left to get free coffee</string>
     <string name="user_points_and_cups">You have %1$d points and %2$d cups of coffee, %3$d left to get free coffee</string>
+    <string name="user_list_add">Add user</string>
+    <string name="user_list_delete">Delete users</string>
     <string name="edit_user_points">Current points %d</string>
     <string name="edit_user_points_and_cups">Current points %1$d and %2$d cups of coffee</string>
     <string name="qr_scanner_camera_not_found">Camera not found</string>
     <string name="qr_scanner_qr_not_found">QR not found</string>
+    <string name="profile_password">Password</string>
+    <string name="profile_points">Points count</string>
     <string name="profile_city">Город</string>
     <string name="profile_address">Адрес</string>
-    <string name="profile_name">Имя</string>
-    <string name="profile_phone">Телефон</string>
+    <string name="profile_name">Name</string>
+    <string name="profile_phone">Phone</string>
     <string name="profile_gender">Пол</string>
     <string name="profile_male">М</string>
     <string name="profile_female">Ж</string>

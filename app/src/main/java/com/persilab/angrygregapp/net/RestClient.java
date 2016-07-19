@@ -50,7 +50,7 @@ public class RestClient {
                                  @Query("phone") String phone,
                                  @Query("birthday") String birthday);
 
-        @PUT(ACCOUNTS)
+        @POST(ACCOUNTS)
         Call<User> createAccount(@Query("name") String name,
                                  @Query("phone") String phone,
                                  @Query("password") String password,

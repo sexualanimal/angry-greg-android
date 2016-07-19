@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 
 import com.persilab.angrygregapp.domain.entity.json.JsonError;
 import com.persilab.angrygregapp.domain.event.NetworkEvent;
+import net.vrallev.android.cat.Cat;
 import org.greenrobot.eventbus.EventBus;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,7 +77,7 @@ public class DefaultCallback<T> implements Callback<T> {
 
     @Override
     public void onFailure(Throwable throwable) {
-        System.out.println(errorMsg + ": " + throwable.getLocalizedMessage());
+        Cat.e(throwable);
         if (onFailure != null) onFailure.response(throwable, this);
         else postErrorEvent(throwable, null);
     }

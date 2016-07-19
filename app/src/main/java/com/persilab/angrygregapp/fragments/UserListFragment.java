@@ -1,10 +1,10 @@
 package com.persilab.angrygregapp.fragments;
 
+
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.view.*;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -61,8 +61,24 @@ public class UserListFragment extends ListFragment<User> {
         if (editMode) {
             menu.clear();
             inflater.inflate(R.menu.editlist, menu);
+            ActionBar actionBar = getMainActivity().getCurrentActionBar();
+            actionBar.setCustomView(R.layout.back_button);
+            actionBar.getCustomView().findViewById(R.id.button_back).setOnClickListener(v -> exitEditMode());
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
         } else {
+            inflater.inflate(R.menu.viewlist, menu);
             super.onCreateOptionsMenu(menu, inflater);
+        }
+    }
+
+    @Override
+    public boolean allowBackPress() {
+        if(editMode) {
+            exitEditMode();
+            return false;
+        } else {
+            return super.allowBackPress();
         }
     }
 
@@ -77,9 +93,22 @@ public class UserListFragment extends ListFragment<User> {
                 adapter.getItems().removeAll(needDelete);
                 adapter.notifyDataSetChanged();
                 break;
+            case R.id.user_list_add:
+                ProfileFragment.show(this, new User());
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void exitEditMode() {
+        editMode = !editMode;
+        ActionBar actionBar = getMainActivity().getCurrentActionBar();
+        actionBar.setDisplayShowCustomEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(true);
+        getActivity().invalidateOptionsMenu();
+        adapter.notifyDataSetChanged();
+    }
+
 
     @Override
     protected ItemListAdapter<User> newAdapter() {
@@ -118,7 +147,7 @@ public class UserListFragment extends ListFragment<User> {
     }
 
     @Subscribe
-    public void onEven(AddRateEvent event) {
+    public void onEvent(AddRateEvent event) {
         int index = getUserById(event.message.getId());
         if(index > 0) {
             adapter.getItems().set(index, event.message);
@@ -181,9 +210,7 @@ public class UserListFragment extends ListFragment<User> {
 
         @Override
         public boolean onLongClick(View view, User item) {
-            editMode = !editMode;
-            getActivity().invalidateOptionsMenu();
-            adapter.notifyDataSetChanged();
+            exitEditMode();
             return true;
         }
 
