@@ -7,9 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -49,6 +47,13 @@ public class LoginFragment extends BaseFragment {
     TextView loginContinue;
     @Bind(R.id.login_message)
     TextView loginMessage;
+    @Bind(R.id.load_progress)
+    protected ProgressBar progressBar;
+    @Bind(R.id.loading_text)
+    protected TextView loadingText;
+    @Bind(R.id.progress_layout)
+    protected RelativeLayout progress;
+
 
     private boolean acceptEvents = false;
 
@@ -71,7 +76,6 @@ public class LoginFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
         bind(rootView);
-        ButterKnife.bind(this, rootView);
         SnappyHelper helper = new SnappyHelper(getContext(), "login");
         try {
             String phone = helper.getString(PHONE);
@@ -84,7 +88,8 @@ public class LoginFragment extends BaseFragment {
         } finally {
             helper.close();
         }
-
+        loadingText.setText(R.string.login_loading);
+        progress.setVisibility(View.GONE);
         if (TokenUpdateJob.getToken(getContext()) != null && !TokenUpdateJob.getToken().isAccessExpired()) {
             TokenUpdateJob.start(null, null);
              if(TokenUpdateJob.getToken().getAccount().getIs_admin()) {
@@ -108,11 +113,13 @@ public class LoginFragment extends BaseFragment {
         } else {
             acceptEvents = true;
             RestClient.serviceApi().accessToken(loginPhone.getText().toString(), loginPassword.getText().toString()).enqueue();
+            progress.setVisibility(View.VISIBLE);
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(TokenUpdateEvent updateEvent) {
+        progress.setVisibility(View.GONE);
         if(acceptEvents) {
             acceptEvents = false;
             if (updateEvent.status.equals(ResponseEvent.Status.SUCCESS)) {

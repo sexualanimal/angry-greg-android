@@ -7,6 +7,7 @@ import android.view.*;
 import android.widget.ImageView;
 import com.google.gson.Gson;
 import com.neovisionaries.ws.client.*;
+import com.persilab.angrygregapp.util.SystemUtils;
 import com.whinc.widget.ratingbar.RatingBar;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -134,11 +135,15 @@ public class UserFragment extends BaseFragment {
         @Override
         public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
             websocket.sendText(new Gson().toJson(new WebSocketMessage(WebSocketMessage.Action.remove, user.getId())));
+            SystemUtils.sleepQuietly(1000);
+            connect();
         }
 
         @Override
         public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
             Cat.e(cause);
+            SystemUtils.sleepQuietly(1000);
+            connect();
         }
     };
 

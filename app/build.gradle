@@ -24,7 +24,7 @@ ext {
     buildToolsProjectVersion = '23.0.3'
     supportLibraryVersion = '23.1.1'
     versionProjectCode = 1
-    versionProjectName = "0.0.9"
+    versionProjectName = "0.1.0"
     baseScheme = 'http'
     baseHost = 's1.vshost.info:5003/'
     betaDistributionEmails = "kl@persilab.com"

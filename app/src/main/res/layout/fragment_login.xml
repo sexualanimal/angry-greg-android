@@ -77,4 +77,6 @@
               android:visibility="gone"
               android:textColor="@color/red_dark"
             android:text="@string/login_wrong"/>
+
+    <include layout="@layout/progressbar"/>
 </LinearLayout>
