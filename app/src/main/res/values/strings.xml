@@ -20,6 +20,7 @@
     <string name="filter_hint">Filter...</string>
     <string name="refresh">Refresh</string>
     <string name="edit">Edit</string>
+    <string name="action_exit">Exit</string>
     <string name="action_settings">Опции</string>
 
     <string name="app_name">Angry Greg</string>

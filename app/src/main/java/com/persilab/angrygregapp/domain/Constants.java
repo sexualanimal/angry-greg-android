@@ -19,7 +19,7 @@ public class Constants {
         public static final String FRAGMENT_CLASS = "fragment_class";
         public static final String FRAGMENT_ARGS = "fragment_args";
         public static final String INDEX = "index";
-        public static final String TITLE = "title";
+        public static final String LOGOUT = "logout";
         public static final String MESSAGE = "message";
         public static final String USER = "user";
         public static final String USER_ID = "user_id";

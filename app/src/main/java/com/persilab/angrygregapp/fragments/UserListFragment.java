@@ -68,6 +68,7 @@ public class UserListFragment extends ListFragment<User> {
             actionBar.setDisplayShowTitleEnabled(false);
         } else {
             inflater.inflate(R.menu.viewlist, menu);
+            inflater.inflate(R.menu.exit, menu);
             super.onCreateOptionsMenu(menu, inflater);
         }
     }

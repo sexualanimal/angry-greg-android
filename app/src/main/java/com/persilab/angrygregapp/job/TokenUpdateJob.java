@@ -95,7 +95,9 @@ public class TokenUpdateJob extends Job {
             try {
                 helper = new SnappyHelper(context, TAG);;
                 token = helper.getSerializable(Token.class);
-                user = token.getAccount();
+                if(token != null) {
+                    user = token.getAccount();
+                }
             } catch (SnappydbException e) {
                 Log.e(TAG, "Unknown exception", e);
             } finally {

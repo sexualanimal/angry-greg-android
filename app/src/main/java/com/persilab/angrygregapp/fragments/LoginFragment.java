@@ -116,13 +116,11 @@ public class LoginFragment extends BaseFragment {
         if(acceptEvents) {
             acceptEvents = false;
             if (updateEvent.status.equals(ResponseEvent.Status.SUCCESS)) {
-                User user = new User();
-                user.setPassword(loginPassword.getText().toString());
-                user.setPhone(loginPhone.getText().toString());
-                TokenUpdateJob.start(updateEvent.message, user);
+                TokenUpdateJob.start(updateEvent.message, null);
                 SnappyHelper helper = new SnappyHelper(getContext(), "login");
                 try {
                     helper.storeString(PHONE, loginPhone.getText().toString());
+                    helper.storeSerializable(updateEvent.message);
                 } catch (SnappydbException e) {
                     Cat.e("Unknown exception", e);
                 } finally {

@@ -1,20 +1,16 @@
 package com.persilab.angrygregapp.activity;
 
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.SearchRecentSuggestions;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.SearchView;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import com.persilab.angrygregapp.R;
+import com.persilab.angrygregapp.database.SnappyHelper;
 import com.persilab.angrygregapp.database.SuggestionProvider;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.Token;
@@ -24,8 +20,10 @@ import com.persilab.angrygregapp.domain.event.*;
 import com.persilab.angrygregapp.fragments.BaseFragment;
 import com.persilab.angrygregapp.fragments.ErrorFragment;
 import com.persilab.angrygregapp.fragments.LoginFragment;
+import com.persilab.angrygregapp.job.TokenUpdateJob;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.GuiUtils;
+import com.snappydb.SnappydbException;
 import net.vrallev.android.cat.Cat;
 import org.greenrobot.eventbus.Subscribe;
 import retrofit2.Response;
@@ -75,6 +73,29 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDrawerOpened(View drawerView) {
 
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_exit :
+                TokenUpdateJob.stop();
+                SnappyHelper helper = new SnappyHelper(this, "logout");
+                Token token = null;
+                try {
+                    token = helper.getSerializable(Token.class);
+                    token.setAccessExpires(null);
+                    helper.storeSerializable(token);
+                } catch (SnappydbException e) {
+                    Cat.e(e);
+                } finally {
+                    helper.close();
+                }
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Subscribe
@@ -133,9 +154,15 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.exit(0);
+    }
+
     @Subscribe
     public void onEvent(FragmentAttachedEvent fragmentAttached) {
-        title = fragmentAttached.fragment.getArguments().getString(Constants.ArgsName.TITLE);
+        title = fragmentAttached.fragment.getArguments().getString(Constants.ArgsName.LOGOUT);
     }
 
     @Override

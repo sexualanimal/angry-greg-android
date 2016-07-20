@@ -3,9 +3,7 @@ package com.persilab.angrygregapp.fragments;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.ImageView;
 import com.google.gson.Gson;
 import com.neovisionaries.ws.client.*;
@@ -52,7 +50,7 @@ public class UserFragment extends BaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_user, container, false);
         handler = new Handler();
         bind(rootView);
-
+        setHasOptionsMenu(true);
         getActivity().setTitle(R.string.user);
 
         user = (User) getArguments().getSerializable(Constants.ArgsName.USER);
@@ -67,6 +65,11 @@ public class UserFragment extends BaseFragment {
         connect();
         return rootView;
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+            inflater.inflate(R.menu.exit, menu);
     }
 
     private void initPoints() {
