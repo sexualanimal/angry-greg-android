@@ -78,7 +78,7 @@ public class ProfileFragment extends BaseFragment {
         user = (User) getArguments().getSerializable(Constants.ArgsName.USER);
         if (user.getId() == null) {
             user.setName(null);
-            getActivity().setTitle(R.string.profile_edit);
+            getActivity().setTitle(R.string.profile_create);
             layoutNewUser.setVisibility(View.VISIBLE);
         }
         putInfo();
