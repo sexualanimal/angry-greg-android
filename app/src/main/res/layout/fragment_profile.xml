@@ -25,6 +25,9 @@
                 <EditText android:layout_width="match_parent"
                           android:id="@+id/profile_name"
                           android:hint="@string/profile_name"
+                          android:inputType="text"
+                          android:imeOptions="actionNext"
+                          android:nextFocusDown="@+id/profile_phone"
                           style="@style/edit_text"/>
                 <View style="@style/horizontal_border"
                       android:layout_marginTop="@dimen/spacing_medium"
@@ -32,7 +35,9 @@
 
                 <EditText android:layout_width="match_parent"
                           android:id="@+id/profile_phone"
+                          android:nextFocusDown="@+id/profile_password"
                           android:inputType="phone"
+                          android:imeOptions="actionNext"
                           android:hint="@string/profile_phone"
                           style="@style/edit_text"/>
                 <View style="@style/horizontal_border"
@@ -47,7 +52,9 @@
 
                     <EditText android:layout_width="match_parent"
                               android:id="@+id/profile_password"
+                              android:nextFocusDown="@+id/profile_points"
                               android:inputType="textVisiblePassword"
+                              android:imeOptions="actionNext"
                               android:hint="@string/profile_password"
                               style="@style/edit_text"/>
                     <View style="@style/horizontal_border"
@@ -57,6 +64,7 @@
                     <EditText android:layout_width="match_parent"
                               android:id="@+id/profile_points"
                               android:hint="@string/profile_points"
+                              android:imeOptions="actionDone"
                               android:inputType="number"
                               style="@style/edit_text"/>
                     <View style="@style/horizontal_border"

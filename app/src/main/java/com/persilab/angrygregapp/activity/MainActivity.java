@@ -22,6 +22,7 @@ import com.persilab.angrygregapp.fragments.ErrorFragment;
 import com.persilab.angrygregapp.fragments.LoginFragment;
 import com.persilab.angrygregapp.job.TokenUpdateJob;
 import com.persilab.angrygregapp.net.RestClient;
+import com.persilab.angrygregapp.util.FragmentBuilder;
 import com.persilab.angrygregapp.util.GuiUtils;
 import com.snappydb.SnappydbException;
 import net.vrallev.android.cat.Cat;
@@ -34,7 +35,7 @@ public class MainActivity extends BaseActivity {
     private CharSequence title;
 
     boolean doubleBackToExitPressedOnce = false;
-
+    boolean exit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class MainActivity extends BaseActivity {
         // Востанавливаем фрагмент при смене ориентации экрана.
         Fragment sectionFragment = getLastFragment(savedInstanceState);
         if (sectionFragment != null) {
-            replaceFragment(sectionFragment);
+            restoreFragment(sectionFragment);
         } else {
             replaceFragment(LoginFragment.class);
         }
@@ -92,6 +93,7 @@ public class MainActivity extends BaseActivity {
                 } finally {
                     helper.close();
                 }
+                exit = true;
                 finish();
                 break;
         }
@@ -157,7 +159,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        System.exit(0);
+        if(exit) {
+            System.exit(0);
+        }
     }
 
     @Subscribe

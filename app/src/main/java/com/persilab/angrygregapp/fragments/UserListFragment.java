@@ -144,6 +144,8 @@ public class UserListFragment extends ListFragment<User> {
     @Override
     public void onStop() {
         EventBus.getDefault().unregister(this);
+        users.clear();
+        clearData();
         super.onStop();
     }
 
