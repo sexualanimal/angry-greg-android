@@ -34,7 +34,6 @@ public class MainActivity extends BaseActivity {
 
     private CharSequence title;
 
-    boolean doubleBackToExitPressedOnce = false;
     boolean exit = false;
 
     @Override
@@ -171,18 +170,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() <= 0) {
-            if (doubleBackToExitPressedOnce) {
-                super.onBackPressed();
-                return;
-            }
-
-            this.doubleBackToExitPressedOnce = true;
-            GuiUtils.showSnackbar(container,  R.string.back_to_exit);
-            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
-        } else {
             super.onBackPressed();
-        }
     }
 
 }
