@@ -40,4 +40,43 @@ public class Token extends JsonEntity implements Serializable, Validatable {
         return time.getTime().getTime();
     }
 
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public Date getAccessExpires() {
+        return accessExpires;
+    }
+
+    public void setAccessExpires(Date accessExpires) {
+        this.accessExpires = accessExpires;
+    }
+
+    public Date getRefreshExpires() {
+        return refreshExpires;
+    }
+
+    public void setRefreshExpires(Date refreshExpires) {
+        this.refreshExpires = refreshExpires;
+    }
+
+    public User getAccount() {
+        return account;
+    }
+
+    public void setAccount(User account) {
+        this.account = account;
+    }
 }
