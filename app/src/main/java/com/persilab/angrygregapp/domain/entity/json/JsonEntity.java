@@ -10,4 +10,20 @@ import lombok.Data;
 public class JsonEntity {
     private ServerInformation serverInformation;
     private RequesterInformation requesterInformation;
+
+    public ServerInformation getServerInformation() {
+        return serverInformation;
+    }
+
+    public void setServerInformation(ServerInformation serverInformation) {
+        this.serverInformation = serverInformation;
+    }
+
+    public RequesterInformation getRequesterInformation() {
+        return requesterInformation;
+    }
+
+    public void setRequesterInformation(RequesterInformation requesterInformation) {
+        this.requesterInformation = requesterInformation;
+    }
 }
