@@ -123,9 +123,7 @@ retrolambda {
 dependencies {
     //   compile "com.github.User:Repo:Tag"  for github repos
     compile fileTree(include: ["*.jar"], dir: "libs")
-    apt "org.projectlombok:lombok:1.16.6"
     apt "com.jakewharton:butterknife:7.0.1"
-    provided "org.projectlombok:lombok:1.16.6"
 
     // UI
     compile "com.android.support:appcompat-v7:$supportLibraryVersion"

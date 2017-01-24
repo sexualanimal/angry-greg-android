@@ -3,7 +3,6 @@ package com.persilab.angrygregapp.job;
 import android.util.Log;
 import com.evernote.android.job.Job;
 
-import lombok.experimental.ExtensionMethod;
 
 /**
  * Created by 0shad on 01.03.2016.

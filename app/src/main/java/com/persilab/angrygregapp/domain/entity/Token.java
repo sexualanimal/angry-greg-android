@@ -2,7 +2,6 @@ package com.persilab.angrygregapp.domain.entity;
 
 import com.persilab.angrygregapp.domain.Validatable;
 import com.persilab.angrygregapp.domain.entity.json.JsonEntity;
-import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -12,7 +11,6 @@ import java.util.Date;
  * Created by 0shad on 20.06.2016.
  */
 
-@Data
 public class Token extends JsonEntity implements Serializable, Validatable {
 
     private String accessToken;

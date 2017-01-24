@@ -8,7 +8,6 @@ import com.persilab.angrygregapp.fragments.ListFragment;
 import com.persilab.angrygregapp.util.SystemUtils;
 import io.requery.Entity;
 import io.requery.Key;
-import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -19,7 +18,6 @@ import java.util.Random;
  * Created by 0shad on 20.06.2016.
  */
 @Entity
-@Data
 public class User implements Serializable, Findable {
 
     private static long point = System.currentTimeMillis();
