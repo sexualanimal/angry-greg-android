@@ -1,7 +1,11 @@
 package com.persilab.angrygregapp.net;
 
+import android.content.Context;
 import android.net.Uri;
+
 import com.google.gson.*;
+import com.persilab.angrygregapp.App;
+import com.persilab.angrygregapp.activity.MainActivity;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.Token;
 import com.persilab.angrygregapp.domain.entity.User;
@@ -9,19 +13,20 @@ import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.entity.json.JsonEntity;
 import com.persilab.angrygregapp.net.adapter.BigDecimalTypeAdapter;
 import com.persilab.angrygregapp.net.adapter.UriTypeAdapter;
+
 import okhttp3.*;
 import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.*;
 import retrofit2.http.*;
 
+import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
-/**
- * Created by 0shad on 25.02.2016.
- */
 public class RestClient {
 
     private static final String TAG = RestClient.class.getSimpleName();
@@ -31,40 +36,40 @@ public class RestClient {
     public interface RestServiceApi {
 
         @GET(ACCOUNTS)
-        Call<List<User>> accounts(@Header("Authentication") String authentication,
-                                  @Query("phone") String phone,
-                                  @Query("name") String name,
-                                  @Query("is_admin") Boolean admin,
-                                  @Query("offset") Integer offset,
-                                  @Query("limit") Integer limit);
+        Call<List<User>> accounts(@Header("Authorization") String authentication);
 
         @GET(ACCOUNTS + "/{id}")
-        Call<User> getAccount(@Path("id") String id);
+        Call<User> getAccount(@Path("id") Integer id);
 
         @DELETE(ACCOUNTS + "/{id}")
-        Call<JsonEntity> deleteAccount(@Path("id") String id);
+        Call<JsonEntity> deleteAccount(@Path("id") Integer id);
 
         @PUT(ACCOUNTS + "/{id}")
-        Call<User> changeAccount(@Path("id") String id,
+        Call<User> changeAccount(@Path("id") Integer id,
                                  @Query("name") String name,
                                  @Query("phone") String phone,
-                                 @Query("birthday") String birthday);
+                                 @Query("birthday") String birthday,
+                                 @Query("points") Integer points,
+                                 @Query("is_admin") Integer is_admin,
+                                 @Query("password") String password);
 
         @POST(ACCOUNTS)
         Call<User> createAccount(@Query("name") String name,
                                  @Query("phone") String phone,
-                                 @Query("password") String password,
-                                 @Query("birthday") String birthday);
+                                 @Query("birthday") String birthday,
+                                 @Query("points") Integer points,
+                                 @Query("is_admin") Integer is_admin,
+                                 @Query("password") String password);
 
         @POST(AUTH + "/access")
-        Call<Token> accessToken(@Query("phone") String phone,
+        Call<Token> accessToken(@Query("username") String username,
                                 @Query("password") String password);
 
         @POST(AUTH + "/refresh/{refreshToken}")
         Call<Token> refreshToken(@Path("refreshToken") String refreshToken);
 
         @PUT(ACCOUNTS + "/{id}/addpoints/{amountOfPoints}")
-        Call<User> addPoints(@Path("id") String userId, @Path("amountOfPoints") Integer amount);
+        Call<User> addPoints(@Path("id") Integer id, @Path("points") Integer points);
     }
 
     private final static RestServiceApi service = buildApi();
@@ -79,16 +84,7 @@ public class RestClient {
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .addNetworkInterceptor(interceptor)
-                    .addInterceptor(chain -> {
-                        Request original = chain.request();
-                        Request request = original.newBuilder()
-                                .header("Content-Type", "application/json")
-                                .header("Accept", "application/json")
-                                .method(original.method(), original.body())
-                                .build();
-                        return chain.proceed(request);
-                    }).build();
+                    .authenticator(new TokenAuthenticator()).build();
 
             Gson gson = new GsonBuilder()
                     .setDateFormat(Constants.Pattern.DATA_ISO_8601_24H_FULL_FORMAT)
@@ -112,6 +108,34 @@ public class RestClient {
                     .create(RestServiceApi.class);
         }
         return service;
+    }
+
+    public static class TokenAuthenticator implements Authenticator {
+        @Override
+        public Request authenticate(Route route, Response response) throws IOException {
+            System.out.println("--------------------------------------------------------try to auto auth");
+            Context context = App.getInstance();
+            if (context != null) {
+                MainActivity mainActivity = new MainActivity();
+                Token oldToken = mainActivity.getActualToken();
+
+                // Refresh your access_token using a synchronous api request
+                Token newAccessToken = service.refreshToken(oldToken.getRefreshToken()).execute().body();
+                if (newAccessToken != null) {
+                    mainActivity.setActualToken(newAccessToken);
+                } else {
+                    return null;
+                }
+
+                // Add new header to rejected request and retry it
+                return response.request().newBuilder()
+                        .header("Authentication", newAccessToken.getAccessToken())
+                        .build();
+            } else {
+                return null;
+            }
+        }
+
     }
 
 }
