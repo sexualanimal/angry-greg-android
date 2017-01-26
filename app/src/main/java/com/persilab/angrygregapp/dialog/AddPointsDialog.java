@@ -22,7 +22,7 @@ import com.persilab.angrygregapp.util.GuiUtils;
  */
 public class AddPointsDialog extends BaseDialog {
 
-    private String userId;
+    private Integer userId;
 
     public static void show(FragmentManager fragmentManager, User user) {
         AddPointsDialog dialog = (AddPointsDialog) fragmentManager.findFragmentByTag(AddPointsDialog.class.getSimpleName());
@@ -36,7 +36,7 @@ public class AddPointsDialog extends BaseDialog {
     @Bind(R.id.dialog_picker_numberPicker)
     NumberPicker numberPicker;
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

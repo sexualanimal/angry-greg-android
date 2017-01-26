@@ -1,36 +1,41 @@
 package com.persilab.angrygregapp.domain.entity;
 
 import android.os.SystemClock;
+
 import com.persilab.angrygregapp.adapter.ItemListAdapter;
 import com.persilab.angrygregapp.domain.Findable;
 
 import com.persilab.angrygregapp.fragments.ListFragment;
 import com.persilab.angrygregapp.util.SystemUtils;
+
 import io.requery.Entity;
 import io.requery.Key;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
-/**
- * Created by 0shad on 20.06.2016.
- */
-@Entity
 public class User implements Serializable, Findable {
 
     private static long point = System.currentTimeMillis();
 
     @Key
-    String id;
-    String name = "Anonymous";
+    Integer id;
+    String name;
     String phone;
     String password;
-    Date birthday;
-    Boolean is_admin = true;
-    Integer amountOfFreeCoffe = 0;
-    Integer amountOfPoints = 0;
+    String birthday;
+    Integer points;
+    Integer free_coffee;
+    Integer is_admin;
+    String created_at;
+    String updated_at;
+    String deleted_at;
 
     transient boolean delete = false;
 
@@ -39,11 +44,11 @@ public class User implements Serializable, Findable {
         return name.toLowerCase().contains(event.query.toLowerCase()) || phone.toLowerCase().contains(event.query.toLowerCase());
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -72,35 +77,45 @@ public class User implements Serializable, Findable {
     }
 
     public Date getBirthday() {
-        return birthday;
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Date result = new Date();
+        try {
+            result = format.parse(birthday);
+        } catch (ParseException e) {
+        }
+        return result;
     }
 
     public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+        this.birthday = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(birthday);
     }
 
     public Boolean getIs_admin() {
-        return is_admin;
+        return is_admin == 1;
     }
 
     public void setIs_admin(Boolean is_admin) {
-        this.is_admin = is_admin;
+        if (is_admin) {
+            this.is_admin = 1;
+        } else {
+            this.is_admin = 0;
+        }
     }
 
     public Integer getAmountOfFreeCoffe() {
-        return amountOfFreeCoffe;
+        return free_coffee;
     }
 
-    public void setAmountOfFreeCoffe(Integer amountOfFreeCoffe) {
-        this.amountOfFreeCoffe = amountOfFreeCoffe;
+    public void setAmountOfFreeCoffe(Integer free_coffee) {
+        this.free_coffee = free_coffee;
     }
 
     public Integer getAmountOfPoints() {
-        return amountOfPoints;
+        return points;
     }
 
-    public void setAmountOfPoints(Integer amountOfPoints) {
-        this.amountOfPoints = amountOfPoints;
+    public void setAmountOfPoints(Integer points) {
+        this.points = points;
     }
 
     public boolean isDelete() {
@@ -109,5 +124,29 @@ public class User implements Serializable, Findable {
 
     public void setDelete(boolean delete) {
         this.delete = delete;
+    }
+
+    public String getDeleted_at() {
+        return deleted_at;
+    }
+
+    public void setDeleted_at(String deleted_at) {
+        this.deleted_at = deleted_at;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
+    public String getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(String updated_at) {
+        this.updated_at = updated_at;
     }
 }

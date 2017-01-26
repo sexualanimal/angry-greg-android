@@ -59,7 +59,7 @@ public class UserFragment extends BaseFragment {
             int offColor = Color.TRANSPARENT;
             int onColor = Color.BLACK;
             int width = GuiUtils.getScreenSize(getContext()).y;
-            cardQr.setImageBitmap(QRCode.from(user.getId()).withCharset("UTF-8").withColor(onColor, offColor).withSize(width, width).bitmap());
+            cardQr.setImageBitmap(QRCode.from(String.valueOf(user.getId())).withCharset("UTF-8").withColor(onColor, offColor).withSize(width, width).bitmap());
             getActivity().setTitle(user.getName());
             initPoints();
         }
@@ -128,13 +128,13 @@ public class UserFragment extends BaseFragment {
         @Override
         public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
             Cat.i("Websocket connected");
-            websocket.sendText(new Gson().toJson(new WebSocketMessage(WebSocketMessage.Action.init, user.getId())));
+            websocket.sendText(new Gson().toJson(new WebSocketMessage(WebSocketMessage.Action.init, String.valueOf(user.getId()))));
         }
 
 
         @Override
         public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-            websocket.sendText(new Gson().toJson(new WebSocketMessage(WebSocketMessage.Action.remove, user.getId())));
+            websocket.sendText(new Gson().toJson(new WebSocketMessage(WebSocketMessage.Action.remove, String.valueOf(user.getId()))));
             SystemUtils.sleepQuietly(1000);
             connect();
         }

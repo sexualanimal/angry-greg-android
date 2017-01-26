@@ -19,7 +19,6 @@ import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.event.NetworkEvent;
 import com.persilab.angrygregapp.domain.event.ResponseEvent;
 import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
-import com.persilab.angrygregapp.job.TokenUpdateJob;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.FragmentBuilder;
 import com.persilab.angrygregapp.util.GuiUtils;
@@ -90,16 +89,16 @@ public class LoginFragment extends BaseFragment {
         }
         loadingText.setText(R.string.login_loading);
         progress.setVisibility(View.GONE);
-        if (TokenUpdateJob.getToken(getContext()) != null && !TokenUpdateJob.getToken().isAccessExpired()) {
-            TokenUpdateJob.start(null, null);
-             if(TokenUpdateJob.getToken().getAccount().getIs_admin()) {
-                 getMainActivity().replaceFragment(UserListFragment.class);
-             } else {
-                 FragmentBuilder builder = new FragmentBuilder(getFragmentManager());
-                 builder.putArg(Constants.ArgsName.USER, TokenUpdateJob.getToken().getAccount());
-                 getMainActivity().replaceFragment(UserFragment.class, builder);
-             }
-        }
+//        if (TokenUpdateJob.getToken(getContext()) != null && !TokenUpdateJob.getToken().isAccessExpired()) {
+//            TokenUpdateJob.start(null, null);////////////////////////////////////////////////            //todo fix it
+//             if(TokenUpdateJob.getToken().getAccount().getIs_admin()) {
+//                 getMainActivity().replaceFragment(UserListFragment.class);
+//             } else {
+//                 FragmentBuilder builder = new FragmentBuilder(getFragmentManager());
+//                 builder.putArg(Constants.ArgsName.USER, TokenUpdateJob.getToken().getAccount());
+//                 getMainActivity().replaceFragment(UserFragment.class, builder);
+//             }
+//        }
         return rootView;
     }
 
@@ -119,11 +118,11 @@ public class LoginFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(TokenUpdateEvent updateEvent) {
+        System.out.println("---------------------------------------------------------------------------"+updateEvent.status);
         progress.setVisibility(View.GONE);
         if(acceptEvents) {
             acceptEvents = false;
             if (updateEvent.status.equals(ResponseEvent.Status.SUCCESS)) {
-                TokenUpdateJob.start(updateEvent.message, null);
                 SnappyHelper helper = new SnappyHelper(getContext(), "login");
                 try {
                     helper.storeString(PHONE, loginPhone.getText().toString());

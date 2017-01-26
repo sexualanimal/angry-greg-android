@@ -4,8 +4,12 @@ import com.persilab.angrygregapp.domain.Validatable;
 import com.persilab.angrygregapp.domain.entity.json.JsonEntity;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by 0shad on 20.06.2016.
@@ -15,8 +19,8 @@ public class Token extends JsonEntity implements Serializable, Validatable {
 
     private String accessToken;
     private String refreshToken;
-    private Date accessExpires;
-    private Date refreshExpires;
+    private String accessExpires;
+    private String refreshExpires;
     private User account;
 
     @Override
@@ -25,11 +29,11 @@ public class Token extends JsonEntity implements Serializable, Validatable {
     }
 
     public boolean isAccessExpired() {
-        return accessExpires == null || accessExpires.getTime() - currentTime() - 5000 < 0;
+        return accessExpires == null ||  Integer.parseInt(accessExpires) - currentTime() - 5000 < 0;
     }
 
     public boolean isRefreshExpired() {
-        return refreshExpires == null || refreshExpires.getTime() - currentTime() - 5000 < 0;
+        return refreshExpires == null ||  Integer.parseInt(refreshExpires) - currentTime() - 5000 < 0;
     }
 
     private static long currentTime() {
@@ -55,19 +59,31 @@ public class Token extends JsonEntity implements Serializable, Validatable {
     }
 
     public Date getAccessExpires() {
-        return accessExpires;
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Date result = new Date();
+        try {
+            result = format.parse(this.accessExpires);
+        } catch (ParseException e) {
+        }
+        return result;
     }
 
     public void setAccessExpires(Date accessExpires) {
-        this.accessExpires = accessExpires;
+        this.accessExpires = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(accessExpires);
     }
 
     public Date getRefreshExpires() {
-        return refreshExpires;
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Date result = new Date();
+        try {
+            result = format.parse(this.refreshExpires);
+        } catch (ParseException e) {
+        }
+        return result;
     }
 
     public void setRefreshExpires(Date refreshExpires) {
-        this.refreshExpires = refreshExpires;
+        this.refreshExpires = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(refreshExpires);
     }
 
     public User getAccount() {

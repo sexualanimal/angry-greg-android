@@ -76,7 +76,7 @@ public class ProfileFragment extends BaseFragment {
         setHasOptionsMenu(true);
         getActivity().setTitle(R.string.profile_edit);
         user = (User) getArguments().getSerializable(Constants.ArgsName.USER);
-        if (user.getId() == null) {
+        if (!(user.getId()>=0)) {
             user.setName(null);
             getActivity().setTitle(R.string.profile_create);
             layoutNewUser.setVisibility(View.VISIBLE);
@@ -141,21 +141,21 @@ public class ProfileFragment extends BaseFragment {
                 }, year, month, day);
     }
 
-    public void save() {
-        if (user.getBirthday() != null) {
-            String date = new SimpleDateFormat(Constants.Pattern.DATA_ISO_8601_24H_FULL_FORMAT).format(user.getBirthday());
-            if(user.getId() != null) {
-                RestClient.serviceApi().changeAccount(user.getId(), user.getName(), user.getPhone(), date).enqueue();
-            } else {
-                RestClient.serviceApi().createAccount(user.getName(), user.getPhone(), user.getPassword(), date).enqueue();
-            }
-        } else {
-            if (user.getId() != null) {
-                RestClient.serviceApi().changeAccount(user.getId(), user.getName(), user.getPhone(), null).enqueue();
-            } else {
-                RestClient.serviceApi().createAccount(user.getName(), user.getPhone(), user.getPassword(), null).enqueue();
-            }
-        }
+    public void save() { //todo fix it
+//        if (user.getBirthday() != null) {
+//            String date = new SimpleDateFormat(Constants.Pattern.DATA_ISO_8601_24H_FULL_FORMAT).format(user.getBirthday());
+//            if(user.getId() != null) {
+//                RestClient.serviceApi().changeAccount(user.getId(), user.getName(), user.getPhone(), date).enqueue();
+//            } else {
+//                RestClient.serviceApi().createAccount(user.getName(), user.getPhone(), user.getPassword(), date).enqueue();
+//            }
+//        } else {
+//            if (user.getId() != null) {
+//                RestClient.serviceApi().changeAccount(user.getId(), user.getName(), user.getPhone(), null).enqueue();
+//            } else {
+//                RestClient.serviceApi().createAccount(user.getName(), user.getPhone(), user.getPassword(), null).enqueue();
+//            }
+//        }
     }
 }
 

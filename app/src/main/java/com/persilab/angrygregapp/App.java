@@ -6,8 +6,6 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import com.evernote.android.job.JobManager;
 import com.persilab.angrygregapp.database.BigDecimalConverter;
 import com.persilab.angrygregapp.domain.Constants;
-import com.persilab.angrygregapp.domain.entity.Models;
-import com.persilab.angrygregapp.job.AppJobCreator;
 import io.fabric.sdk.android.Fabric;
 import io.requery.Persistable;
 import io.requery.android.DefaultMapping;
@@ -47,7 +45,6 @@ public class App extends Application {
                 .setDefaultFontPath(Constants.Assets.ROBOTO_FONT_PATH)
                 .setFontAttrId(R.attr.fontPath)
                 .build());
-        JobManager.create(this).addJobCreator(new AppJobCreator());
     }
 
     @Override
@@ -55,29 +52,29 @@ public class App extends Application {
         super.onLowMemory();
     }
 
-
-    public EntityDataStore<Persistable> getDataStore() {
-        if (dataStore == null) {
-            // override onUpgrade to handle migrating to a new version
-            DatabaseSource source = new DatabaseSource(this, Models.DEFAULT, 1);
-            if (BuildConfig.DEBUG) {
-                // use this in development mode to drop and recreate the tables on every upgrade
-                source.setTableCreationMode(TableCreationMode.DROP_CREATE);
-                source.setLoggingEnabled(true);
-            }
-
-            Configuration configuration = source.getConfiguration();
-            ((DefaultMapping) configuration.getMapping()).addConverter(new BigDecimalConverter(), BigDecimal.class);
-            dataStore = new EntityDataStore<Persistable>(configuration);
-
-            rxDataStore = RxSupport.toReactiveStore(
-                    new EntityDataStore<Persistable>(configuration));
-        }
-        return dataStore;
-    }
-
-    public SingleEntityStore<Persistable> getRxDataStore() {
-        getDataStore();
-        return rxDataStore;
-    }
+//todo fix it
+//    public EntityDataStore<Persistable> getDataStore() {
+//        if (dataStore == null) {
+//            // override onUpgrade to handle migrating to a new version
+//            DatabaseSource source = new DatabaseSource(this, Models.DEFAULT, 1);
+//            if (BuildConfig.DEBUG) {
+//                // use this in development mode to drop and recreate the tables on every upgrade
+//                source.setTableCreationMode(TableCreationMode.DROP_CREATE);
+//                source.setLoggingEnabled(true);
+//            }
+//
+//            Configuration configuration = source.getConfiguration();
+//            ((DefaultMapping) configuration.getMapping()).addConverter(new BigDecimalConverter(), BigDecimal.class);
+//            dataStore = new EntityDataStore<Persistable>(configuration);
+//
+//            rxDataStore = RxSupport.toReactiveStore(
+//                    new EntityDataStore<Persistable>(configuration));
+//        }
+//        return dataStore;
+//    }
+//
+//    public SingleEntityStore<Persistable> getRxDataStore() {
+//        getDataStore();
+//        return rxDataStore;
+//    }
 }

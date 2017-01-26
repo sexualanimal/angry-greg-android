@@ -16,7 +16,6 @@ import com.persilab.angrygregapp.adapter.ItemListAdapter;
 import com.persilab.angrygregapp.adapter.LazyItemListAdapter;
 import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.event.AddRateEvent;
-import com.persilab.angrygregapp.job.TokenUpdateJob;
 import com.persilab.angrygregapp.lister.DataSource;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.GuiUtils;
@@ -89,7 +88,7 @@ public class UserListFragment extends ListFragment<User> {
             case R.id.user_list_delete:
                 List<User> needDelete = Stream.of(adapter.getItems()).filter(User::isDelete).collect(Collectors.toList());
                 for (User user : needDelete) {
-                    RestClient.serviceApi().deleteAccount(user.getId()).enqueue();
+                    RestClient.serviceApi().deleteAccount(user.getId()).enqueue();//todo delete
                 }
                 adapter.getItems().removeAll(needDelete);
                 adapter.notifyDataSetChanged();
@@ -110,7 +109,6 @@ public class UserListFragment extends ListFragment<User> {
         adapter.notifyDataSetChanged();
     }
 
-
     @Override
     protected ItemListAdapter<User> newAdapter() {
         return new UserListAdapter();
@@ -126,9 +124,10 @@ public class UserListFragment extends ListFragment<User> {
     protected DataSource<User> getDataSource() throws Exception {
         return (skip, size) -> {
             if (users.isEmpty()) {
-                users = RestClient
-                        .serviceApi()
-                        .accounts(TokenUpdateJob.getToken().getAccessToken(), null, null, false, null, null).execute().body();
+//                users = RestClient
+//                        .serviceApi()
+//                        .accounts(TokenUpdateJob.getToken().getAccessToken()).execute().body();
+//                        .accounts(TokenUpdateJob.getToken().getAccessToken(),null,null,null,null,null,null,null,null,null,null).execute().body(); //todo fix it
 
             }
             return Stream.of(users).skip(skip).limit(size).collect(Collectors.toList());
@@ -158,9 +157,9 @@ public class UserListFragment extends ListFragment<User> {
         }
     }
 
-    private int getUserById(final String id) {
+    private int getUserById(final int id) {
         for (int i = 0; i < adapter.getItems().size(); i++) {
-            if(adapter.getItems().get(i).getId().equals(id)) {
+            if(adapter.getItems().get(i).getId() == id) {
                 return i;
             }
         }
@@ -172,7 +171,6 @@ public class UserListFragment extends ListFragment<User> {
         public UserListAdapter() {
             super(R.layout.item_user);
         }
-
 
         @Override
         public void onBindHolder(ViewHolder holder, @Nullable User item) {
@@ -218,6 +216,5 @@ public class UserListFragment extends ListFragment<User> {
         }
 
     }
-
 
 }

@@ -20,7 +20,7 @@ import com.persilab.angrygregapp.domain.event.*;
 import com.persilab.angrygregapp.fragments.BaseFragment;
 import com.persilab.angrygregapp.fragments.ErrorFragment;
 import com.persilab.angrygregapp.fragments.LoginFragment;
-import com.persilab.angrygregapp.job.TokenUpdateJob;
+//import com.persilab.angrygregapp.job.TokenUpdateJob;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.FragmentBuilder;
 import com.persilab.angrygregapp.util.GuiUtils;
@@ -33,8 +33,9 @@ import retrofit2.Response;
 public class MainActivity extends BaseActivity {
 
     private CharSequence title;
-
+    Token actualToken;
     boolean exit = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,6 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_exit :
-                TokenUpdateJob.stop();
                 SnappyHelper helper = new SnappyHelper(this, "logout");
                 Token token = null;
                 try {
@@ -173,4 +173,11 @@ public class MainActivity extends BaseActivity {
             super.onBackPressed();
     }
 
+    public Token getActualToken() {
+        return actualToken;
+    }
+
+    public void setActualToken(Token actualToken) {
+        this.actualToken = actualToken;
+    }
 }
