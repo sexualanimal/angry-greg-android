@@ -110,7 +110,6 @@ public class LoginFragment extends BaseFragment {
 
     @OnClick(R.id.login_continue)
     public void onClick() {
-            qwe = false;
             User user = new User();
             if (TextUtils.isEmpty(loginPhone.getText())) {
                 loginPhone.setError(getString(R.string.login_phone_error));
