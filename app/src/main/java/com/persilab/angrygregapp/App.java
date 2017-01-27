@@ -6,6 +6,8 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import com.evernote.android.job.JobManager;
 import com.persilab.angrygregapp.database.BigDecimalConverter;
 import com.persilab.angrygregapp.domain.Constants;
+import com.persilab.angrygregapp.domain.entity.Token;
+
 import io.fabric.sdk.android.Fabric;
 import io.requery.Persistable;
 import io.requery.android.DefaultMapping;
@@ -25,7 +27,7 @@ import java.math.BigDecimal;
 public class App extends Application {
 
     private static App singleton;
-
+    private static Token actualToken;
     public static App getInstance() {
         return singleton;
     }
@@ -52,6 +54,13 @@ public class App extends Application {
         super.onLowMemory();
     }
 
+    public static Token getActualToken() {
+        return actualToken;
+    }
+
+    public static void setActualToken(Token actualToken) {
+        App.actualToken = actualToken;
+    }
 //todo fix it
 //    public EntityDataStore<Persistable> getDataStore() {
 //        if (dataStore == null) {

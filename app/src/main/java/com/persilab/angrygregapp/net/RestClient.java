@@ -1,5 +1,6 @@
 package com.persilab.angrygregapp.net;
 
+import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
 
@@ -116,13 +117,12 @@ public class RestClient {
             System.out.println("--------------------------------------------------------try to auto auth");
             Context context = App.getInstance();
             if (context != null) {
-                MainActivity mainActivity = new MainActivity();
-                Token oldToken = mainActivity.getActualToken();
+                Token oldToken = App.getActualToken();
 
                 // Refresh your access_token using a synchronous api request
                 Token newAccessToken = service.refreshToken(oldToken.getRefreshToken()).execute().body();
                 if (newAccessToken != null) {
-                    mainActivity.setActualToken(newAccessToken);
+                    App.setActualToken(newAccessToken);
                 } else {
                     return null;
                 }

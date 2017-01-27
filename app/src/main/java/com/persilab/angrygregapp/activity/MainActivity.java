@@ -33,7 +33,6 @@ import retrofit2.Response;
 public class MainActivity extends BaseActivity {
 
     private CharSequence title;
-    Token actualToken;
     boolean exit = false;
 
 
@@ -173,11 +172,4 @@ public class MainActivity extends BaseActivity {
             super.onBackPressed();
     }
 
-    public Token getActualToken() {
-        return actualToken;
-    }
-
-    public void setActualToken(Token actualToken) {
-        this.actualToken = actualToken;
-    }
 }
