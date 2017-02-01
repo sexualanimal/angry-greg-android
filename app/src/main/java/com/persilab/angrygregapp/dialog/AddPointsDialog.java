@@ -22,13 +22,13 @@ import com.persilab.angrygregapp.util.GuiUtils;
  */
 public class AddPointsDialog extends BaseDialog {
 
-    private Integer userId;
+//    private int userId;
 
     public static void show(FragmentManager fragmentManager, User user) {
         AddPointsDialog dialog = (AddPointsDialog) fragmentManager.findFragmentByTag(AddPointsDialog.class.getSimpleName());
         if (dialog == null) {
             dialog = new AddPointsDialog();
-            dialog.setUserId(user.getId());
+//            dialog.setUserId(user.getId());
             dialog.show(fragmentManager, AddPointsDialog.class.getSimpleName());
         }
     }
@@ -36,9 +36,9 @@ public class AddPointsDialog extends BaseDialog {
     @Bind(R.id.dialog_picker_numberPicker)
     NumberPicker numberPicker;
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
+//    public void setUserId(int userId) {
+//        this.userId = userId;
+//    }
 
     @NonNull
     @Override
@@ -58,7 +58,7 @@ public class AddPointsDialog extends BaseDialog {
 
     @Override
     public void onButtonPositive(DialogInterface dialog) {
-        RestClient.serviceApi().addPoints(userId, numberPicker.getValue()).enqueue();
+//        RestClient.serviceApi().addPoints(userId, numberPicker.getValue()).enqueue(); //todo fix
     }
 
 }

@@ -88,7 +88,7 @@ public class UserListFragment extends ListFragment<User> {
             case R.id.user_list_delete:
                 List<User> needDelete = Stream.of(adapter.getItems()).filter(User::isDelete).collect(Collectors.toList());
                 for (User user : needDelete) {
-                    RestClient.serviceApi().deleteAccount(user.getId()).enqueue();//todo delete
+//                    RestClient.serviceApi().deleteAccount(user.getId()).enqueue();//todo fix
                 }
                 adapter.getItems().removeAll(needDelete);
                 adapter.notifyDataSetChanged();

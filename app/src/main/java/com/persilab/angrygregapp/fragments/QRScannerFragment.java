@@ -47,7 +47,7 @@ public class QRScannerFragment extends BaseFragment implements ZXingScannerView.
 
     @Override
     public void handleResult(Result result) {
-        RestClient.serviceApi().getAccount(Integer.parseInt(result.getText())).enqueue();
+//        RestClient.serviceApi().getAccount(Integer.parseInt(result.getText())).enqueue(); //todo FIX
     }
 
     @Override

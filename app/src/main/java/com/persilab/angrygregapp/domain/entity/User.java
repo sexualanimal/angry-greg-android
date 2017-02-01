@@ -25,17 +25,17 @@ public class User implements Serializable, Findable {
     private static long point = System.currentTimeMillis();
 
     @Key
-    Integer id;
+    int id;
     String name;
     String phone;
     String password;
-    String birthday;
-    Integer points;
-    Integer free_coffee;
-    Integer is_admin;
-    String created_at;
-    String updated_at;
-    String deleted_at;
+//    String birthday;
+    int points;
+    int free_coffee;
+    int is_admin;
+//    String created_at;
+//    String updated_at;
+//    String deleted_at;
 
     transient boolean delete = false;
 
@@ -48,7 +48,7 @@ public class User implements Serializable, Findable {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -76,19 +76,19 @@ public class User implements Serializable, Findable {
         this.password = password;
     }
 
-    public Date getBirthday() {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-        Date result = new Date();
-        try {
-            result = format.parse(birthday);
-        } catch (ParseException e) {
-        }
-        return result;
-    }
+//    public Date getBirthday() {
+//        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+//        Date result = new Date();
+//        try {
+//            result = format.parse(birthday);
+//        } catch (ParseException e) {
+//        }
+//        return result;
+//    }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(birthday);
-    }
+//    public void setBirthday(Date birthday) {
+//        this.birthday = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(birthday);
+//    }
 
     public Boolean getIs_admin() {
         return is_admin == 1;
@@ -102,19 +102,19 @@ public class User implements Serializable, Findable {
         }
     }
 
-    public Integer getAmountOfFreeCoffe() {
+    public int getAmountOfFreeCoffe() {
         return free_coffee;
     }
 
-    public void setAmountOfFreeCoffe(Integer free_coffee) {
+    public void setAmountOfFreeCoffe(int free_coffee) {
         this.free_coffee = free_coffee;
     }
 
-    public Integer getAmountOfPoints() {
+    public int getAmountOfPoints() {
         return points;
     }
 
-    public void setAmountOfPoints(Integer points) {
+    public void setAmountOfPoints(int points) {
         this.points = points;
     }
 
@@ -126,27 +126,27 @@ public class User implements Serializable, Findable {
         this.delete = delete;
     }
 
-    public String getDeleted_at() {
-        return deleted_at;
-    }
-
-    public void setDeleted_at(String deleted_at) {
-        this.deleted_at = deleted_at;
-    }
-
-    public String getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
-    }
-
-    public String getUpdated_at() {
-        return updated_at;
-    }
-
-    public void setUpdated_at(String updated_at) {
-        this.updated_at = updated_at;
-    }
+//    public String getDeleted_at() {
+//        return deleted_at;
+//    }
+//
+//    public void setDeleted_at(String deleted_at) {
+//        this.deleted_at = deleted_at;
+//    }
+//
+//    public String getCreated_at() {
+//        return created_at;
+//    }
+//
+//    public void setCreated_at(String created_at) {
+//        this.created_at = created_at;
+//    }
+//
+//    public String getUpdated_at() {
+//        return updated_at;
+//    }
+//
+//    public void setUpdated_at(String updated_at) {
+//        this.updated_at = updated_at;
+//    }
 }

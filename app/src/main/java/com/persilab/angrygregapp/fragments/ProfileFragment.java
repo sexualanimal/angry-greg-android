@@ -116,27 +116,27 @@ public class ProfileFragment extends BaseFragment {
         if (user != null) {
             phone.setText(user.getPhone());
             name.setText(user.getName());
-            if (user.getBirthday() != null) {
-                calendar.setTime(user.getBirthday());
-            } else {
-                calendar.roll(Calendar.YEAR, -18);
-            }
+//            if (user.getBirthday() != null) {        //todo FIX
+//                calendar.setTime(user.getBirthday());
+//            } else {
+//                calendar.roll(Calendar.YEAR, -18);
+//            }
         }
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        if (user.getBirthday() != null) {
-            GuiUtils.setText(birthdate, R.string.profile_birthdate_pattern, day, month + 1, year);
-        } else {
-            GuiUtils.setText(birthdate, "");
-        }
+//        if (user.getBirthday() != null) {        //todo FIX
+//            GuiUtils.setText(birthdate, R.string.profile_birthdate_pattern, day, month + 1, year);
+//        } else {
+//            GuiUtils.setText(birthdate, "");
+//        }
         datePickerDialog = new DatePickerDialog(getContext(),
                 (view, newYear, newMonth, newDay) -> {
                     Calendar cal = Calendar.getInstance();
                     cal.set(Calendar.YEAR, newYear);
                     cal.set(Calendar.MONTH, newMonth);
                     cal.set(Calendar.DAY_OF_MONTH, newDay);
-                    user.setBirthday(cal.getTime());
+//                    user.setBirthday(cal.getTime());        //todo FIX
                     GuiUtils.setText(birthdate, R.string.profile_birthdate_pattern, newDay, newMonth + 1, newYear);
                 }, year, month, day);
     }

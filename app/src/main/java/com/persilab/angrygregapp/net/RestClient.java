@@ -37,16 +37,17 @@ public class RestClient {
     public interface RestServiceApi {
 
         @GET(ACCOUNTS)
-        Call<List<User>> accounts(@Header("Authorization") String authentication);
+        Call<List<User>> accounts(@Header("Authorization") String authentication, @Query("limit") Integer limit);
 
         @GET(ACCOUNTS + "/{id}")
-        Call<User> getAccount(@Path("id") Integer id);
+        Call<User> getAccount(@Header("Authorization") String authentication, @Path("id") Integer id);
 
         @DELETE(ACCOUNTS + "/{id}")
-        Call<JsonEntity> deleteAccount(@Path("id") Integer id);
+        Call<JsonEntity> deleteAccount(@Header("Authorization") String authentication, @Path("id") Integer id);
 
         @PUT(ACCOUNTS + "/{id}")
-        Call<User> changeAccount(@Path("id") Integer id,
+        Call<User> changeAccount(@Header("Authorization") String authentication,
+                                 @Path("id") Integer id,
                                  @Query("name") String name,
                                  @Query("phone") String phone,
                                  @Query("birthday") String birthday,
@@ -55,7 +56,8 @@ public class RestClient {
                                  @Query("password") String password);
 
         @POST(ACCOUNTS)
-        Call<User> createAccount(@Query("name") String name,
+        Call<User> createAccount(@Header("Authorization") String authentication,
+                                 @Query("name") String name,
                                  @Query("phone") String phone,
                                  @Query("birthday") String birthday,
                                  @Query("points") Integer points,
@@ -69,8 +71,8 @@ public class RestClient {
         @POST(AUTH + "/refresh/{refreshToken}")
         Call<Token> refreshToken(@Path("refreshToken") String refreshToken);
 
-        @PUT(ACCOUNTS + "/{id}/addpoints/{amountOfPoints}")
-        Call<User> addPoints(@Path("id") Integer id, @Path("points") Integer points);
+        @PUT(ACCOUNTS + "/{id}/points/{points}")
+        Call<User> addPoints(@Header("Authorization") String authentication, @Path("id") Integer id, @Path("points") Integer points);
     }
 
     private final static RestServiceApi service = buildApi();

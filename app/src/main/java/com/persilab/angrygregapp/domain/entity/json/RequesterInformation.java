@@ -9,16 +9,16 @@ import java.util.Map;
  */
 
 public class RequesterInformation {
-    private String id;
+    private int id;
     private String fingerprint;
     private String remoteIP;
     private Map<String,String> receivedParams = new LinkedHashMap<>();
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

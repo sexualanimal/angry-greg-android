@@ -117,7 +117,7 @@ public class UserFragment extends BaseFragment {
                 getArguments().putSerializable(Constants.ArgsName.USER, current);
                 handler.post(() -> {
                     initPoints();
-                    if(coffee > 0 && !current.getAmountOfFreeCoffe().equals(coffee)) {
+                    if(coffee > 0 && current.getAmountOfFreeCoffe()!=coffee) {
                         FreeCoffeeFragment.show(UserFragment.this);
                     }
                 });
@@ -128,13 +128,13 @@ public class UserFragment extends BaseFragment {
         @Override
         public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
             Cat.i("Websocket connected");
-            websocket.sendText(new Gson().toJson(new WebSocketMessage(WebSocketMessage.Action.init, String.valueOf(user.getId()))));
+            websocket.sendText(new Gson().toJson(new WebSocketMessage(WebSocketMessage.Action.init, user.getId())));
         }
 
 
         @Override
         public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-            websocket.sendText(new Gson().toJson(new WebSocketMessage(WebSocketMessage.Action.remove, String.valueOf(user.getId()))));
+            websocket.sendText(new Gson().toJson(new WebSocketMessage(WebSocketMessage.Action.remove, user.getId())));
             SystemUtils.sleepQuietly(1000);
             connect();
         }
@@ -154,9 +154,9 @@ public class UserFragment extends BaseFragment {
 
 
         public final String action;
-        public final String id;
+        public final int id;
 
-        public WebSocketMessage(Action action, String id) {
+        public WebSocketMessage(Action action, int id) {
             this.action = action.name();
             this.id = id;
         }

@@ -131,7 +131,7 @@ public class MainActivity extends BaseActivity {
                 if (response.body() instanceof Token) {
                     postEvent(new TokenUpdateEvent(networkEvent.status, (Token) response.body()));
                 }
-                if (path.contains("addpoints")) {
+                if (path.contains("points")) {
                     postEvent(new AddRateEvent(networkEvent.status, (User) response.body()));
                 }
                 if(path.matches(RestClient.ACCOUNTS + "/[a-z0-9]+")) {
