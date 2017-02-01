@@ -96,7 +96,6 @@ public class RestClient {
                     .excludeFieldsWithModifiers(Modifier.STATIC)
                     .setFieldNamingStrategy(f -> {
                         String name = f.getName();
-                        if (name.equals("id")) name = "_id";
                         if (name.equals("version")) name = "__v";
                         return name;
                     })

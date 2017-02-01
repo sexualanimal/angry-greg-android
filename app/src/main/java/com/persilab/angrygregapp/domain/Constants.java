@@ -29,8 +29,8 @@ public class Constants {
 
     public static class Net {
         public static final String BASE_SCHEME = BuildConfig.BASE_SCHEME;
-        public static final String BASE_HOST = "api.angrygreg.test.persilab.com/";
-        public static final String BASE_DOMAIN = BASE_SCHEME + "://" + BASE_HOST;
+        public static final String BASE_HOST = BuildConfig.BASE_HOST;
+        public static final String BASE_DOMAIN = BASE_SCHEME + "://" + BASE_HOST + "/";
         public static final String USER_AGENT = "Mozilla";
     }
 

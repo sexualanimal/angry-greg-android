@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
+import com.persilab.angrygregapp.App;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.adapter.ItemListAdapter;
 import com.persilab.angrygregapp.adapter.LazyItemListAdapter;
@@ -124,10 +125,9 @@ public class UserListFragment extends ListFragment<User> {
     protected DataSource<User> getDataSource() throws Exception {
         return (skip, size) -> {
             if (users.isEmpty()) {
-//                users = RestClient
-//                        .serviceApi()
-//                        .accounts(TokenUpdateJob.getToken().getAccessToken()).execute().body();
-//                        .accounts(TokenUpdateJob.getToken().getAccessToken(),null,null,null,null,null,null,null,null,null,null).execute().body(); //todo fix it
+                users = RestClient
+                        .serviceApi()
+                        .accounts(App.getActualToken().getAccessToken(), 10).execute().body();
 
             }
             return Stream.of(users).skip(skip).limit(size).collect(Collectors.toList());

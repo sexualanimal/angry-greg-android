@@ -141,11 +141,11 @@ public class LoginFragment extends BaseFragment {
                     helper.close();
                 }
                 if (updateEvent.message.getAccount().getIs_admin()) {
-//                        getMainActivity().replaceFragment(UserListFragment.class);
+                        getMainActivity().replaceFragment(UserListFragment.class);
                 } else {
                     FragmentBuilder builder = new FragmentBuilder(getFragmentManager());
                     builder.putArg(Constants.ArgsName.USER, updateEvent.message.getAccount());
-//                        getMainActivity().replaceFragment(UserFragment.class, builder);
+                        getMainActivity().replaceFragment(UserFragment.class, builder);
                 }
             }
             if (updateEvent.status.equals(ResponseEvent.Status.FAILURE)) {
