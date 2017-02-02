@@ -150,9 +150,9 @@ public class UserListFragment extends ListFragment<User> {
 
     @Subscribe
     public void onEvent(AddRateEvent event) {
-        int index = getUserById(event.message.getId());
+        int index = getUserById(event.message.getAccount().getId());
         if(index > 0) {
-            adapter.getItems().set(index, event.message);
+            adapter.getItems().set(index, event.message.getAccount());
             GuiUtils.runInUI(getContext(), (var) -> adapter.notifyItemChanged(index));
         }
     }

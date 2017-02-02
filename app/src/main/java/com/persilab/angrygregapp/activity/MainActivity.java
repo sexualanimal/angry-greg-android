@@ -16,6 +16,7 @@ import com.persilab.angrygregapp.database.SuggestionProvider;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.Token;
 import com.persilab.angrygregapp.domain.entity.User;
+import com.persilab.angrygregapp.domain.entity.UserNeedCoffee;
 import com.persilab.angrygregapp.domain.entity.json.JsonError;
 import com.persilab.angrygregapp.domain.event.*;
 import com.persilab.angrygregapp.fragments.BaseFragment;
@@ -134,7 +135,7 @@ public class MainActivity extends BaseActivity {
                     postEvent(new TokenUpdateEvent(networkEvent.status, (Token) response.body()));
                 }
                 if (path.contains("points")) {
-                    postEvent(new AddRateEvent(networkEvent.status, (User) response.body()));
+                    postEvent(new AddRateEvent(networkEvent.status, (UserNeedCoffee) response.body()));
                 }
                 if(path.matches(RestClient.ACCOUNTS + "/[a-z0-9]+")) {
                     if(method.equals("GET")) {

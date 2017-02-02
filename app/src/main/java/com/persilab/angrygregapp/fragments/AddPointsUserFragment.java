@@ -70,17 +70,17 @@ public class AddPointsUserFragment extends BaseFragment {
 
     @Subscribe
     public void onEvent(AddRateEvent event) {
-        user = event.message;
+        user = event.message.getAccount();
         GuiUtils.runInUI(getContext(), var -> updateUi(user));
     }
 
     private void updateUi(User user) {
         if (user != null) {
-            if(user.getAmountOfFreeCoffe() == 0) {
+//            if(user.getAmountOfFreeCoffe() == 0) {
 //                GuiUtils.setText(userPoints, R.string.edit_user_points, user.getAmountOfPoints());     //todo fix it (show score)
-            } else {
+//            } else {
 //                GuiUtils.setText(userPoints, R.string.edit_user_points_and_cups, user.getAmountOfPoints(), user.getAmountOfFreeCoffe());
-            }
+//            }
             ratingBar.setCount(user.getAmountOfPoints());
         }
     }

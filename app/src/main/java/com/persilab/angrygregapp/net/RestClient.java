@@ -11,6 +11,7 @@ import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.Token;
 import com.persilab.angrygregapp.domain.entity.User;
 
+import com.persilab.angrygregapp.domain.entity.UserNeedCoffee;
 import com.persilab.angrygregapp.domain.entity.json.JsonEntity;
 import com.persilab.angrygregapp.net.adapter.BigDecimalTypeAdapter;
 import com.persilab.angrygregapp.net.adapter.UriTypeAdapter;
@@ -72,7 +73,7 @@ public class RestClient {
         Call<Token> refreshToken(@Path("refreshToken") String refreshToken);
 
         @PUT(ACCOUNTS + "/{id}/points/{points}")
-        Call<User> addPoints(@Header("Authorization") String authentication, @Path("id") Integer id, @Path("points") Integer points);
+        Call<UserNeedCoffee> addPoints(@Header("Authorization") String authentication, @Path("id") Integer id, @Path("points") Integer points);
     }
 
     private final static RestServiceApi service = buildApi();
