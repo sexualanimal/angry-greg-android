@@ -33,8 +33,8 @@ public class UserFragment extends BaseFragment {
         return show(baseFragment, UserFragment.class, Constants.ArgsName.USER, user);
     }
 
-    @Bind(R.id.user_points)
-    TextView userPoints;
+//    @Bind(R.id.user_points)
+//    TextView userPoints;
     @Bind(R.id.user_rating)
     RatingBar ratingBar;
     @Bind(R.id.user_card_qr)
@@ -76,9 +76,9 @@ public class UserFragment extends BaseFragment {
     private void initPoints() {
         int left = ratingBar.getMaxCount() - user.getAmountOfPoints();
         if (user.getAmountOfFreeCoffe() == 0) {
-            GuiUtils.setText(userPoints, R.string.user_points, user.getAmountOfPoints(), left);
+//            GuiUtils.setText(userPoints, R.string.user_points, user.getAmountOfPoints(), left);  //todo fix it (show score)
         } else {
-            GuiUtils.setText(userPoints, R.string.user_points_and_cups, user.getAmountOfPoints(), user.getAmountOfFreeCoffe(), left);
+//            GuiUtils.setText(userPoints, R.string.user_points_and_cups, user.getAmountOfPoints(), user.getAmountOfFreeCoffe(), left);
         }
         ratingBar.setCount(user.getAmountOfPoints());
     }

@@ -46,7 +46,7 @@ public class App extends Application {
     public static void setActualToken(Token actualToken) {
         App.actualToken = actualToken;
     }
-//todo fix it
+//todo fix it(no)
 //    public EntityDataStore<Persistable> getDataStore() {
 //        if (dataStore == null) {
 //            // override onUpgrade to handle migrating to a new version

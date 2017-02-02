@@ -28,8 +28,8 @@ public class AddPointsUserFragment extends BaseFragment {
         return show(baseFragment, AddPointsUserFragment.class, Constants.ArgsName.USER, user);
     }
 
-    @Bind(R.id.edit_user_points)
-    TextView userPoints;
+//    @Bind(R.id.edit_user_points)
+//    TextView userPoints;
     @Bind(R.id.edit_user_rating)
     RatingBar ratingBar;
     @Bind(R.id.edit_user_tick)
@@ -77,9 +77,9 @@ public class AddPointsUserFragment extends BaseFragment {
     private void updateUi(User user) {
         if (user != null) {
             if(user.getAmountOfFreeCoffe() == 0) {
-                GuiUtils.setText(userPoints, R.string.edit_user_points, user.getAmountOfPoints());
+//                GuiUtils.setText(userPoints, R.string.edit_user_points, user.getAmountOfPoints());     //todo fix it (show score)
             } else {
-                GuiUtils.setText(userPoints, R.string.edit_user_points_and_cups, user.getAmountOfPoints(), user.getAmountOfFreeCoffe());
+//                GuiUtils.setText(userPoints, R.string.edit_user_points_and_cups, user.getAmountOfPoints(), user.getAmountOfFreeCoffe());
             }
             ratingBar.setCount(user.getAmountOfPoints());
         }

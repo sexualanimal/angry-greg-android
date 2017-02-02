@@ -35,12 +35,12 @@
                       android:layout_marginTop="@dimen/spacing_medium"
                       android:gravity="center_horizontal"
                       android:layout_height="wrap_content">
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:gravity="center"
-                      android:textSize="@dimen/text_large"
-                      android:text="@string/edit_user_points"
-                      android:id="@+id/edit_user_points"/>
+            <!--<TextView android:layout_width="wrap_content"-->
+                      <!--android:layout_height="wrap_content"-->
+                      <!--android:gravity="center"-->
+                      <!--android:textSize="@dimen/text_large"-->
+                      <!--android:text="@string/edit_user_points"-->
+                      <!--android:id="@+id/edit_user_points"/>-->
             <com.whinc.widget.ratingbar.RatingBar
                     android:id="@+id/edit_user_rating"
                     android:layout_width="match_parent"
