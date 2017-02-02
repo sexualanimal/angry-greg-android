@@ -185,6 +185,7 @@ public class UserListFragment extends ListFragment<User> {
             }
             CheckBox checkBox = holder.getView(R.id.item_user_checkbox);
             if (editMode) {
+                button.setVisibility(View.INVISIBLE);
                 checkBox.setVisibility(View.VISIBLE);
                 checkBox.setChecked(false);
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -195,6 +196,7 @@ public class UserListFragment extends ListFragment<User> {
                     }
                 });
             } else {
+                button.setVisibility(View.VISIBLE);
                 checkBox.setVisibility(View.GONE);
                 checkBox.setChecked(false);
                 item.setDelete(false);
