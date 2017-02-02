@@ -90,7 +90,7 @@ public class RestClient {
                     .authenticator(new TokenAuthenticator()).build();
 
             Gson gson = new GsonBuilder()
-                    .setDateFormat(Constants.Pattern.DATA_ISO_8601_24H_FULL_FORMAT)
+                    .setDateFormat(Constants.Pattern.DATA_ISO_8601_SHORT_FORMAT)
                     .registerTypeAdapter(Uri.class, new UriTypeAdapter())
                     .registerTypeAdapter(BigDecimal.class, new BigDecimalTypeAdapter())
                     .excludeFieldsWithModifiers(Modifier.STATIC)

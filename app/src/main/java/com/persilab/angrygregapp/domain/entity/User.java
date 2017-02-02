@@ -25,11 +25,11 @@ public class User implements Serializable, Findable {
     private static long point = System.currentTimeMillis();
 
     @Key
-    int id;
+    int id = 0;
     String name;
     String phone;
     String password;
-//    String birthday;
+    String birthday;
     int points;
     int free_coffee;
     int is_admin;
@@ -76,19 +76,30 @@ public class User implements Serializable, Findable {
         this.password = password;
     }
 
-//    public Date getBirthday() {
-//        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-//        Date result = new Date();
-//        try {
-//            result = format.parse(birthday);
-//        } catch (ParseException e) {
-//        }
-//        return result;
-//    }
+    public String getBirthday() {
+        return birthday;
+    }
 
-//    public void setBirthday(Date birthday) {
-//        this.birthday = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(birthday);
-//    }
+    public Date getBirthdayDate() {
+        if (this.birthday == null) {
+            return null;
+        }
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Date result = new Date();
+        try {
+            result = format.parse(birthday);
+        } catch (ParseException e) {
+        }
+        return result;
+    }
+
+    public void setBirthdayDate(Date birthday) {
+        this.birthday = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(birthday);
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
 
     public Boolean getIs_admin() {
         return is_admin == 1;

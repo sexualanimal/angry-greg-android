@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.Bind;
+
+import com.persilab.angrygregapp.App;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.User;
@@ -116,46 +118,46 @@ public class ProfileFragment extends BaseFragment {
         if (user != null) {
             phone.setText(user.getPhone());
             name.setText(user.getName());
-//            if (user.getBirthday() != null) {        //todo FIX
-//                calendar.setTime(user.getBirthday());
-//            } else {
-//                calendar.roll(Calendar.YEAR, -18);
-//            }
+            if (user.getBirthday()!=null) {
+                calendar.setTime(user.getBirthdayDate());
+            } else {
+                calendar.roll(Calendar.YEAR, -18);
+            }
         }
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-//        if (user.getBirthday() != null) {        //todo FIX
-//            GuiUtils.setText(birthdate, R.string.profile_birthdate_pattern, day, month + 1, year);
-//        } else {
-//            GuiUtils.setText(birthdate, "");
-//        }
+        if (user.getBirthday()!=null) {
+            GuiUtils.setText(birthdate, R.string.profile_birthdate_pattern, day, month + 1, year);
+        } else {
+            GuiUtils.setText(birthdate, "");
+        }
         datePickerDialog = new DatePickerDialog(getContext(),
                 (view, newYear, newMonth, newDay) -> {
                     Calendar cal = Calendar.getInstance();
                     cal.set(Calendar.YEAR, newYear);
                     cal.set(Calendar.MONTH, newMonth);
                     cal.set(Calendar.DAY_OF_MONTH, newDay);
-//                    user.setBirthday(cal.getTime());        //todo FIX
+                    user.setBirthdayDate(cal.getTime());
                     GuiUtils.setText(birthdate, R.string.profile_birthdate_pattern, newDay, newMonth + 1, newYear);
                 }, year, month, day);
     }
 
-    public void save() { //todo fix it
-//        if (user.getBirthday() != null) {
-//            String date = new SimpleDateFormat(Constants.Pattern.DATA_ISO_8601_24H_FULL_FORMAT).format(user.getBirthday());
-//            if(user.getId() != null) {
-//                RestClient.serviceApi().changeAccount(user.getId(), user.getName(), user.getPhone(), date).enqueue();
-//            } else {
-//                RestClient.serviceApi().createAccount(user.getName(), user.getPhone(), user.getPassword(), date).enqueue();
-//            }
-//        } else {
-//            if (user.getId() != null) {
-//                RestClient.serviceApi().changeAccount(user.getId(), user.getName(), user.getPhone(), null).enqueue();
-//            } else {
-//                RestClient.serviceApi().createAccount(user.getName(), user.getPhone(), user.getPassword(), null).enqueue();
-//            }
-//        }
+    public void save() {
+        if (user.getBirthday()!=null) {
+            String date = user.getBirthday();
+            if(user.getId()>0) {
+                RestClient.serviceApi().changeAccount(App.getActualToken().getAccessToken(),user.getId(), user.getName(), user.getPhone(), date,null,null,null).enqueue();
+            } else {
+                RestClient.serviceApi().createAccount(App.getActualToken().getAccessToken(),user.getName(), user.getPhone(), date,null,null, user.getPassword()).enqueue();
+            }
+        } else {
+            if (user.getId()>0) {
+                RestClient.serviceApi().changeAccount(App.getActualToken().getAccessToken(),user.getId(), user.getName(), user.getPhone(), null,null,null,null).enqueue();
+            } else {
+                RestClient.serviceApi().createAccount(App.getActualToken().getAccessToken(),user.getName(), user.getPhone(), null,null,null, user.getPassword()).enqueue();
+            }
+        }
     }
 }
 
