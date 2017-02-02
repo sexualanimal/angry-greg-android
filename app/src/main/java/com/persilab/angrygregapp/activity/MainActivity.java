@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
+import com.persilab.angrygregapp.App;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.database.SnappyHelper;
 import com.persilab.angrygregapp.database.SuggestionProvider;
@@ -80,19 +81,20 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_exit :
-                SnappyHelper helper = new SnappyHelper(this, "logout");
-                Token token = null;
-                try {
-                    token = helper.getSerializable(Token.class);
-                    token.setAccessExpires(null);
-                    helper.storeSerializable(token);
-                } catch (SnappydbException e) {
-                    Cat.e(e);
-                } finally {
-                    helper.close();
-                }
-                exit = true;
-                finish();
+//                SnappyHelper helper = new SnappyHelper(this, "logout");
+//                Token token = null;
+//                try {
+//                    token = helper.getSerializable(Token.class);
+                    App.setActualToken(null);
+//                    helper.storeSerializable(token);
+                    replaceFragment(LoginFragment.class);
+//                } catch (SnappydbException e) {
+//                    Cat.e(e);
+//                }finally {
+//                    helper.close();
+//                }
+//                exit = true;
+//                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
