@@ -51,7 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_margin="0dp"
-                    app:rb_max_count="10"
+                    app:rb_max_count="5"
                     app:rb_count="0"
                     app:rb_empty="@drawable/gray_star"
                     app:rb_fill="@drawable/red_star"
