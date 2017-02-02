@@ -134,7 +134,7 @@ public class LoginFragment extends BaseFragment {
                 SnappyHelper helper = new SnappyHelper(getContext(), "login");
                 try {
                     helper.storeString(PHONE, loginPhone.getText().toString());
-                    helper.storeSerializable(updateEvent.message);
+//                    helper.storeSerializable(updateEvent.message); //// FIXME: 02.02.2017 ez save by dmitry
                 } catch (SnappydbException e) {
                     Cat.e("Unknown exception", e);
                 } finally {
