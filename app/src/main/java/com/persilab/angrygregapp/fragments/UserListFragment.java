@@ -127,7 +127,7 @@ public class UserListFragment extends ListFragment<User> {
             if (users.isEmpty()) {
                 users = RestClient
                         .serviceApi()
-                        .accounts(App.getActualToken().getAccessToken(), 10).execute().body();
+                        .accounts(App.getActualToken().getAccessToken(), 50).execute().body();
 
             }
             return Stream.of(users).skip(skip).limit(size).collect(Collectors.toList());
