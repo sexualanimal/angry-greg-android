@@ -2,6 +2,7 @@ package com.persilab.angrygregapp.util;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+
 import com.squareup.picasso.Transformation;
 
 /**

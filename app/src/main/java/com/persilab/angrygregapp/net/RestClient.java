@@ -1,33 +1,39 @@
 package com.persilab.angrygregapp.net;
 
-import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.persilab.angrygregapp.App;
-import com.persilab.angrygregapp.activity.MainActivity;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.Token;
 import com.persilab.angrygregapp.domain.entity.User;
-
 import com.persilab.angrygregapp.domain.entity.UserNeedCoffee;
 import com.persilab.angrygregapp.domain.entity.json.JsonEntity;
 import com.persilab.angrygregapp.net.adapter.BigDecimalTypeAdapter;
 import com.persilab.angrygregapp.net.adapter.UriTypeAdapter;
 
-import okhttp3.*;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.*;
-import retrofit2.http.*;
-
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
+
+import okhttp3.Authenticator;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.Route;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Retrofit;
+import retrofit2.http.DELETE;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public class RestClient {
 
@@ -113,10 +119,9 @@ public class RestClient {
         return service;
     }
 
-    public static class TokenAuthenticator implements Authenticator {
+    private static class TokenAuthenticator implements Authenticator {
         @Override
         public Request authenticate(Route route, Response response) throws IOException {
-            System.out.println("--------------------------------------------------------try to auto auth");
             Context context = App.getInstance();
             if (context != null) {
                 Token oldToken = App.getActualToken();
@@ -126,7 +131,7 @@ public class RestClient {
                 if (newAccessToken != null) {
                     App.setActualToken(newAccessToken);
                 } else {
-                    return null;
+                    return null;//todo
                 }
 
                 // Add new header to rejected request and retry it

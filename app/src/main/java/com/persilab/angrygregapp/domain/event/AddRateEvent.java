@@ -1,6 +1,5 @@
 package com.persilab.angrygregapp.domain.event;
 
-import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.entity.UserNeedCoffee;
 
 /**

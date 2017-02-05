@@ -1,13 +1,13 @@
 package com.persilab.angrygregapp.database;
 
-import io.requery.Converter;
-
 import java.math.BigDecimal;
+
+import io.requery.Converter;
 
 /**
  * Created by 0shad on 18.06.2016.
  */
-public class BigDecimalConverter implements Converter<BigDecimal, String>{
+public class BigDecimalConverter implements Converter<BigDecimal, String> {
 
     @Override
     public Class<BigDecimal> getMappedType() {

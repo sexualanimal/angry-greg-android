@@ -29,11 +29,11 @@ public class Token extends JsonEntity implements Serializable, Validatable {
     }
 
     public boolean isAccessExpired() {
-        return accessExpires == null ||  Integer.parseInt(accessExpires) - currentTime() - 5000 < 0;
+        return accessExpires == null || Integer.parseInt(accessExpires) - currentTime() - 5000 < 0;
     }
 
     public boolean isRefreshExpired() {
-        return refreshExpires == null ||  Integer.parseInt(refreshExpires) - currentTime() - 5000 < 0;
+        return refreshExpires == null || Integer.parseInt(refreshExpires) - currentTime() - 5000 < 0;
     }
 
     private static long currentTime() {

@@ -14,7 +14,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -101,11 +108,11 @@ public class DirectoryChooserDialog extends AlertDialog {
             contentView.setBackgroundColor(Color.WHITE);
             filesListView.setCacheColorHint(Color.WHITE);
         }
-        if(withPathTextView) {
+        if (withPathTextView) {
             View divider = new View(getContext());
             divider.setBackgroundColor(Color.DKGRAY);
             divider.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, 1));
-            pathTextView = new EditText(context) ;
+            pathTextView = new EditText(context);
             pathTextView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             pathTextView.setBackgroundDrawable(null);
             pathTextView.setPadding(5, 5, 5, 7);
@@ -210,10 +217,10 @@ public class DirectoryChooserDialog extends AlertDialog {
         super.show();
         checkPath(currentDir.getAbsolutePath());
         Button neutralButton = getButton(BUTTON_NEUTRAL);
-        if(pathTextView != null) {
+        if (pathTextView != null) {
             pathTextView.setText(currentDir.getAbsolutePath());
         }
-        if(neutralButton != null) {
+        if (neutralButton != null) {
             neutralButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -258,7 +265,7 @@ public class DirectoryChooserDialog extends AlertDialog {
 
     private void checkPath(String path) {
         path = path.replaceAll("//+", "/");
-        if(getButton(AlertDialog.BUTTON_POSITIVE) != null && !allowRootDir) {
+        if (getButton(AlertDialog.BUTTON_POSITIVE) != null && !allowRootDir) {
             if (path.contains(Environment.getExternalStorageDirectory().getAbsolutePath() + "/") &&
                     !path.equals(Environment.getExternalStorageDirectory().getAbsolutePath() + "/")) {
                 getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
@@ -327,7 +334,7 @@ public class DirectoryChooserDialog extends AlertDialog {
                 }
             };
             String[] fileList = currentDir.list(filter);
-            if(fileList == null) {
+            if (fileList == null) {
                 fileList = new String[0];
             }
             Arrays.sort(fileList, new Comparator<String>() {

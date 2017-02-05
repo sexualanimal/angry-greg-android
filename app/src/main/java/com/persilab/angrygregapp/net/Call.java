@@ -1,10 +1,9 @@
 package com.persilab.angrygregapp.net;
 
+import java.io.IOException;
+
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import java.io.IOException;
-import java.util.concurrent.Executor;
 
 /**
  * Created by 0shad on 28.02.2016.

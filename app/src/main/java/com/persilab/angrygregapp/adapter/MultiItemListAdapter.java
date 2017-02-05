@@ -4,6 +4,7 @@ import android.support.annotation.LayoutRes;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
 import com.persilab.angrygregapp.util.SystemUtils;
 
 import java.util.ArrayList;

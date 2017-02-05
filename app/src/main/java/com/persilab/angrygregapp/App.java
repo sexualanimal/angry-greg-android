@@ -17,6 +17,7 @@ public class App extends Application {
 
     private static App singleton;
     private static Token actualToken;
+
     public static App getInstance() {
         return singleton;
     }
@@ -46,29 +47,4 @@ public class App extends Application {
     public static void setActualToken(Token actualToken) {
         App.actualToken = actualToken;
     }
-//todo fix it(no)
-//    public EntityDataStore<Persistable> getDataStore() {
-//        if (dataStore == null) {
-//            // override onUpgrade to handle migrating to a new version
-//            DatabaseSource source = new DatabaseSource(this, Models.DEFAULT, 1);
-//            if (BuildConfig.DEBUG) {
-//                // use this in development mode to drop and recreate the tables on every upgrade
-//                source.setTableCreationMode(TableCreationMode.DROP_CREATE);
-//                source.setLoggingEnabled(true);
-//            }
-//
-//            Configuration configuration = source.getConfiguration();
-//            ((DefaultMapping) configuration.getMapping()).addConverter(new BigDecimalConverter(), BigDecimal.class);
-//            dataStore = new EntityDataStore<Persistable>(configuration);
-//
-//            rxDataStore = RxSupport.toReactiveStore(
-//                    new EntityDataStore<Persistable>(configuration));
-//        }
-//        return dataStore;
-//    }
-//
-//    public SingleEntityStore<Persistable> getRxDataStore() {
-//        getDataStore();
-//        return rxDataStore;
-//    }
 }

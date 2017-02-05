@@ -2,16 +2,27 @@ package com.persilab.angrygregapp.util;
 
 import android.util.Base64;
 
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 
 public class CryptUtil {
@@ -163,7 +174,8 @@ public class CryptUtil {
     }
 
     public static byte[] getByteFromHexCustomStringKey(String hexString) {
-        if (hexString == null || hexString.length() <= 0 || hexString.length() % 2 != 0) return null;
+        if (hexString == null || hexString.length() <= 0 || hexString.length() % 2 != 0)
+            return null;
         int len = hexString.length();
         int rawSize = len / 2;
         byte[] key = new byte[rawSize];
@@ -300,7 +312,7 @@ public class CryptUtil {
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
         byte[] keyBytes = key.getBytes("UTF-8");
-        return  Base64.encodeToString(cipher.doFinal(keyBytes), Base64.DEFAULT);
+        return Base64.encodeToString(cipher.doFinal(keyBytes), Base64.DEFAULT);
     }
 
     public static String decodeKey(String key) throws Exception {

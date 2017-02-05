@@ -67,7 +67,7 @@ public class DirectoryChoosePreference extends DialogPreference {
     @Override
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
-        if(chooserDialog != null) {
+        if (chooserDialog != null) {
             String path = chooserDialog.getPath();
             if (positiveResult && isPersistent()) {
                 setText(path);
@@ -104,7 +104,7 @@ public class DirectoryChoosePreference extends DialogPreference {
     }
 
     public EditText getEditText() {
-        if(chooserDialog != null) {
+        if (chooserDialog != null) {
             return chooserDialog.getPathTextView();
         } else {
             return null;

@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import butterknife.ButterKnife;
+
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.activity.BaseActivity;
 import com.persilab.angrygregapp.activity.MainActivity;
@@ -18,9 +18,12 @@ import com.persilab.angrygregapp.domain.event.Event;
 import com.persilab.angrygregapp.domain.event.FragmentAttachedEvent;
 import com.persilab.angrygregapp.util.FragmentBuilder;
 import com.persilab.angrygregapp.util.GuiUtils;
+
 import org.greenrobot.eventbus.EventBus;
 
 import java.lang.reflect.Field;
+
+import butterknife.ButterKnife;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -112,7 +115,7 @@ public class BaseFragment extends Fragment implements BaseActivity.BackCallback 
     }
 
     public boolean allowBackPress() {
-       return true;
+        return true;
     }
 
     protected void postEvent(Event event) {
@@ -133,7 +136,7 @@ public class BaseFragment extends Fragment implements BaseActivity.BackCallback 
         unbind();
     }
 
-    public MainActivity getMainActivity(){
+    public MainActivity getMainActivity() {
         return (MainActivity) getActivity();
     }
 

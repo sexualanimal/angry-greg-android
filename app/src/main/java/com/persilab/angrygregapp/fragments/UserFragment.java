@@ -3,18 +3,26 @@ package com.persilab.angrygregapp.fragments;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+
 import com.google.gson.Gson;
-import com.neovisionaries.ws.client.*;
-import com.persilab.angrygregapp.util.SystemUtils;
-import com.whinc.widget.ratingbar.RatingBar;
-import android.widget.TextView;
-import butterknife.Bind;
+import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketException;
+import com.neovisionaries.ws.client.WebSocketFactory;
+import com.neovisionaries.ws.client.WebSocketFrame;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.util.GuiUtils;
+import com.persilab.angrygregapp.util.SystemUtils;
+import com.whinc.widget.ratingbar.RatingBar;
+
 import net.glxn.qrgen.android.QRCode;
 import net.vrallev.android.cat.Cat;
 
@@ -22,6 +30,8 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import butterknife.Bind;
 
 /**
  * Created by 0shad on 21.06.2016.
@@ -33,8 +43,6 @@ public class UserFragment extends BaseFragment {
         return show(baseFragment, UserFragment.class, Constants.ArgsName.USER, user);
     }
 
-//    @Bind(R.id.user_points)
-//    TextView userPoints;
     @Bind(R.id.user_rating)
     RatingBar ratingBar;
     @Bind(R.id.user_card_qr)
@@ -70,16 +78,11 @@ public class UserFragment extends BaseFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-            inflater.inflate(R.menu.exit, menu);
+        inflater.inflate(R.menu.exit, menu);
     }
 
     private void initPoints() {
         int left = ratingBar.getMaxCount() - user.getAmountOfPoints();
-        if (user.getAmountOfFreeCoffe() == 0) {
-//            GuiUtils.setText(userPoints, R.string.user_points, user.getAmountOfPoints(), left);  //todo fix it (show score)
-        } else {
-//            GuiUtils.setText(userPoints, R.string.user_points_and_cups, user.getAmountOfPoints(), user.getAmountOfFreeCoffe(), left);
-        }
         ratingBar.setCount(user.getAmountOfPoints());
     }
 
@@ -109,7 +112,7 @@ public class UserFragment extends BaseFragment {
         @Override
         public void onTextMessage(WebSocket websocket, String message) throws Exception {
             User user = new Gson().fromJson(message, WebSockedResponse.class).data;
-            if(user != null) {
+            if (user != null) {
                 final User current = UserFragment.this.user;
                 final int coffee = current.getAmountOfFreeCoffe();
                 current.setAmountOfFreeCoffe(user.getAmountOfFreeCoffe());
@@ -117,7 +120,7 @@ public class UserFragment extends BaseFragment {
                 getArguments().putSerializable(Constants.ArgsName.USER, current);
                 handler.post(() -> {
                     initPoints();
-                    if(coffee > 0 && current.getAmountOfFreeCoffe()!=coffee) {
+                    if (coffee > 0 && current.getAmountOfFreeCoffe() != coffee) {
                         FreeCoffeeFragment.show(UserFragment.this);
                     }
                 });

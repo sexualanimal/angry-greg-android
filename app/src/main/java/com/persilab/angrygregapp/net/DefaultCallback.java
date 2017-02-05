@@ -1,17 +1,20 @@
 package com.persilab.angrygregapp.net;
 
 import android.util.Log;
-import com.google.gson.Gson;
 
+import com.google.gson.Gson;
 import com.persilab.angrygregapp.domain.entity.json.JsonError;
 import com.persilab.angrygregapp.domain.event.NetworkEvent;
+
 import net.vrallev.android.cat.Cat;
+
 import org.greenrobot.eventbus.EventBus;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by 0shad on 28.02.2016.

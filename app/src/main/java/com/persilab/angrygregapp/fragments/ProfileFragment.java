@@ -4,12 +4,16 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Pair;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import butterknife.Bind;
 
 import com.persilab.angrygregapp.App;
 import com.persilab.angrygregapp.R;
@@ -20,11 +24,12 @@ import com.persilab.angrygregapp.util.GuiUtils;
 import com.persilab.angrygregapp.util.TextUtils;
 import com.persilab.angrygregapp.view.watcher.TextChangedWatcher;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import butterknife.Bind;
 
 /**
  * Created by 0shad on 04.03.2016.
@@ -78,7 +83,7 @@ public class ProfileFragment extends BaseFragment {
         setHasOptionsMenu(true);
         getActivity().setTitle(R.string.profile_edit);
         user = (User) getArguments().getSerializable(Constants.ArgsName.USER);
-        if (!(user.getId()>=0)) {
+        if (!(user.getId() >= 0)) {
             user.setName(null);
             getActivity().setTitle(R.string.profile_create);
             layoutNewUser.setVisibility(View.VISIBLE);
@@ -118,7 +123,7 @@ public class ProfileFragment extends BaseFragment {
         if (user != null) {
             phone.setText(user.getPhone());
             name.setText(user.getName());
-            if (user.getBirthday()!=null) {
+            if (user.getBirthday() != null) {
                 calendar.setTime(user.getBirthdayDate());
             } else {
                 calendar.roll(Calendar.YEAR, -18);
@@ -127,7 +132,7 @@ public class ProfileFragment extends BaseFragment {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        if (user.getBirthday()!=null) {
+        if (user.getBirthday() != null) {
             GuiUtils.setText(birthdate, R.string.profile_birthdate_pattern, day, month + 1, year);
         } else {
             GuiUtils.setText(birthdate, "");
@@ -144,18 +149,18 @@ public class ProfileFragment extends BaseFragment {
     }
 
     public void save() {
-        if (user.getBirthday()!=null) {
+        if (user.getBirthday() != null) {
             String date = user.getBirthday();
-            if(user.getId()>0) {
-                RestClient.serviceApi().changeAccount(App.getActualToken().getAccessToken(),user.getId(), user.getName(), user.getPhone(), date,null,null,null).enqueue();
+            if (user.getId() > 0) {
+                RestClient.serviceApi().changeAccount(App.getActualToken().getAccessToken(), user.getId(), user.getName(), user.getPhone(), date, null, null, null).enqueue();
             } else {
-                RestClient.serviceApi().createAccount(App.getActualToken().getAccessToken(),user.getName(), user.getPhone(), date,null,null, user.getPassword()).enqueue();
+                RestClient.serviceApi().createAccount(App.getActualToken().getAccessToken(), user.getName(), user.getPhone(), date, null, null, user.getPassword()).enqueue();
             }
         } else {
-            if (user.getId()>0) {
-                RestClient.serviceApi().changeAccount(App.getActualToken().getAccessToken(),user.getId(), user.getName(), user.getPhone(), null,null,null,null).enqueue();
+            if (user.getId() > 0) {
+                RestClient.serviceApi().changeAccount(App.getActualToken().getAccessToken(), user.getId(), user.getName(), user.getPhone(), null, null, null, null).enqueue();
             } else {
-                RestClient.serviceApi().createAccount(App.getActualToken().getAccessToken(),user.getName(), user.getPhone(), null,null,null, user.getPassword()).enqueue();
+                RestClient.serviceApi().createAccount(App.getActualToken().getAccessToken(), user.getName(), user.getPhone(), null, null, null, user.getPassword()).enqueue();
             }
         }
     }

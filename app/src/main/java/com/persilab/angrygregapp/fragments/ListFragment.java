@@ -3,27 +3,43 @@ package com.persilab.angrygregapp.fragments;
 import android.app.SearchManager;
 import android.content.Context;
 import android.graphics.PointF;
-import android.os.*;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.*;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSmoothScroller;
+import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import butterknife.Bind;
+
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.adapter.ItemListAdapter;
 import com.persilab.angrygregapp.adapter.MultiItemListAdapter;
 import com.persilab.angrygregapp.lister.DataSource;
 import com.persilab.angrygregapp.util.GuiUtils;
-import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
 
 import java.io.IOException;
 import java.util.List;
+
+import butterknife.Bind;
+import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
 
 /**
  * Created by Rufim on 17.01.2015.
@@ -52,7 +68,6 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
     protected DataSource<I> savedDataSource;
     protected DataSource<I> dataSource;
 
-    //
     protected int pageSize = 50;
     protected volatile boolean isLoading = false;
     protected volatile boolean isEnd = false;

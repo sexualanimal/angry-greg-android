@@ -2,6 +2,7 @@ package com.persilab.angrygregapp.database;
 
 import android.content.Context;
 import android.util.Log;
+
 import com.persilab.angrygregapp.util.SystemUtils;
 import com.snappydb.DB;
 import com.snappydb.DBFactory;

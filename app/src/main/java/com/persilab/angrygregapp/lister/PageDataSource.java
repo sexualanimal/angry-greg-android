@@ -6,6 +6,6 @@ import java.util.List;
 /**
  * Created by 0shad on 01.11.2015.
  */
-public interface PageDataSource<I>{
+public interface PageDataSource<I> {
     public abstract List<I> getPage(int index) throws IOException;
 }

@@ -14,21 +14,23 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.event.Event;
 import com.persilab.angrygregapp.domain.event.FragmentAttachedEvent;
 import com.persilab.angrygregapp.util.FragmentBuilder;
 import com.persilab.angrygregapp.util.GuiUtils;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
