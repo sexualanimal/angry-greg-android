@@ -35,8 +35,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import retrofit2.Response;
 
-//import com.persilab.angrygregapp.job.TokenUpdateJob;
-
 
 public class MainActivity extends BaseActivity {
 

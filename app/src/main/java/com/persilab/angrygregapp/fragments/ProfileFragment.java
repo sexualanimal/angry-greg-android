@@ -10,9 +10,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.persilab.angrygregapp.App;
@@ -21,7 +23,6 @@ import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.GuiUtils;
-import com.persilab.angrygregapp.util.TextUtils;
 import com.persilab.angrygregapp.view.watcher.TextChangedWatcher;
 
 import java.util.Calendar;
@@ -47,12 +48,12 @@ public class ProfileFragment extends BaseFragment {
     EditText phone;
     @Bind(R.id.profile_password)
     EditText password;
-    @Bind(R.id.profile_points)
-    EditText profilePoints;
     @Bind(R.id.profile_new_user_fields)
     LinearLayout layoutNewUser;
     @Bind(R.id.profile_birthdate_layout)
     LinearLayout layoutBirthdate;
+    @Bind(R.id.profile_is_admin)
+    Switch switchIsAdmin;
 
     private User user;
 
@@ -83,10 +84,14 @@ public class ProfileFragment extends BaseFragment {
         setHasOptionsMenu(true);
         getActivity().setTitle(R.string.profile_edit);
         user = (User) getArguments().getSerializable(Constants.ArgsName.USER);
-        if (!(user.getId() >= 0)) {
+        if (!(user.getId() > 0)) {
             user.setName(null);
+            user.setPassword(null);
+            user.setIs_admin(false);
             getActivity().setTitle(R.string.profile_create);
             layoutNewUser.setVisibility(View.VISIBLE);
+        } else {
+            switchIsAdmin.setChecked(user.getIs_admin());
         }
         putInfo();
         name.addTextChangedListener(new TextChangedWatcher() {
@@ -107,10 +112,10 @@ public class ProfileFragment extends BaseFragment {
                 user.setPassword(s.toString());
             }
         });
-        profilePoints.addTextChangedListener(new TextChangedWatcher() {
+        switchIsAdmin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void textChanged(Editable s) {
-                user.setAmountOfPoints(TextUtils.extractInt(s.toString(), 0));
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                user.setIs_admin(isChecked);
             }
         });
         layoutBirthdate.setOnClickListener(v -> datePickerDialog.show());
@@ -149,20 +154,18 @@ public class ProfileFragment extends BaseFragment {
     }
 
     public void save() {
-        if (user.getBirthday() != null) {
-            String date = user.getBirthday();
-            if (user.getId() > 0) {
-                RestClient.serviceApi().changeAccount(App.getActualToken().getAccessToken(), user.getId(), user.getName(), user.getPhone(), date, null, null, null).enqueue();
-            } else {
-                RestClient.serviceApi().createAccount(App.getActualToken().getAccessToken(), user.getName(), user.getPhone(), date, null, null, user.getPassword()).enqueue();
-            }
+        int isAdmin;
+        if (user.getIs_admin()) {
+            isAdmin = 1;
         } else {
-            if (user.getId() > 0) {
-                RestClient.serviceApi().changeAccount(App.getActualToken().getAccessToken(), user.getId(), user.getName(), user.getPhone(), null, null, null, null).enqueue();
-            } else {
-                RestClient.serviceApi().createAccount(App.getActualToken().getAccessToken(), user.getName(), user.getPhone(), null, null, null, user.getPassword()).enqueue();
-            }
+            isAdmin = 0;
+        }
+        if (user.getId() > 0) {
+            RestClient.serviceApi().changeAccount(App.getActualToken().getAccessToken(), user.getId(), user.getName(), user.getPhone(), user.getBirthday(), null, isAdmin, user.getPassword()).enqueue();
+        } else {
+            RestClient.serviceApi().createAccount(App.getActualToken().getAccessToken(), user.getName(), user.getPhone(), user.getBirthday(), null, isAdmin, user.getPassword()).enqueue();
         }
     }
+
 }
 

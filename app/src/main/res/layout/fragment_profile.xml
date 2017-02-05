@@ -1,94 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
     <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:fillViewport="true"
-            android:layout_height="wrap_content">
-        <LinearLayout android:orientation="vertical"
-                      android:layout_width="match_parent"
-                      android:layout_height="fill_parent">
-            <ImageView android:id="@+id/profile_image"
-                       android:layout_width="match_parent"
-                       android:src="@drawable/ms90"
-                       android:scaleType="centerCrop"
-                       android:adjustViewBounds="true"
-                       android:layout_height="240dp"/>
-            <LinearLayout android:orientation="vertical"
-                          android:layout_width="fill_parent"
-                          android:layout_margin="@dimen/spacing_large"
-                          android:layout_height="wrap_content">
-                <EditText android:layout_width="match_parent"
-                          android:id="@+id/profile_name"
-                          android:hint="@string/profile_name"
-                          android:inputType="text"
-                          android:imeOptions="actionNext"
-                          android:nextFocusDown="@+id/profile_phone"
-                          style="@style/edit_text"/>
-                <View style="@style/horizontal_border"
-                      android:layout_marginTop="@dimen/spacing_medium"
-                      android:layout_marginBottom="@dimen/spacing_medium"/>
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
 
-                <EditText android:layout_width="match_parent"
-                          android:id="@+id/profile_phone"
-                          android:nextFocusDown="@+id/profile_password"
-                          android:inputType="phone"
-                          android:imeOptions="actionNext"
-                          android:hint="@string/profile_phone"
-                          style="@style/edit_text"/>
-                <View style="@style/horizontal_border"
-                      android:layout_marginTop="@dimen/spacing_medium"
-                      android:layout_marginBottom="@dimen/spacing_medium"/>
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/anonim_user" />
 
-                <LinearLayout android:orientation="vertical"
-                              android:id="@+id/profile_new_user_fields"
-                              android:layout_width="fill_parent"
-                              android:visibility="gone"
-                              android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_large"
+                android:orientation="vertical">
 
-                    <EditText android:layout_width="match_parent"
-                              android:id="@+id/profile_password"
-                              android:nextFocusDown="@+id/profile_points"
-                              android:inputType="textVisiblePassword"
-                              android:imeOptions="actionNext"
-                              android:hint="@string/profile_password"
-                              style="@style/edit_text"/>
-                    <View style="@style/horizontal_border"
-                          android:layout_marginTop="@dimen/spacing_medium"
-                          android:layout_marginBottom="@dimen/spacing_medium"/>
+                <EditText
+                    android:id="@+id/profile_name"
+                    style="@style/edit_text"
+                    android:layout_width="match_parent"
+                    android:hint="@string/profile_name"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:nextFocusDown="@+id/profile_phone" />
 
-                    <EditText android:layout_width="match_parent"
-                              android:id="@+id/profile_points"
-                              android:hint="@string/profile_points"
-                              android:imeOptions="actionDone"
-                              android:inputType="number"
-                              style="@style/edit_text"/>
-                    <View style="@style/horizontal_border"
-                          android:layout_marginTop="@dimen/spacing_medium"
-                          android:layout_marginBottom="@dimen/spacing_medium"/>
+                <View
+                    style="@style/horizontal_border"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:layout_marginTop="@dimen/spacing_medium" />
+
+                <EditText
+                    android:id="@+id/profile_phone"
+                    style="@style/edit_text"
+                    android:layout_width="match_parent"
+                    android:hint="@string/profile_phone"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:nextFocusDown="@+id/profile_password" />
+
+                <View
+                    style="@style/horizontal_border"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:layout_marginTop="@dimen/spacing_medium" />
+
+                <LinearLayout
+                    android:id="@+id/profile_new_user_fields"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/profile_password"
+                        style="@style/edit_text"
+                        android:layout_width="match_parent"
+                        android:hint="@string/profile_password"
+                        android:imeOptions="actionNext"
+                        android:inputType="textVisiblePassword"
+                        android:nextFocusDown="@+id/profile_points" />
+
+                    <View
+                        style="@style/horizontal_border"
+                        android:layout_marginBottom="@dimen/spacing_medium"
+                        android:layout_marginTop="@dimen/spacing_medium" />
+
+                    <Switch
+                        android:id="@+id/profile_is_admin"
+                        android:layout_width="match_parent"
+                        android:hint="@string/profile_is_admin"
+                        style="@style/edit_text"
+                        android:textSize="18sp"
+                        android:gravity="left"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <View
+                        style="@style/horizontal_border"
+                        android:layout_marginBottom="@dimen/spacing_medium"
+                        android:layout_marginTop="@dimen/spacing_medium" />
 
                 </LinearLayout>
 
-                <LinearLayout android:orientation="horizontal"
-                              android:id="@+id/profile_birthdate_layout"
-                              android:layout_width="fill_parent"
-                              android:layout_margin="@dimen/spacing_large"
-                              android:layout_height="wrap_content">
-                    <TextView android:layout_width="wrap_content"
-                              android:text="@string/profile_birthdate"
-                              android:textSize="@dimen/text_large"
-                              android:layout_height="wrap_content"/>
-                    <View style="@style/horizontal_spacer"/>
-                    <TextView android:id="@+id/profile_birthdate"
-                              android:layout_width="wrap_content"
-                              android:clickable="true"
-                              android:textSize="@dimen/text_large"
-                              android:text="@string/profile_birthdate_pattern"
-                              android:layout_height="wrap_content"/>
+                <LinearLayout
+                    style="@style/edit_text"
+                    android:id="@+id/profile_birthdate_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/gray"
+                        android:text="@string/profile_birthdate"
+                        android:textSize="18sp" />
+
+                    <View style="@style/horizontal_spacer" />
+
+                    <TextView
+                        android:id="@+id/profile_birthdate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:text="@string/profile_birthdate_pattern"
+                        android:textSize="@dimen/text_large" />
                 </LinearLayout>
 
             </LinearLayout>

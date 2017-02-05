@@ -77,6 +77,7 @@
     <string name="qr_scanner_qr_not_found">QR not found</string>
     <string name="profile_password">Password</string>
     <string name="profile_points">Points count</string>
+    <string name="profile_is_admin">Is admin?</string>
     <string name="profile_city">Город</string>
     <string name="profile_address">Адрес</string>
     <string name="profile_name">Name</string>
@@ -85,7 +86,7 @@
     <string name="profile_male">М</string>
     <string name="profile_female">Ж</string>
     <string name="profile_birthdate_pattern">%1$02d-%2$02d-%3$04d</string>
-    <string name="profile_birthdate">Дата Рождения</string>
+    <string name="profile_birthdate">Birthday</string>
     <string name="profile_payment_cards">Мои платежные карты</string>
     <string name="profile_addresses">Мои адреса доставки</string>
     <string name="profile_orders">Moи заказы</string>
