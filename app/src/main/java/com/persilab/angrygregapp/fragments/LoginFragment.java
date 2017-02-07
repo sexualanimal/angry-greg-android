@@ -1,5 +1,7 @@
 package com.persilab.angrygregapp.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,12 +34,15 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.Bind;
 import butterknife.OnClick;
 
+import static com.persilab.angrygregapp.domain.Constants.Net.RESET_TOKEN;
+
 /**
  * Created by 0shad on 17.06.2016.
  */
 public class LoginFragment extends BaseFragment {
 
     private static final String PHONE = "phone";
+    private SharedPreferences prefs;
 
     @Bind(R.id.login_logo)
     ImageView loginLogo;
@@ -90,8 +95,13 @@ public class LoginFragment extends BaseFragment {
         } finally {
             helper.close();
         }
+        prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
         loadingText.setText(R.string.login_loading);
         progress.setVisibility(View.GONE);
+        String storedRefreshToken = prefs.getString(RESET_TOKEN, "");
+        if (storedRefreshToken.length() > 0) {
+            RestClient.serviceApi().refreshToken(storedRefreshToken).enqueue();
+        }
         return rootView;
     }
 
@@ -116,6 +126,9 @@ public class LoginFragment extends BaseFragment {
         if (acceptEvents) {
             acceptEvents = false;
             if (updateEvent.status.equals(ResponseEvent.Status.SUCCESS)) {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(RESET_TOKEN, updateEvent.message.getRefreshToken());
+                editor.commit();
                 App.setActualToken(updateEvent.message);
                 SnappyHelper helper = new SnappyHelper(getContext(), "login");
                 try {

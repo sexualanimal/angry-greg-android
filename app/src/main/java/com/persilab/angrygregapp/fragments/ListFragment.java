@@ -32,6 +32,7 @@ import android.widget.TextView;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.adapter.ItemListAdapter;
 import com.persilab.angrygregapp.adapter.MultiItemListAdapter;
+import com.persilab.angrygregapp.domain.event.LoadEvent;
 import com.persilab.angrygregapp.lister.DataSource;
 import com.persilab.angrygregapp.util.GuiUtils;
 
@@ -68,7 +69,7 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
     protected DataSource<I> savedDataSource;
     protected DataSource<I> dataSource;
 
-    protected int pageSize = 50;
+    protected int pageSize = 10;
     protected volatile boolean isLoading = false;
     protected volatile boolean isEnd = false;
     protected int currentCount = 0;
@@ -203,8 +204,18 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
         swipeRefresh.setRefreshing(false);
     }
 
+    private void prePostLoadItems() {
+        postEvent(new LoadEvent());
+    }
+
+    boolean oneasd = true;
+
     protected void loadItems(int count, boolean showProgress, AsyncTask onElementsLoadedTask, Object... params) {
         if (isLoading || isEnd) {
+            if (oneasd) {
+                oneasd = false;
+                prePostLoadItems();
+            }
             return;
         }
         if (dataSource != null && dataTask == null) {

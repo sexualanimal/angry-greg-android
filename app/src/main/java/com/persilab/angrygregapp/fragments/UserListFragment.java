@@ -23,6 +23,8 @@ import com.persilab.angrygregapp.adapter.ItemListAdapter;
 import com.persilab.angrygregapp.adapter.LazyItemListAdapter;
 import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.event.AddRateEvent;
+import com.persilab.angrygregapp.domain.event.LoadEvent;
+import com.persilab.angrygregapp.domain.event.PostLoadEvent;
 import com.persilab.angrygregapp.lister.DataSource;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.GuiUtils;
@@ -30,6 +32,7 @@ import com.persilab.angrygregapp.util.GuiUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +44,8 @@ public class UserListFragment extends ListFragment<User> {
     FloatingActionButton button;
 
     private List<User> users = new ArrayList<>();
+
+    int userListSize = 10;
 
     private boolean editMode = false;
 
@@ -102,7 +107,8 @@ public class UserListFragment extends ListFragment<User> {
                 adapter.notifyDataSetChanged();
                 break;
             case R.id.user_list_add:
-                ProfileFragment.show(this, new User());
+                System.out.println(findLastVisibleItemPosition(false));
+//                ProfileFragment.show(this, new User());
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -134,8 +140,10 @@ public class UserListFragment extends ListFragment<User> {
             if (users.isEmpty()) {
                 users = RestClient
                         .serviceApi()
-                        .accounts(App.getActualToken().getAccessToken(), 50).execute().body();
+                        .accounts(App.getActualToken().getAccessToken(), 10).execute().body();
 
+            }else{
+                System.out.println("123");
             }
             return Stream.of(users).skip(skip).limit(size).collect(Collectors.toList());
         };
@@ -223,6 +231,18 @@ public class UserListFragment extends ListFragment<User> {
             exitEditMode();
             return true;
         }
+
+    }
+
+    @Subscribe
+    public void onEvent(LoadEvent event) throws Exception {
+        userListSize+=10;
+        RestClient.serviceApi().accounts(App.getActualToken().getAccessToken(), userListSize).enqueue();
+//        System.out.println("------- "+postLoadUsers.size());
+    }
+
+    @Subscribe
+    public void onEvent(PostLoadEvent event){
 
     }
 
