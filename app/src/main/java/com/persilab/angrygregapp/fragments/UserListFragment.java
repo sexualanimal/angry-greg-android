@@ -2,6 +2,7 @@ package com.persilab.angrygregapp.fragments;
 
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -23,6 +24,7 @@ import com.persilab.angrygregapp.adapter.ItemListAdapter;
 import com.persilab.angrygregapp.adapter.LazyItemListAdapter;
 import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.event.AddRateEvent;
+import com.persilab.angrygregapp.domain.event.AllowLoadEvent;
 import com.persilab.angrygregapp.domain.event.LoadEvent;
 import com.persilab.angrygregapp.domain.event.PostLoadEvent;
 import com.persilab.angrygregapp.lister.DataSource;
@@ -32,9 +34,10 @@ import com.persilab.angrygregapp.util.GuiUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 /**
  * Created by 0shad on 21.06.2016.
@@ -45,7 +48,8 @@ public class UserListFragment extends ListFragment<User> {
 
     private List<User> users = new ArrayList<>();
 
-    int userListSize = 10;
+    int userListSize = pageSize;
+    List<User> loadedUserList = new ArrayList<>();
 
     private boolean editMode = false;
 
@@ -108,7 +112,7 @@ public class UserListFragment extends ListFragment<User> {
                 break;
             case R.id.user_list_add:
                 System.out.println(findLastVisibleItemPosition(false));
-//                ProfileFragment.show(this, new User());
+                ProfileFragment.show(this, new User());
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -131,6 +135,8 @@ public class UserListFragment extends ListFragment<User> {
     @Override
     public void refreshData(boolean showProgress) {
         users.clear();
+        userListSize = 10;
+        loadedUserList = new ArrayList<>();
         super.refreshData(showProgress);
     }
 
@@ -140,9 +146,9 @@ public class UserListFragment extends ListFragment<User> {
             if (users.isEmpty()) {
                 users = RestClient
                         .serviceApi()
-                        .accounts(App.getActualToken().getAccessToken(), 10).execute().body();
+                        .accounts(App.getActualToken().getAccessToken(), pageSize).execute().body();
 
-            }else{
+            } else {
                 System.out.println("123");
             }
             return Stream.of(users).skip(skip).limit(size).collect(Collectors.toList());
@@ -236,14 +242,31 @@ public class UserListFragment extends ListFragment<User> {
 
     @Subscribe
     public void onEvent(LoadEvent event) throws Exception {
-        userListSize+=10;
-        RestClient.serviceApi().accounts(App.getActualToken().getAccessToken(), userListSize).enqueue();
-//        System.out.println("------- "+postLoadUsers.size());
+        RestClient.serviceApi().accounts(App.getActualToken().getAccessToken(), userListSize+10).enqueue();
     }
 
     @Subscribe
-    public void onEvent(PostLoadEvent event){
-
+    public void onEvent(PostLoadEvent event) {
+        if (event.userList.size() > (users.size() + loadedUserList.size())) {
+            userListSize += pageSize;
+            for (int i = userListSize - pageSize; i < event.userList.size(); i++) {
+                loadedUserList.add(event.userList.get(i));
+            }
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.addItems(loadedUserList);
+                }
+            });
+        }
+        Thread nThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SystemClock.sleep(500);
+                postEvent(new AllowLoadEvent());
+            }
+        });
+        nThread.run();
     }
 
 }

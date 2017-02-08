@@ -32,9 +32,12 @@ import android.widget.TextView;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.adapter.ItemListAdapter;
 import com.persilab.angrygregapp.adapter.MultiItemListAdapter;
+import com.persilab.angrygregapp.domain.event.AllowLoadEvent;
 import com.persilab.angrygregapp.domain.event.LoadEvent;
 import com.persilab.angrygregapp.lister.DataSource;
 import com.persilab.angrygregapp.util.GuiUtils;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 import java.util.List;
@@ -81,6 +84,8 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
     protected boolean enableFiltering = false;
     protected boolean enableScrollbar = true;
     protected long lastFilteringTime = 0;
+    boolean allowPostLoad = true;
+    private int itemSpottedFromEnd = 1;
 
     public ListFragment() {
     }
@@ -204,18 +209,8 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
         swipeRefresh.setRefreshing(false);
     }
 
-    private void prePostLoadItems() {
-        postEvent(new LoadEvent());
-    }
-
-    boolean oneasd = true;
-
     protected void loadItems(int count, boolean showProgress, AsyncTask onElementsLoadedTask, Object... params) {
         if (isLoading || isEnd) {
-            if (oneasd) {
-                oneasd = false;
-                prePostLoadItems();
-            }
             return;
         }
         if (dataSource != null && dataTask == null) {
@@ -351,6 +346,10 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
     }
 
 
+    private void prePostLoadItems() {
+        postEvent(new LoadEvent());
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -387,6 +386,14 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
                 visibleItemCount = mLayoutManager.getChildCount();
                 totalItemCount = mLayoutManager.getItemCount();
                 pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+                if (dy > 0) {
+                    if (layoutManager.findLastVisibleItemPosition() == totalItemCount - itemSpottedFromEnd) {
+                        if (allowPostLoad) {
+                            allowPostLoad = false;
+                            prePostLoadItems();
+                        }
+                    }
+                }
                 if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
                     loadItems(true);
                 }
@@ -534,6 +541,11 @@ public abstract class ListFragment<I> extends BaseFragment implements SearchView
                 }
             }
         }
+    }
+
+    @Subscribe
+    public void onEvent(AllowLoadEvent event) {
+        allowPostLoad = true;
     }
 
 }

@@ -20,6 +20,7 @@ import com.persilab.angrygregapp.domain.entity.json.JsonError;
 import com.persilab.angrygregapp.domain.event.AddRateEvent;
 import com.persilab.angrygregapp.domain.event.FragmentAttachedEvent;
 import com.persilab.angrygregapp.domain.event.NetworkEvent;
+import com.persilab.angrygregapp.domain.event.PostLoadEvent;
 import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
 import com.persilab.angrygregapp.domain.event.UserDeletedEvent;
 import com.persilab.angrygregapp.domain.event.UserFoundEvent;
@@ -32,6 +33,8 @@ import com.persilab.angrygregapp.util.GuiUtils;
 import net.vrallev.android.cat.Cat;
 
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
 
 import retrofit2.Response;
 
@@ -144,6 +147,9 @@ public class MainActivity extends BaseActivity {
                     if (method.equals("POST")) {
                         GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
                     }
+                }
+                if(path.contains("accounts")){
+                    postEvent(new PostLoadEvent((List<User>)((Response) networkEvent.message).body()));
                 }
             }
         }

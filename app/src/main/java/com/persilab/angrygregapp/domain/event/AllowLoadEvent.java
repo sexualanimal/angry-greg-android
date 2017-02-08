@@ -8,10 +8,5 @@ import java.util.List;
  * Created by kozak on 07.02.2017.
  */
 
-public class PostLoadEvent implements Event {
-    public List<User> userList;
-
-    public PostLoadEvent(List<User> userList) {
-        this.userList = userList;
-    }
+public class AllowLoadEvent implements Event {
 }
