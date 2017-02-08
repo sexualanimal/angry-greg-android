@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity {
     public void onEvent(NetworkEvent networkEvent) {
         System.out.println(networkEvent.message.toString());
         if (networkEvent.request == null) {
-            ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error_network);
+//            ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error_network);
             return;
         }
         String path = networkEvent.request.url().encodedPath().substring(5);
@@ -148,7 +148,7 @@ public class MainActivity extends BaseActivity {
                         GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
                     }
                 }
-                if(path.contains("accounts")){
+                if(path.contains("accounts") && !(((Response) networkEvent.message).body() instanceof User)){
                     postEvent(new PostLoadEvent((List<User>)((Response) networkEvent.message).body()));
                 }
             }

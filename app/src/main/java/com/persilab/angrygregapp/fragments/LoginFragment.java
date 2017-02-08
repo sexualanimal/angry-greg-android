@@ -100,6 +100,8 @@ public class LoginFragment extends BaseFragment {
         progress.setVisibility(View.GONE);
         String storedRefreshToken = prefs.getString(RESET_TOKEN, "");
         if (storedRefreshToken.length() > 0) {
+            progress.setVisibility(View.VISIBLE);
+            acceptEvents = true;
             RestClient.serviceApi().refreshToken(storedRefreshToken).enqueue();
         }
         return rootView;
