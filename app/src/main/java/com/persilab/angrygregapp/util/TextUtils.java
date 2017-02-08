@@ -2,10 +2,21 @@ package com.persilab.angrygregapp.util;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
+
 import org.intellij.lang.annotations.RegExp;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,8 +48,8 @@ public class TextUtils {
         return string.replaceAll("^\\s+|\\s+$", "");
     }
 
-    public static String [] trim(String ... strings) {
-        String [] trimStrings = new String[strings.length];
+    public static String[] trim(String... strings) {
+        String[] trimStrings = new String[strings.length];
         for (int i = 0; i < strings.length; i++) {
             trimStrings[i] = trim(trim(strings[i]));
         }

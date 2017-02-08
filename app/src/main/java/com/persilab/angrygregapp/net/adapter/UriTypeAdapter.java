@@ -1,12 +1,12 @@
 package com.persilab.angrygregapp.net.adapter;
 
 import android.net.Uri;
+
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import com.persilab.angrygregapp.domain.Constants;
-
 
 import java.io.IOException;
 

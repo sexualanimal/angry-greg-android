@@ -1,7 +1,15 @@
 package com.persilab.angrygregapp.net;
 
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.DataOutput;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.URI;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -51,10 +59,11 @@ public class CachedResponse extends File implements Serializable {
         try {
             zos = new GZIPOutputStream(new BufferedOutputStream(new FileOutputStream(cachedResponse, false)));
             is = new FileInputStream(this);
-            while (readStream(is, zos, buffer));
+            while (readStream(is, zos, buffer)) ;
         } finally {
-            if(zos != null) zos.close();
-            if(is != null) is.close();;
+            if (zos != null) zos.close();
+            if (is != null) is.close();
+            ;
         }
         return cachedResponse;
     }

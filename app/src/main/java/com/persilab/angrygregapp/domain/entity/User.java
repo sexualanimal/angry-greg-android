@@ -1,41 +1,30 @@
 package com.persilab.angrygregapp.domain.entity;
 
-import android.os.SystemClock;
-
 import com.persilab.angrygregapp.adapter.ItemListAdapter;
 import com.persilab.angrygregapp.domain.Findable;
-
-import com.persilab.angrygregapp.fragments.ListFragment;
-import com.persilab.angrygregapp.util.SystemUtils;
-
-import io.requery.Entity;
-import io.requery.Key;
 
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Random;
+
+import io.requery.Key;
 
 public class User implements Serializable, Findable {
 
     private static long point = System.currentTimeMillis();
 
     @Key
-    int id;
+    int id = 0;
     String name;
     String phone;
     String password;
-//    String birthday;
+    String birthday;
     int points;
     int free_coffee;
     int is_admin;
-//    String created_at;
-//    String updated_at;
-//    String deleted_at;
 
     transient boolean delete = false;
 
@@ -76,19 +65,30 @@ public class User implements Serializable, Findable {
         this.password = password;
     }
 
-//    public Date getBirthday() {
-//        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-//        Date result = new Date();
-//        try {
-//            result = format.parse(birthday);
-//        } catch (ParseException e) {
-//        }
-//        return result;
-//    }
+    public String getBirthday() {
+        return birthday;
+    }
 
-//    public void setBirthday(Date birthday) {
-//        this.birthday = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(birthday);
-//    }
+    public Date getBirthdayDate() {
+        if (this.birthday == null) {
+            return null;
+        }
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Date result = new Date();
+        try {
+            result = format.parse(birthday);
+        } catch (ParseException e) {
+        }
+        return result;
+    }
+
+    public void setBirthdayDate(Date birthday) {
+        this.birthday = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(birthday);
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
 
     public Boolean getIs_admin() {
         return is_admin == 1;
@@ -126,27 +126,4 @@ public class User implements Serializable, Findable {
         this.delete = delete;
     }
 
-//    public String getDeleted_at() {
-//        return deleted_at;
-//    }
-//
-//    public void setDeleted_at(String deleted_at) {
-//        this.deleted_at = deleted_at;
-//    }
-//
-//    public String getCreated_at() {
-//        return created_at;
-//    }
-//
-//    public void setCreated_at(String created_at) {
-//        this.created_at = created_at;
-//    }
-//
-//    public String getUpdated_at() {
-//        return updated_at;
-//    }
-//
-//    public void setUpdated_at(String updated_at) {
-//        this.updated_at = updated_at;
-//    }
 }

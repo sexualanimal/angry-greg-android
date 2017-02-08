@@ -8,13 +8,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.NumberPicker;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
+import com.persilab.angrygregapp.App;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.domain.entity.User;
-import com.persilab.angrygregapp.domain.event.AddRateEvent;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.GuiUtils;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 /**
@@ -22,13 +24,13 @@ import com.persilab.angrygregapp.util.GuiUtils;
  */
 public class AddPointsDialog extends BaseDialog {
 
-//    private int userId;
+    private int userId;
 
     public static void show(FragmentManager fragmentManager, User user) {
         AddPointsDialog dialog = (AddPointsDialog) fragmentManager.findFragmentByTag(AddPointsDialog.class.getSimpleName());
         if (dialog == null) {
             dialog = new AddPointsDialog();
-//            dialog.setUserId(user.getId());
+            dialog.setUserId(user.getId());
             dialog.show(fragmentManager, AddPointsDialog.class.getSimpleName());
         }
     }
@@ -36,9 +38,9 @@ public class AddPointsDialog extends BaseDialog {
     @Bind(R.id.dialog_picker_numberPicker)
     NumberPicker numberPicker;
 
-//    public void setUserId(int userId) {
-//        this.userId = userId;
-//    }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     @NonNull
     @Override
@@ -58,7 +60,7 @@ public class AddPointsDialog extends BaseDialog {
 
     @Override
     public void onButtonPositive(DialogInterface dialog) {
-//        RestClient.serviceApi().addPoints(userId, numberPicker.getValue()).enqueue(); //todo fix
+        RestClient.serviceApi().addPoints(App.getActualToken().getAccessToken(), userId, numberPicker.getValue()).enqueue();
     }
 
 }

@@ -5,10 +5,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
+
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.persilab.angrygregapp.App;
@@ -20,6 +26,7 @@ import com.persilab.angrygregapp.domain.event.AddRateEvent;
 import com.persilab.angrygregapp.lister.DataSource;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.GuiUtils;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -75,7 +82,7 @@ public class UserListFragment extends ListFragment<User> {
 
     @Override
     public boolean allowBackPress() {
-        if(editMode) {
+        if (editMode) {
             exitEditMode();
             return false;
         } else {
@@ -89,7 +96,7 @@ public class UserListFragment extends ListFragment<User> {
             case R.id.user_list_delete:
                 List<User> needDelete = Stream.of(adapter.getItems()).filter(User::isDelete).collect(Collectors.toList());
                 for (User user : needDelete) {
-//                    RestClient.serviceApi().deleteAccount(user.getId()).enqueue();//todo fix
+                    RestClient.serviceApi().deleteAccount(App.getActualToken().getAccessToken(), user.getId()).enqueue();
                 }
                 adapter.getItems().removeAll(needDelete);
                 adapter.notifyDataSetChanged();
@@ -127,7 +134,7 @@ public class UserListFragment extends ListFragment<User> {
             if (users.isEmpty()) {
                 users = RestClient
                         .serviceApi()
-                        .accounts(App.getActualToken().getAccessToken(), 10).execute().body();
+                        .accounts(App.getActualToken().getAccessToken(), 50).execute().body();
 
             }
             return Stream.of(users).skip(skip).limit(size).collect(Collectors.toList());
@@ -150,16 +157,16 @@ public class UserListFragment extends ListFragment<User> {
 
     @Subscribe
     public void onEvent(AddRateEvent event) {
-        int index = getUserById(event.message.getId());
-        if(index > 0) {
-            adapter.getItems().set(index, event.message);
+        int index = getUserById(event.message.getAccount().getId());
+        if (index > 0) {
+            adapter.getItems().set(index, event.message.getAccount());
             GuiUtils.runInUI(getContext(), (var) -> adapter.notifyItemChanged(index));
         }
     }
 
     private int getUserById(final int id) {
         for (int i = 0; i < adapter.getItems().size(); i++) {
-            if(adapter.getItems().get(i).getId() == id) {
+            if (adapter.getItems().get(i).getId() == id) {
                 return i;
             }
         }
@@ -185,6 +192,7 @@ public class UserListFragment extends ListFragment<User> {
             }
             CheckBox checkBox = holder.getView(R.id.item_user_checkbox);
             if (editMode) {
+                button.setVisibility(View.INVISIBLE);
                 checkBox.setVisibility(View.VISIBLE);
                 checkBox.setChecked(false);
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -195,6 +203,7 @@ public class UserListFragment extends ListFragment<User> {
                     }
                 });
             } else {
+                button.setVisibility(View.VISIBLE);
                 checkBox.setVisibility(View.GONE);
                 checkBox.setChecked(false);
                 item.setDelete(false);
@@ -203,7 +212,7 @@ public class UserListFragment extends ListFragment<User> {
 
         @Override
         public boolean onClick(View view, @Nullable User item) {
-            if(!editMode) {
+            if (!editMode) {
                 AddPointsUserFragment.show(UserListFragment.this, item);
             }
             return true;

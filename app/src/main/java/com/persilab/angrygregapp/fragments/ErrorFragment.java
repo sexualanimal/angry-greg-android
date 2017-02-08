@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.util.FragmentBuilder;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by 0shad on 13.07.2015.
@@ -47,7 +49,7 @@ public class ErrorFragment extends BaseFragment {
                     .replaceFragment(getId(), fragmentClass);
         });
         String message = getArguments().getString(Constants.ArgsName.MESSAGE);
-        if(message == null) {
+        if (message == null) {
             message = getString(R.string.error);
         }
         errorMessage.setText(message);

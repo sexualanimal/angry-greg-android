@@ -4,15 +4,27 @@ import android.support.annotation.LayoutRes;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
 import com.persilab.angrygregapp.util.GuiUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 /**
  * Created by 0shad on 08.03.2016.
  */
-public abstract class ExpandableItemListAdapter<G,C> extends BaseExpandableListAdapter implements View.OnClickListener,
+public abstract class ExpandableItemListAdapter<G, C> extends BaseExpandableListAdapter implements View.OnClickListener,
         View.OnLongClickListener {
 
     private final Map<Pair<Integer, G>, List<C>> items;
@@ -45,7 +57,7 @@ public abstract class ExpandableItemListAdapter<G,C> extends BaseExpandableListA
     @Override
     public List<C> getGroup(int groupPosition) {
         for (Pair<Integer, G> pair : items.keySet()) {
-            if(pair.first == groupPosition) {
+            if (pair.first == groupPosition) {
                 return items.get(pair);
             }
         }
@@ -147,7 +159,7 @@ public abstract class ExpandableItemListAdapter<G,C> extends BaseExpandableListA
     }
 
     public abstract void onBindViewHolder(ViewHolder holder);
-    
+
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
@@ -157,9 +169,9 @@ public abstract class ExpandableItemListAdapter<G,C> extends BaseExpandableListA
     public void onClick(View view) {
         ViewHolder holder = (ViewHolder) view.getTag();
         if (holder.getView(view.getId()) != null && holder.isGroup()) {
-            if(holder.isGroup()) {
+            if (holder.isGroup()) {
                 ExpandableListView mExpandableListView = (ExpandableListView) holder.itemView.getParent();
-                if(holder.isExpanded) {
+                if (holder.isExpanded) {
                     mExpandableListView.collapseGroup(holder.getGroupPosition());
                 } else {
                     mExpandableListView.expandGroup(holder.getGroupPosition());
@@ -179,7 +191,7 @@ public abstract class ExpandableItemListAdapter<G,C> extends BaseExpandableListA
     public void onChildClick(View view, int groupPosition, int childPosition) {
 
     }
-    
+
     // Implement OnLongClick listener.
     @Override
     public boolean onLongClick(View view) {
@@ -250,7 +262,7 @@ public abstract class ExpandableItemListAdapter<G,C> extends BaseExpandableListA
 
     }
 
-    public static abstract class ViewHolder  {
+    public static abstract class ViewHolder {
 
         protected final View itemView;
         protected HashMap<Integer, View> views;

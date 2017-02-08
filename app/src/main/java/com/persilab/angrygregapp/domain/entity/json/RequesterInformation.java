@@ -12,7 +12,7 @@ public class RequesterInformation {
     private int id;
     private String fingerprint;
     private String remoteIP;
-    private Map<String,String> receivedParams = new LinkedHashMap<>();
+    private Map<String, String> receivedParams = new LinkedHashMap<>();
 
     public int getId() {
         return id;

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Dmitry on 21.04.2016.
  */
-public abstract class LazyItemListAdapter<I> extends ItemListAdapter<I>{
+public abstract class LazyItemListAdapter<I> extends ItemListAdapter<I> {
 
     public LazyItemListAdapter(@LayoutRes int layoutId) {
         super(layoutId);
@@ -21,7 +21,7 @@ public abstract class LazyItemListAdapter<I> extends ItemListAdapter<I>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if(items != null && items.size() > translatePosition(position)) {
+        if (items != null && items.size() > translatePosition(position)) {
             onBindHolder(holder, items.get(translatePosition(position)));
         } else {
             onBindHolder(holder, null);
@@ -33,7 +33,7 @@ public abstract class LazyItemListAdapter<I> extends ItemListAdapter<I>{
     @Override
     public void onClick(View view) {
         boolean handled = false;
-        if(view.getTag() instanceof ViewHolder) {
+        if (view.getTag() instanceof ViewHolder) {
             ViewHolder holder = (ViewHolder) view.getTag();
             if (holder.getView(view.getId()) != null) {
                 handled = onClick(view, items.get(translatePosition(holder.getLayoutPosition())));
@@ -41,13 +41,13 @@ public abstract class LazyItemListAdapter<I> extends ItemListAdapter<I>{
         } else {
             handled = onClick(view, null);
         }
-        if(!handled && view.getParent() != null){
-            ((View)view.getParent()).performClick();
+        if (!handled && view.getParent() != null) {
+            ((View) view.getParent()).performClick();
         }
     }
 
-    public boolean onClick(View view, @Nullable I item){
-       return false;
+    public boolean onClick(View view, @Nullable I item) {
+        return false;
     }
 
     @Override
@@ -61,14 +61,14 @@ public abstract class LazyItemListAdapter<I> extends ItemListAdapter<I>{
         } else {
             handled = onLongClick(view, null);
         }
-        if(!handled && view.getParent() != null) {
-            ((View)view.getParent()).performLongClick();
+        if (!handled && view.getParent() != null) {
+            ((View) view.getParent()).performLongClick();
         }
         return handled;
     }
 
     public boolean onLongClick(View view, @Nullable I item) {
-       return false;
+        return false;
     }
 
     public int translatePosition(int position) {

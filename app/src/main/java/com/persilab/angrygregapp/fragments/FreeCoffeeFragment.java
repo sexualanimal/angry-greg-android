@@ -4,14 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
+
+import com.persilab.angrygregapp.R;
+
 import butterknife.Bind;
 import butterknife.OnClick;
-import com.persilab.angrygregapp.R;
-import com.persilab.angrygregapp.domain.Constants;
-import com.persilab.angrygregapp.util.FragmentBuilder;
-import com.persilab.angrygregapp.util.GuiUtils;
 
 /**
  * Created by 0shad on 23.06.2016.

@@ -17,7 +17,12 @@ import android.text.format.Formatter;
 import android.util.Log;
 import android.widget.ProgressBar;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -146,10 +151,10 @@ public class AndroidSystemUtils {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public static Map<String, String> getStringPreferences(Context context, String ... prefNames) {
+    public static Map<String, String> getStringPreferences(Context context, String... prefNames) {
         SharedPreferences preferences = getDefaultPreference(context);
         Map<String, String> prefMap = new HashMap<String, String>();
-        for(String name : prefNames) {
+        for (String name : prefNames) {
             prefMap.put(name, preferences.getString(name, ""));
         }
         return prefMap;
@@ -233,7 +238,7 @@ public class AndroidSystemUtils {
         context.startActivity(intent);
     }
 
-    public static void shareText(Context context, String title, String subject,  String text, String mime) {
+    public static void shareText(Context context, String title, String subject, String text, String mime) {
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType(mime);
         share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET | Intent.FLAG_ACTIVITY_NEW_DOCUMENT);

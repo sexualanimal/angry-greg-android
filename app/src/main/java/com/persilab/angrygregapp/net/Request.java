@@ -2,6 +2,7 @@ package com.persilab.angrygregapp.net;
 
 import android.support.v4.util.Pair;
 import android.util.Log;
+
 import com.persilab.angrygregapp.domain.Valuable;
 
 import java.io.Serializable;
@@ -244,8 +245,10 @@ public class Request implements Cloneable, Serializable {
         if (!url.equals(request.url)) return false;
         if (suffix != null ? !suffix.equals(request.suffix) : request.suffix != null) return false;
         if (!params.equals(request.params)) return false;
-        if (encoding != null ? !encoding.equals(request.encoding) : request.encoding != null) return false;
-        if (content != null ? !content.equals(request.content) : request.content != null) return false;
+        if (encoding != null ? !encoding.equals(request.encoding) : request.encoding != null)
+            return false;
+        if (content != null ? !content.equals(request.content) : request.content != null)
+            return false;
         if (!headers.equals(request.headers)) return false;
         return method == request.method;
 

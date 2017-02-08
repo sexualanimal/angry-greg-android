@@ -3,7 +3,16 @@ package com.persilab.angrygregapp.util;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.text.DecimalFormat;
@@ -55,7 +64,7 @@ public class SystemUtils {
         void execute(T t);
     }
 
-    public static <T> void forEach(Function<T> function, T ... ts) {
+    public static <T> void forEach(Function<T> function, T... ts) {
         for (T t : ts) {
             function.execute(t);
         }

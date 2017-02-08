@@ -1,7 +1,5 @@
 package com.persilab.angrygregapp.domain.event;
 
-import okhttp3.Request;
-
 /**
  * Created by 0shad on 01.03.2016.
  */

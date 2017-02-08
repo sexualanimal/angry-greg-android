@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import butterknife.Bind;
+
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.adapter.FragmentPagerAdapter;
 import com.persilab.angrygregapp.lister.DataSource;
@@ -17,6 +17,8 @@ import com.persilab.angrygregapp.lister.DataSource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
 
 /**
  * Created by 0shad on 26.10.2015.
@@ -153,7 +155,7 @@ public abstract class PagerFragment<I, F extends BaseFragment> extends BaseFragm
     }
 
     public void onPageSelected(int position) {
-        if(!isEnd && position == currentCount - 1) {
+        if (!isEnd && position == currentCount - 1) {
             loadItems(pagesSize, true);
         }
         currentItem = position;

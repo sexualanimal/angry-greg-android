@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
+
 import com.google.gson.internal.Primitives;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.fragments.ErrorFragment;
@@ -139,7 +140,8 @@ public class FragmentBuilder {
                 return this;
             case CHARSEQUENCE:
                 if (arrayFlag) bundle.putCharSequenceArray(key, (CharSequence[]) value);
-                else if (listFlag) bundle.putCharSequenceArrayList(key, (ArrayList<CharSequence>) value);
+                else if (listFlag)
+                    bundle.putCharSequenceArrayList(key, (ArrayList<CharSequence>) value);
                 else bundle.putCharSequence(key, (CharSequence) value);
                 return this;
             case BUNDLE:
@@ -193,7 +195,7 @@ public class FragmentBuilder {
     }
 
     public FragmentBuilder putArgs(Map<String, Object> args) {
-        for (Map.Entry<String, Object> entry :  args.entrySet()) {
+        for (Map.Entry<String, Object> entry : args.entrySet()) {
             putArg(entry.getKey(), entry.getValue());
         }
         return this;
@@ -253,7 +255,7 @@ public class FragmentBuilder {
         if (fragmentClass == null && name == null) {
             return null;
         }
-        if(clearBackStack) {
+        if (clearBackStack) {
             manager.popBackStack(clearBackStackUpToName, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
         Fragment fragment = manager.findFragmentByTag(name);
@@ -280,7 +282,7 @@ public class FragmentBuilder {
         if (toBackStack) {
             transaction.addToBackStack(null);
         }
-        if(inAnimationId > 0 && outAnimationId > 0){
+        if (inAnimationId > 0 && outAnimationId > 0) {
             transaction.setCustomAnimations(inAnimationId, outAnimationId);
         }
         transaction.commitAllowingStateLoss();

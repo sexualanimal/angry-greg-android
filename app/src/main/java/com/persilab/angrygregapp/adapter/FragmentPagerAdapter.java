@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
+
 import com.persilab.angrygregapp.fragments.BaseFragment;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * Created by Dmitry on 26.10.2015.
  */
-public abstract class FragmentPagerAdapter<I,F extends BaseFragment> extends FragmentStatePagerAdapter {
+public abstract class FragmentPagerAdapter<I, F extends BaseFragment> extends FragmentStatePagerAdapter {
 
     protected SparseArray<F> registeredFragments = new SparseArray<>();
     protected List<I> items = new ArrayList<>();
@@ -29,7 +30,7 @@ public abstract class FragmentPagerAdapter<I,F extends BaseFragment> extends Fra
         this.items = items;
     }
 
-    public List<I> getItems(){
+    public List<I> getItems() {
         return items;
     }
 
@@ -67,11 +68,12 @@ public abstract class FragmentPagerAdapter<I,F extends BaseFragment> extends Fra
     }
 
     public F getRegisteredFragment(int position) {
-        if(position < 0 || position >= registeredFragments.size()) {
+        if (position < 0 || position >= registeredFragments.size()) {
             return null;
         }
         return registeredFragments.get(position);
     }
+
     @Override
     public abstract Fragment getItem(int position);
 }

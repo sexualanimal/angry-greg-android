@@ -3,31 +3,39 @@ package com.persilab.angrygregapp.activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.persilab.angrygregapp.App;
 import com.persilab.angrygregapp.R;
-import com.persilab.angrygregapp.database.SnappyHelper;
 import com.persilab.angrygregapp.database.SuggestionProvider;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.Token;
 import com.persilab.angrygregapp.domain.entity.User;
+import com.persilab.angrygregapp.domain.entity.UserNeedCoffee;
 import com.persilab.angrygregapp.domain.entity.json.JsonError;
-import com.persilab.angrygregapp.domain.event.*;
+import com.persilab.angrygregapp.domain.event.AddRateEvent;
+import com.persilab.angrygregapp.domain.event.FragmentAttachedEvent;
+import com.persilab.angrygregapp.domain.event.NetworkEvent;
+import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
+import com.persilab.angrygregapp.domain.event.UserDeletedEvent;
+import com.persilab.angrygregapp.domain.event.UserFoundEvent;
 import com.persilab.angrygregapp.fragments.BaseFragment;
 import com.persilab.angrygregapp.fragments.ErrorFragment;
 import com.persilab.angrygregapp.fragments.LoginFragment;
-//import com.persilab.angrygregapp.job.TokenUpdateJob;
 import com.persilab.angrygregapp.net.RestClient;
-import com.persilab.angrygregapp.util.FragmentBuilder;
 import com.persilab.angrygregapp.util.GuiUtils;
-import com.snappydb.SnappydbException;
+
 import net.vrallev.android.cat.Cat;
+
 import org.greenrobot.eventbus.Subscribe;
+
 import retrofit2.Response;
+
+//import com.persilab.angrygregapp.job.TokenUpdateJob;
 
 
 public class MainActivity extends BaseActivity {
@@ -56,7 +64,7 @@ public class MainActivity extends BaseActivity {
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
                     SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
             suggestions.saveRecentQuery(query, null);
-           // SearchFragment.show(getCurrentFragment(), query); // Implement SearchFragment
+            // SearchFragment.show(getCurrentFragment(), query); // Implement SearchFragment
         }
     }
 
@@ -79,20 +87,9 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_exit :
-                SnappyHelper helper = new SnappyHelper(this, "logout");
-                Token token = null;
-                try {
-                    token = helper.getSerializable(Token.class);
-                    token.setAccessExpires(null);
-                    helper.storeSerializable(token);
-                } catch (SnappydbException e) {
-                    Cat.e(e);
-                } finally {
-                    helper.close();
-                }
-                exit = true;
-                finish();
+            case R.id.action_exit:
+                App.setActualToken(null);
+                replaceFragment(LoginFragment.class);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -101,7 +98,7 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(NetworkEvent networkEvent) {
         System.out.println(networkEvent.message.toString());
-        if(networkEvent.request == null) {
+        if (networkEvent.request == null) {
             ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error_network);
             return;
         }
@@ -109,17 +106,17 @@ public class MainActivity extends BaseActivity {
         String method = networkEvent.request.method();
         if (networkEvent.status == NetworkEvent.Status.FAILURE) {
             Cat.e(networkEvent.message.toString());
-            if(networkEvent.message instanceof JsonError) {
+            if (networkEvent.message instanceof JsonError) {
                 JsonError error = (JsonError) networkEvent.message;
-                if(path.contains(RestClient.AUTH)) {
+                if (path.contains(RestClient.AUTH)) {
                     postEvent(new TokenUpdateEvent(networkEvent.status, null));
                     return;
                 }
-                if(path.matches(RestClient.ACCOUNTS + "/[a-z0-9]+")) {
-                    if(method.equals("GET")) {
+                if (path.matches(RestClient.ACCOUNTS + "/[a-z0-9]+")) {
+                    if (method.equals("GET")) {
                         postEvent(new UserFoundEvent(networkEvent.status, null));
                     }
-                    if(method.equals("DELETE")) {
+                    if (method.equals("DELETE")) {
                         postEvent(new UserDeletedEvent(networkEvent.status, null));
                     }
                 }
@@ -132,20 +129,20 @@ public class MainActivity extends BaseActivity {
                     postEvent(new TokenUpdateEvent(networkEvent.status, (Token) response.body()));
                 }
                 if (path.contains("points")) {
-                    postEvent(new AddRateEvent(networkEvent.status, (User) response.body()));
+                    postEvent(new AddRateEvent(networkEvent.status, (UserNeedCoffee) response.body()));
                 }
-                if(path.matches(RestClient.ACCOUNTS + "/[a-z0-9]+")) {
-                    if(method.equals("GET")) {
+                if (path.matches(RestClient.ACCOUNTS + "/[a-z0-9]+")) {
+                    if (method.equals("GET")) {
                         postEvent(new UserFoundEvent(networkEvent.status, (User) response.body()));
                     }
-                    if(method.equals("DELETE")) {
+                    if (method.equals("DELETE")) {
                         postEvent(new UserDeletedEvent(networkEvent.status, path.substring(path.indexOf('/') + 1)));
                     }
                     if (method.equals("PUT")) {
                         GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
                     }
                 }
-                if(path.matches(RestClient.ACCOUNTS)) {
+                if (path.matches(RestClient.ACCOUNTS)) {
                     if (method.equals("POST")) {
                         GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
                     }
@@ -157,7 +154,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(exit) {
+        if (exit) {
             System.exit(0);
         }
     }
@@ -169,7 +166,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-            super.onBackPressed();
+        super.onBackPressed();
     }
 
 }

@@ -2,7 +2,12 @@ package com.persilab.angrygregapp.net;
 
 import android.util.Log;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.util.Map;
 import java.util.concurrent.Callable;

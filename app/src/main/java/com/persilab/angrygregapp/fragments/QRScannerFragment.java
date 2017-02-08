@@ -2,17 +2,24 @@ package com.persilab.angrygregapp.fragments;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.google.zxing.Result;
+import com.persilab.angrygregapp.App;
 import com.persilab.angrygregapp.R;
-import com.persilab.angrygregapp.domain.event.UserFoundEvent;
 import com.persilab.angrygregapp.domain.event.ResponseEvent;
+import com.persilab.angrygregapp.domain.event.UserFoundEvent;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.GuiUtils;
 
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /**
  * Created by 0shad on 27.06.2016.
@@ -47,7 +54,7 @@ public class QRScannerFragment extends BaseFragment implements ZXingScannerView.
 
     @Override
     public void handleResult(Result result) {
-//        RestClient.serviceApi().getAccount(Integer.parseInt(result.getText())).enqueue(); //todo FIX
+        RestClient.serviceApi().getAccount(App.getActualToken().getAccessToken(), Integer.parseInt(result.getText())).enqueue();
     }
 
     @Override
@@ -70,7 +77,7 @@ public class QRScannerFragment extends BaseFragment implements ZXingScannerView.
 
     @Subscribe
     public void onEvent(UserFoundEvent event) {
-        if(event.status.equals(ResponseEvent.Status.SUCCESS)) {
+        if (event.status.equals(ResponseEvent.Status.SUCCESS)) {
             AddPointsUserFragment.show(QRScannerFragment.this, event.message);
             Handler handler = new Handler();
             handler.postDelayed(() -> mScannerView.resumeCameraPreview(QRScannerFragment.this), 2000);

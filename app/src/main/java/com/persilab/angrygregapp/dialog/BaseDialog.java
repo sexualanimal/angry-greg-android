@@ -4,15 +4,18 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import butterknife.ButterKnife;
+
 import com.persilab.angrygregapp.domain.event.Event;
 import com.persilab.angrygregapp.util.FragmentBuilder;
+
 import org.greenrobot.eventbus.EventBus;
+
+import butterknife.ButterKnife;
 
 /**
  * Created by Dmitry on 20.10.2015.
  */
-public  class BaseDialog extends DialogFragment implements DialogInterface.OnClickListener {
+public class BaseDialog extends DialogFragment implements DialogInterface.OnClickListener {
 
     private BaseDialog loginDialog;
 
