@@ -36,8 +36,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 /**
  * Created by 0shad on 21.06.2016.
@@ -242,7 +240,7 @@ public class UserListFragment extends ListFragment<User> {
 
     @Subscribe
     public void onEvent(LoadEvent event) throws Exception {
-        RestClient.serviceApi().accounts(App.getActualToken().getAccessToken(), userListSize+10).enqueue();
+        RestClient.serviceApi().accounts(App.getActualToken().getAccessToken(), userListSize + pageSize).enqueue();
     }
 
     @Subscribe

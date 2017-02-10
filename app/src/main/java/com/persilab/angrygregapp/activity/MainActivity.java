@@ -19,6 +19,7 @@ import com.persilab.angrygregapp.domain.entity.UserNeedCoffee;
 import com.persilab.angrygregapp.domain.entity.json.JsonError;
 import com.persilab.angrygregapp.domain.event.AddRateEvent;
 import com.persilab.angrygregapp.domain.event.FragmentAttachedEvent;
+import com.persilab.angrygregapp.domain.event.LoadedRefreshTokenEvent;
 import com.persilab.angrygregapp.domain.event.NetworkEvent;
 import com.persilab.angrygregapp.domain.event.PostLoadEvent;
 import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
@@ -27,6 +28,7 @@ import com.persilab.angrygregapp.domain.event.UserFoundEvent;
 import com.persilab.angrygregapp.fragments.BaseFragment;
 import com.persilab.angrygregapp.fragments.ErrorFragment;
 import com.persilab.angrygregapp.fragments.LoginFragment;
+import com.persilab.angrygregapp.fragments.LogoFragment;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.GuiUtils;
 
@@ -53,7 +55,7 @@ public class MainActivity extends BaseActivity {
         if (sectionFragment != null) {
             restoreFragment(sectionFragment);
         } else {
-            replaceFragment(LoginFragment.class);
+            replaceFragment(LogoFragment.class);
         }
         getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
@@ -126,6 +128,9 @@ public class MainActivity extends BaseActivity {
         } else {
             if (networkEvent.message instanceof Response) {
                 Response response = (Response) networkEvent.message;
+                if (path.contains("refresh")) {
+                    postEvent(new LoadedRefreshTokenEvent(((Token) ((Response) networkEvent.message).body())));
+                }
                 if (response.body() instanceof Token) {
                     postEvent(new TokenUpdateEvent(networkEvent.status, (Token) response.body()));
                 }
@@ -148,8 +153,8 @@ public class MainActivity extends BaseActivity {
                         GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
                     }
                 }
-                if(path.contains("accounts") && !(((Response) networkEvent.message).body() instanceof User)){
-                    postEvent(new PostLoadEvent((List<User>)((Response) networkEvent.message).body()));
+                if (path.contains("accounts") && !(((Response) networkEvent.message).body() instanceof User)) {
+                    postEvent(new PostLoadEvent((List<User>) ((Response) networkEvent.message).body()));
                 }
             }
         }

@@ -98,12 +98,6 @@ public class LoginFragment extends BaseFragment {
         prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
         loadingText.setText(R.string.login_loading);
         progress.setVisibility(View.GONE);
-        String storedRefreshToken = prefs.getString(RESET_TOKEN, "");
-        if (storedRefreshToken.length() > 0) {
-            progress.setVisibility(View.VISIBLE);
-            acceptEvents = true;
-            RestClient.serviceApi().refreshToken(storedRefreshToken).enqueue();
-        }
         return rootView;
     }
 
