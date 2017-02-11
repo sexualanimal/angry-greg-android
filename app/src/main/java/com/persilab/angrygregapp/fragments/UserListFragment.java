@@ -156,6 +156,7 @@ public class UserListFragment extends ListFragment<User> {
     @Override
     public void onStart() {
         super.onStart();
+        refreshData(false);
         EventBus.getDefault().register(this);
     }
 
