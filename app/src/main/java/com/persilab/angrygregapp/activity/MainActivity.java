@@ -29,7 +29,10 @@ import com.persilab.angrygregapp.fragments.BaseFragment;
 import com.persilab.angrygregapp.fragments.ErrorFragment;
 import com.persilab.angrygregapp.fragments.LoginFragment;
 import com.persilab.angrygregapp.fragments.LogoFragment;
+import com.persilab.angrygregapp.fragments.UserFragment;
+import com.persilab.angrygregapp.fragments.UserListFragment;
 import com.persilab.angrygregapp.net.RestClient;
+import com.persilab.angrygregapp.util.FragmentBuilder;
 import com.persilab.angrygregapp.util.GuiUtils;
 
 import net.vrallev.android.cat.Cat;
@@ -145,11 +148,17 @@ public class MainActivity extends BaseActivity {
                         postEvent(new UserDeletedEvent(networkEvent.status, path.substring(path.indexOf('/') + 1)));
                     }
                     if (method.equals("PUT")) {
+                        FragmentBuilder builder = new FragmentBuilder(getSupportFragmentManager());
+                        builder.putArg(Constants.ArgsName.USER, App.getActualToken().getAccount());
+                        replaceFragment(UserFragment.class, builder);
                         GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
                     }
                 }
                 if (path.matches(RestClient.ACCOUNTS)) {
                     if (method.equals("POST")) {
+                        FragmentBuilder builder = new FragmentBuilder(getSupportFragmentManager());
+                        builder.putArg(Constants.ArgsName.USER, App.getActualToken().getAccount());
+                        replaceFragment(UserListFragment.class, builder);
                         GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
                     }
                 }
