@@ -3,7 +3,6 @@ package com.persilab.angrygregapp.fragments;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -273,7 +272,7 @@ public class UserListFragment extends ListFragment<User> {
                 postEvent(new AllowLoadEvent());
             }
         };
-        handler.postDelayed(waitRunnable,500);
+        handler.postDelayed(waitRunnable, 500);
     }
 
 }

@@ -29,7 +29,6 @@ import com.persilab.angrygregapp.fragments.BaseFragment;
 import com.persilab.angrygregapp.fragments.ErrorFragment;
 import com.persilab.angrygregapp.fragments.LoginFragment;
 import com.persilab.angrygregapp.fragments.LogoFragment;
-import com.persilab.angrygregapp.fragments.UserFragment;
 import com.persilab.angrygregapp.fragments.UserListFragment;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.FragmentBuilder;
@@ -148,9 +147,6 @@ public class MainActivity extends BaseActivity {
                         postEvent(new UserDeletedEvent(networkEvent.status, path.substring(path.indexOf('/') + 1)));
                     }
                     if (method.equals("PUT")) {
-                        FragmentBuilder builder = new FragmentBuilder(getSupportFragmentManager());
-                        builder.putArg(Constants.ArgsName.USER, App.getActualToken().getAccount());
-                        replaceFragment(UserFragment.class, builder);
                         GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
                     }
                 }
@@ -162,7 +158,7 @@ public class MainActivity extends BaseActivity {
                         GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
                     }
                 }
-                if (path.contains("accounts") && !(((Response) networkEvent.message).body() instanceof User)) {
+                if (path.contains("accounts") && ((Response) networkEvent.message).body() instanceof List) {
                     postEvent(new PostLoadEvent((List<User>) ((Response) networkEvent.message).body()));
                 }
             }
