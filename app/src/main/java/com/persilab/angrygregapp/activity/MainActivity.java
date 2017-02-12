@@ -1,7 +1,9 @@
 package com.persilab.angrygregapp.activity;
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.Fragment;
@@ -39,6 +41,8 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.List;
 
 import retrofit2.Response;
+
+import static com.persilab.angrygregapp.domain.Constants.Net.RESET_TOKEN;
 
 
 public class MainActivity extends BaseActivity {
@@ -92,6 +96,10 @@ public class MainActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.action_exit:
                 App.setActualToken(null);
+                SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.remove(RESET_TOKEN);
+                editor.commit();
                 replaceFragment(LoginFragment.class);
                 break;
         }
