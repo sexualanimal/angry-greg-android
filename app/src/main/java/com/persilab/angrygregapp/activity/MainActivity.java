@@ -1,7 +1,9 @@
 package com.persilab.angrygregapp.activity;
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.Fragment;
@@ -19,13 +21,14 @@ import com.persilab.angrygregapp.domain.entity.UserNeedCoffee;
 import com.persilab.angrygregapp.domain.entity.json.JsonError;
 import com.persilab.angrygregapp.domain.event.AddRateEvent;
 import com.persilab.angrygregapp.domain.event.FragmentAttachedEvent;
+import com.persilab.angrygregapp.domain.event.LoadedRefreshTokenEvent;
 import com.persilab.angrygregapp.domain.event.NetworkEvent;
+import com.persilab.angrygregapp.domain.event.PostLoadEvent;
 import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
 import com.persilab.angrygregapp.domain.event.UserDeletedEvent;
 import com.persilab.angrygregapp.domain.event.UserFoundEvent;
-import com.persilab.angrygregapp.fragments.BaseFragment;
-import com.persilab.angrygregapp.fragments.ErrorFragment;
 import com.persilab.angrygregapp.fragments.LoginFragment;
+import com.persilab.angrygregapp.fragments.LogoFragment;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.GuiUtils;
 
@@ -33,9 +36,11 @@ import net.vrallev.android.cat.Cat;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.List;
+
 import retrofit2.Response;
 
-//import com.persilab.angrygregapp.job.TokenUpdateJob;
+import static com.persilab.angrygregapp.domain.Constants.Net.RESET_TOKEN;
 
 
 public class MainActivity extends BaseActivity {
@@ -52,7 +57,7 @@ public class MainActivity extends BaseActivity {
         if (sectionFragment != null) {
             restoreFragment(sectionFragment);
         } else {
-            replaceFragment(LoginFragment.class);
+            replaceFragment(LogoFragment.class);
         }
         getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
@@ -89,6 +94,10 @@ public class MainActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.action_exit:
                 App.setActualToken(null);
+                SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.remove(RESET_TOKEN);
+                editor.commit();
                 replaceFragment(LoginFragment.class);
                 break;
         }
@@ -98,10 +107,6 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(NetworkEvent networkEvent) {
         System.out.println(networkEvent.message.toString());
-        if (networkEvent.request == null) {
-            ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error_network);
-            return;
-        }
         String path = networkEvent.request.url().encodedPath().substring(5);
         String method = networkEvent.request.method();
         if (networkEvent.status == NetworkEvent.Status.FAILURE) {
@@ -121,10 +126,17 @@ public class MainActivity extends BaseActivity {
                     }
                 }
             }
-            ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error);
+            if(((Response)networkEvent.message).code()==403){
+                Response response = (Response) networkEvent.message;
+                postEvent(new TokenUpdateEvent(networkEvent.status, (Token) response.body()));
+            }
+//            ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error); //think about add another errors
         } else {
             if (networkEvent.message instanceof Response) {
                 Response response = (Response) networkEvent.message;
+                if (path.contains("refresh")) {
+                    postEvent(new LoadedRefreshTokenEvent(((Token) ((Response) networkEvent.message).body())));
+                }
                 if (response.body() instanceof Token) {
                     postEvent(new TokenUpdateEvent(networkEvent.status, (Token) response.body()));
                 }
@@ -146,6 +158,9 @@ public class MainActivity extends BaseActivity {
                     if (method.equals("POST")) {
                         GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
                     }
+                }
+                if (path.contains("accounts") && !(((Response) networkEvent.message).body() instanceof User)) {
+                    postEvent(new PostLoadEvent((List<User>) ((Response) networkEvent.message).body()));
                 }
             }
         }

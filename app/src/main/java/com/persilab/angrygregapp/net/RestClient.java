@@ -75,7 +75,7 @@ public class RestClient {
         Call<Token> accessToken(@Query("username") String username,
                                 @Query("password") String password);
 
-        @POST(AUTH + "/refresh/{refreshToken}")
+        @GET(AUTH + "/refresh/{refreshToken}")
         Call<Token> refreshToken(@Path("refreshToken") String refreshToken);
 
         @PUT(ACCOUNTS + "/{id}/points/{points}")

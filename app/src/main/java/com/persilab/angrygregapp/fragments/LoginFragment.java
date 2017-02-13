@@ -1,5 +1,7 @@
 package com.persilab.angrygregapp.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,12 +34,15 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.Bind;
 import butterknife.OnClick;
 
+import static com.persilab.angrygregapp.domain.Constants.Net.RESET_TOKEN;
+
 /**
  * Created by 0shad on 17.06.2016.
  */
 public class LoginFragment extends BaseFragment {
 
     private static final String PHONE = "phone";
+    private SharedPreferences prefs;
 
     @Bind(R.id.login_logo)
     ImageView loginLogo;
@@ -90,6 +95,7 @@ public class LoginFragment extends BaseFragment {
         } finally {
             helper.close();
         }
+        prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
         loadingText.setText(R.string.login_loading);
         progress.setVisibility(View.GONE);
         return rootView;
@@ -113,29 +119,33 @@ public class LoginFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(TokenUpdateEvent updateEvent) {
         progress.setVisibility(View.GONE);
-        if (acceptEvents) {
-            acceptEvents = false;
-            if (updateEvent.status.equals(ResponseEvent.Status.SUCCESS)) {
-                App.setActualToken(updateEvent.message);
-                SnappyHelper helper = new SnappyHelper(getContext(), "login");
-                try {
-                    helper.storeString(PHONE, loginPhone.getText().toString());
-                } catch (SnappydbException e) {
-                    Cat.e("Unknown exception", e);
-                } finally {
-                    helper.close();
+            if (acceptEvents) {
+                acceptEvents = false;
+                if (updateEvent.status.equals(ResponseEvent.Status.SUCCESS)) {
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString(RESET_TOKEN, updateEvent.message.getRefreshToken());
+                    editor.commit();
+                    App.setActualToken(updateEvent.message);
+                    SnappyHelper helper = new SnappyHelper(getContext(), "login");
+                    try {
+                        helper.storeString(PHONE, loginPhone.getText().toString());
+                    } catch (SnappydbException e) {
+                        Cat.e("Unknown exception", e);
+                    } finally {
+                        helper.close();
+                    }
+                    if (updateEvent.message.getAccount().getIs_admin()) {
+                        getMainActivity().replaceFragment(UserListFragment.class);
+                    } else {
+                        FragmentBuilder builder = new FragmentBuilder(getFragmentManager());
+                        builder.putArg(Constants.ArgsName.USER, updateEvent.message.getAccount());
+                        getMainActivity().replaceFragment(UserFragment.class, builder);
+                    }
                 }
-                if (updateEvent.message.getAccount().getIs_admin()) {
-                    getMainActivity().replaceFragment(UserListFragment.class);
-                } else {
-                    FragmentBuilder builder = new FragmentBuilder(getFragmentManager());
-                    builder.putArg(Constants.ArgsName.USER, updateEvent.message.getAccount());
-                    getMainActivity().replaceFragment(UserFragment.class, builder);
+                if (updateEvent.status.equals(ResponseEvent.Status.FAILURE)) {
+                    loginMessage.setVisibility(View.VISIBLE);
                 }
-            }
-            if (updateEvent.status.equals(ResponseEvent.Status.FAILURE)) {
-                loginMessage.setVisibility(View.VISIBLE);
             }
         }
-    }
+
 }
