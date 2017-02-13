@@ -27,8 +27,6 @@ import com.persilab.angrygregapp.domain.event.PostLoadEvent;
 import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
 import com.persilab.angrygregapp.domain.event.UserDeletedEvent;
 import com.persilab.angrygregapp.domain.event.UserFoundEvent;
-import com.persilab.angrygregapp.fragments.BaseFragment;
-import com.persilab.angrygregapp.fragments.ErrorFragment;
 import com.persilab.angrygregapp.fragments.LoginFragment;
 import com.persilab.angrygregapp.fragments.LogoFragment;
 import com.persilab.angrygregapp.net.RestClient;
@@ -109,10 +107,6 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(NetworkEvent networkEvent) {
         System.out.println(networkEvent.message.toString());
-        if (networkEvent.request == null) {
-//            ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error_network);
-            return;
-        }
         String path = networkEvent.request.url().encodedPath().substring(5);
         String method = networkEvent.request.method();
         if (networkEvent.status == NetworkEvent.Status.FAILURE) {
@@ -132,7 +126,11 @@ public class MainActivity extends BaseActivity {
                     }
                 }
             }
-            ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error);
+            if(((Response)networkEvent.message).code()==403){
+                Response response = (Response) networkEvent.message;
+                postEvent(new TokenUpdateEvent(networkEvent.status, (Token) response.body()));
+            }
+//            ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error); //think about add another errors
         } else {
             if (networkEvent.message instanceof Response) {
                 Response response = (Response) networkEvent.message;

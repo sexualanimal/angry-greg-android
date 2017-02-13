@@ -119,32 +119,33 @@ public class LoginFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(TokenUpdateEvent updateEvent) {
         progress.setVisibility(View.GONE);
-        if (acceptEvents) {
-            acceptEvents = false;
-            if (updateEvent.status.equals(ResponseEvent.Status.SUCCESS)) {
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString(RESET_TOKEN, updateEvent.message.getRefreshToken());
-                editor.commit();
-                App.setActualToken(updateEvent.message);
-                SnappyHelper helper = new SnappyHelper(getContext(), "login");
-                try {
-                    helper.storeString(PHONE, loginPhone.getText().toString());
-                } catch (SnappydbException e) {
-                    Cat.e("Unknown exception", e);
-                } finally {
-                    helper.close();
+            if (acceptEvents) {
+                acceptEvents = false;
+                if (updateEvent.status.equals(ResponseEvent.Status.SUCCESS)) {
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString(RESET_TOKEN, updateEvent.message.getRefreshToken());
+                    editor.commit();
+                    App.setActualToken(updateEvent.message);
+                    SnappyHelper helper = new SnappyHelper(getContext(), "login");
+                    try {
+                        helper.storeString(PHONE, loginPhone.getText().toString());
+                    } catch (SnappydbException e) {
+                        Cat.e("Unknown exception", e);
+                    } finally {
+                        helper.close();
+                    }
+                    if (updateEvent.message.getAccount().getIs_admin()) {
+                        getMainActivity().replaceFragment(UserListFragment.class);
+                    } else {
+                        FragmentBuilder builder = new FragmentBuilder(getFragmentManager());
+                        builder.putArg(Constants.ArgsName.USER, updateEvent.message.getAccount());
+                        getMainActivity().replaceFragment(UserFragment.class, builder);
+                    }
                 }
-                if (updateEvent.message.getAccount().getIs_admin()) {
-                    getMainActivity().replaceFragment(UserListFragment.class);
-                } else {
-                    FragmentBuilder builder = new FragmentBuilder(getFragmentManager());
-                    builder.putArg(Constants.ArgsName.USER, updateEvent.message.getAccount());
-                    getMainActivity().replaceFragment(UserFragment.class, builder);
+                if (updateEvent.status.equals(ResponseEvent.Status.FAILURE)) {
+                    loginMessage.setVisibility(View.VISIBLE);
                 }
-            }
-            if (updateEvent.status.equals(ResponseEvent.Status.FAILURE)) {
-                loginMessage.setVisibility(View.VISIBLE);
             }
         }
-    }
+
 }

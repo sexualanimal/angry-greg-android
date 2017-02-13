@@ -48,7 +48,7 @@ public class DefaultCallback<T> implements Callback<T> {
 
     @Override
     public void onResponse(Response<T> response) {
-        switch(response.code()){
+        switch (response.code()) {
             case HttpURLConnection.HTTP_ACCEPTED:
                 System.out.println("202: Accepted");
                 break;
@@ -75,6 +75,7 @@ public class DefaultCallback<T> implements Callback<T> {
                 break;
             case HttpURLConnection.HTTP_FORBIDDEN:
                 System.out.println("403: Forbidden");
+                postErrorEvent(response, response.raw().request());
                 break;
             case HttpURLConnection.HTTP_GATEWAY_TIMEOUT:
                 System.out.println("504: Gateway timeout");
@@ -108,6 +109,7 @@ public class DefaultCallback<T> implements Callback<T> {
                 break;
             case HttpURLConnection.HTTP_NOT_FOUND:
                 System.out.println("404: Not found");
+                postErrorEvent(response, response.raw().request());
                 break;
             case HttpURLConnection.HTTP_NOT_IMPLEMENTED:
                 System.out.println("501: Not implemented");
@@ -117,6 +119,13 @@ public class DefaultCallback<T> implements Callback<T> {
                 break;
             case HttpURLConnection.HTTP_OK:
                 System.out.println("200: OK");
+                if (response.body() != null) {
+                    if (onSuccess != null) {
+                        onSuccess.response(response, this);
+                    } else {
+                        postResponseEvent(response, response.raw().request());
+                    }
+                }
                 break;
             case HttpURLConnection.HTTP_PARTIAL:
                 System.out.println("206: Partial");
@@ -154,26 +163,8 @@ public class DefaultCallback<T> implements Callback<T> {
             case HttpURLConnection.HTTP_VERSION:
                 System.out.println("505: Version not supported");
                 break;
+            default: postErrorEvent(response, response.raw().request());
         }
-
-
-
-//        if (response.code() == HttpURLConnection.HTTP_OK && response.body() != null) {
-//            if (onSuccess != null) {
-//                onSuccess.response(response, this);
-//            } else {
-//                postResponseEvent(response, response.raw().request());
-//            }
-//        } else if (response.code() == HttpURLConnection.HTTP_FORBIDDEN) {
-//            System.out.println("Forbidden!");
-//            postErrorEvent(response, response.raw().request());
-//        } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND) {
-//            System.out.println("Not found :(");
-//            postErrorEvent(response, response.raw().request());
-//            // TODO: think about adding other stuff here
-//        } else {
-//            postErrorEvent(response, response.raw().request());
-//        }
     }
 
     @Override
