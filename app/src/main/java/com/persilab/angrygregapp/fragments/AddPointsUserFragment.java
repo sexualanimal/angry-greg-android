@@ -40,6 +40,10 @@ public class AddPointsUserFragment extends BaseFragment {
     RatingBar ratingBar;
     @Bind(R.id.edit_user_tick)
     ImageView tick;
+    @Bind(R.id.points_name)
+    TextView uName;
+    @Bind(R.id.points_phone)
+    TextView uPhone;
 
     User user;
 
@@ -83,6 +87,8 @@ public class AddPointsUserFragment extends BaseFragment {
     private void updateUi(User user) {
         if (user != null) {
             ratingBar.setCount(user.getAmountOfPoints());
+            uName.setText(user.getName());
+            uPhone.setText(user.getPhone());
         }
     }
 
