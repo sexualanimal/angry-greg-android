@@ -17,15 +17,16 @@
     <string name="female">Ж</string>
     <string name="birthdate_pattern">%1$02d-%2$02d-%3$04d</string>
     <string name="birthdate">Дата Рождения</string>
-    <string name="save">Сохранить</string>
+    <string name="save">Сохранить </string>
     <string name="profile_save_success">Профиль сохранён!</string>
     <string name="email">Email</string>
     <string name="phone_number">Нормер телефона</string>
+    <string name="phone_number_dots">Нормер телефона: </string>
     <string name="share">Поделится</string>
     <string name="search">Поиск...</string>
     <string name="refresh">Обновить</string>
     <string name="ready">Готово</string>
-    <string name="profile_save">Сохранить</string>
+    <string name="profile_save">Сохранить </string>
     <string name="qr_scanner_camera_not_found">Камера не найдена</string>
     <string name="qr_scanner_qr_not_found">QR код не найден</string>
     <string name="user">Пользователь</string>
@@ -40,6 +41,7 @@
     <string name="profile_gender">Пол</string>
     <string name="profile_male">М</string>
     <string name="profile_name">Имя</string>
+    <string name="profile_name_dots">Имя: </string>
     <string name="profile_orders">Moи заказы</string>
     <string name="profile_payment_cards">Мои платежные карты</string>
     <string name="profile_phone">Телефон</string>

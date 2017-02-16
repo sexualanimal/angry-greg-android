@@ -64,6 +64,7 @@
     <string name="points_cups">%1$d points, %2$d cups</string>
     <string name="email">Email</string>
     <string name="phone_number">Phone Number</string>
+    <string name="phone_number_dots">Phone Number: </string>
     <string name="share">Share</string>
     <string name="user_show_qr">Show this QR-code to collect points</string>
     <string name="user_full">You can get free coffee!</string>
@@ -81,6 +82,7 @@
     <string name="profile_city">Город</string>
     <string name="profile_address">Адрес</string>
     <string name="profile_name">Name</string>
+    <string name="profile_name_dots">Name: </string>
     <string name="profile_phone">Phone</string>
     <string name="profile_gender">Пол</string>
     <string name="profile_male">М</string>
@@ -91,8 +93,8 @@
     <string name="profile_addresses">Мои адреса доставки</string>
     <string name="profile_orders">Moи заказы</string>
     <string name="profile_save_success">User saved!</string>
-    <string name="profile_save">Save</string>
-    <string name="save">Save</string>
+    <string name="profile_save">Save </string>
+    <string name="save">Save </string>
     <string name="edit_user_add_points">Add points</string>
     <string name="free_coffee_got_it">Got it</string>
 </resources>
