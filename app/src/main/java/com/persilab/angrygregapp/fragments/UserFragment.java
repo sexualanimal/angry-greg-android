@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.persilab.angrygregapp.App;
 import com.persilab.angrygregapp.R;
@@ -104,9 +105,15 @@ public class UserFragment extends BaseFragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    cardQr.setImageBitmap(QRCode.from(String.valueOf(user.getId())).withCharset("UTF-8").withColor(Color.BLACK, Color.TRANSPARENT).withSize(width, width).bitmap());
-                    getActivity().setTitle(user.getName());
                     initPoints();
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
+        }else{
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getActivity(), "Network error! Check connection...", Toast.LENGTH_SHORT).show();
                     swipeRefreshLayout.setRefreshing(false);
                 }
             });
