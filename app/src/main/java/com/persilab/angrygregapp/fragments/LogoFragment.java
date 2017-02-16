@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.persilab.angrygregapp.App;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.domain.Constants;
-import com.persilab.angrygregapp.domain.event.LoadedRefreshTokenEvent;
+import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.FragmentBuilder;
 
@@ -62,16 +62,16 @@ public class LogoFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onEvent(LoadedRefreshTokenEvent event) {
+    public void onEvent(TokenUpdateEvent event) {
         replaceFragmentRunnable = new Runnable() {
             @Override
             public void run() {
-                App.setActualToken(event.token);
-                if (event.token.getAccount().getIs_admin()) {
+                App.setActualToken(event.message);
+                if (event.message.getAccount().getIs_admin()) {
                     getMainActivity().replaceFragment(UserListFragment.class);
                 } else {
                     FragmentBuilder builder = new FragmentBuilder(getFragmentManager());
-                    builder.putArg(Constants.ArgsName.USER, event.token.getAccount());
+                    builder.putArg(Constants.ArgsName.USER, event.message.getAccount());
                     getMainActivity().replaceFragment(UserFragment.class, builder);
                 }
             }
