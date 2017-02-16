@@ -1,93 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:gravity="center_horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <ImageView
+        android:id="@+id/login_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_huge"
+        android:src="@drawable/logo_greg" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/spacing_huge"
-            android:src="@drawable/logo_greg"
-            android:id="@+id/login_logo"/>
-
-    <LinearLayout
-            android:orientation="horizontal"
-            android:weightSum="1"
-            android:gravity="center_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-    <LinearLayout
-            android:orientation="vertical"
             android:layout_weight="0.6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        <LinearLayout
-                android:orientation="horizontal"
+            android:orientation="vertical">
+
+            <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:layout_height="wrap_content">
-            <ImageView android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                        android:src="@drawable/ic_call_black"/>
-            <EditText
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_call_black" />
+
+                <EditText
+                    android:id="@+id/login_phone"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:inputType="phone"
                     android:ems="10"
                     android:hint="@string/login_phone"
-                    android:id="@+id/login_phone"/>
-        </LinearLayout>
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:layout_height="wrap_content">
-            <ImageView android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:src="@drawable/ic_lock_black"/>
-        <EditText
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:hint="@string/login_password"
-                android:id="@+id/login_password"/>
-        </LinearLayout>
+                    android:inputType="phone" />
+            </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_lock_black" />
+
+                <EditText
+                    android:id="@+id/login_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:ems="10"
+                    android:hint="@string/login_password"
+                    android:inputType="textPassword" />
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
 
     <TextView
-              android:textColor="@color/light_blue"
-              android:textSize="@dimen/text_huge"
-              android:text="@string/login_continue"
-              android:id="@+id/login_continue"
-              android:textStyle="bold"
-              android:layout_width="wrap_content"
-              android:clickable="true"
-              android:layout_marginTop="@dimen/spacing_large"
+        android:id="@+id/login_continue"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:clickable="true"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp" />
+        android:paddingRight="5dp"
+        android:text="@string/login_continue"
+        android:textColor="@color/light_blue"
+        android:textSize="@dimen/text_huge"
+        android:textStyle="bold" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <include layout="@layout/progressbar"/>
+
+        <include layout="@layout/progressbar" />
+
         <TextView
             android:id="@+id/login_remember_password"
-            android:textSize="@dimen/text_medium"
-            android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login_forget"
-            android:textColor="@color/gray"
-            android:textStyle="bold"
+            android:layout_centerInParent="true"
+            android:paddingBottom="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp" />
+            android:paddingTop="10dp"
+            android:text="@string/login_forget"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text_medium"
+            android:textStyle="bold" />
     </RelativeLayout>
 </LinearLayout>

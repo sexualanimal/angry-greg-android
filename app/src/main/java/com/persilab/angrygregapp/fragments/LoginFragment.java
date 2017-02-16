@@ -102,7 +102,7 @@ public class LoginFragment extends BaseFragment {
         rememberPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                getMainActivity().replaceFragment(RememberPasswordFragment.class);
             }
         });
         return rootView;
