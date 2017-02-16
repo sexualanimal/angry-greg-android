@@ -128,8 +128,7 @@ public class MainActivity extends BaseActivity {
                 }
             }
             if (((Response) networkEvent.message).code() == 403) {
-                Response response = (Response) networkEvent.message;
-                postEvent(new TokenUpdateEvent(networkEvent.status, (Token) response.body()));
+                postEvent(new TokenUpdateEvent(networkEvent.status, null));
                 return;
             }
 //            ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error); //think about add another errors
