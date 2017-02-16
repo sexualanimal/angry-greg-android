@@ -29,7 +29,9 @@ import com.persilab.angrygregapp.domain.event.UserDeletedEvent;
 import com.persilab.angrygregapp.domain.event.UserFoundEvent;
 import com.persilab.angrygregapp.fragments.LoginFragment;
 import com.persilab.angrygregapp.fragments.LogoFragment;
+import com.persilab.angrygregapp.fragments.UserListFragment;
 import com.persilab.angrygregapp.net.RestClient;
+import com.persilab.angrygregapp.util.FragmentBuilder;
 import com.persilab.angrygregapp.util.GuiUtils;
 
 import net.vrallev.android.cat.Cat;
@@ -156,10 +158,13 @@ public class MainActivity extends BaseActivity {
                 }
                 if (path.matches(RestClient.ACCOUNTS)) {
                     if (method.equals("POST")) {
+                        FragmentBuilder builder = new FragmentBuilder(getSupportFragmentManager());
+                        builder.putArg(Constants.ArgsName.USER, App.getActualToken().getAccount());
+                        replaceFragment(UserListFragment.class, builder);
                         GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
                     }
                 }
-                if (path.contains("accounts") && !(((Response) networkEvent.message).body() instanceof User)) {
+                if (path.contains("accounts") && ((Response) networkEvent.message).body() instanceof List) {
                     postEvent(new PostLoadEvent((List<User>) ((Response) networkEvent.message).body()));
                 }
             }

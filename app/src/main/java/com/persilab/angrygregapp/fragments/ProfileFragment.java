@@ -166,6 +166,5 @@ public class ProfileFragment extends BaseFragment {
             RestClient.serviceApi().createAccount(App.getActualToken().getAccessToken(), user.getName(), user.getPhone(), user.getBirthday(), null, isAdmin, user.getPassword()).enqueue();
         }
     }
-
 }
 
