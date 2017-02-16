@@ -59,6 +59,7 @@
     <string name="login_continue">Continue</string>
     <string name="login_wrong">Wrong phone or password!</string>
     <string name="login_loading">Authorization…</string>
+    <string name="login_forget">Forgot your password?</string>
     <string name="nopoints">no points</string>
     <string name="points">%d points</string>
     <string name="points_cups">%1$d points, %2$d cups</string>

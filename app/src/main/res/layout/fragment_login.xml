@@ -68,15 +68,26 @@
               android:layout_width="wrap_content"
               android:clickable="true"
               android:layout_marginTop="@dimen/spacing_large"
-              android:layout_marginBottom="@dimen/spacing_large"
-              android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" />
 
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:id="@+id/login_message"
-              android:visibility="gone"
-              android:textColor="@color/red_dark"
-            android:text="@string/login_wrong"/>
-
-    <include layout="@layout/progressbar"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include layout="@layout/progressbar"/>
+        <TextView
+            android:id="@+id/login_remember_password"
+            android:textSize="@dimen/text_medium"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_forget"
+            android:textColor="@color/gray"
+            android:textStyle="bold"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp" />
+    </RelativeLayout>
 </LinearLayout>

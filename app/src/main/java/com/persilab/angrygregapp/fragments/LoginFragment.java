@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.persilab.angrygregapp.App;
 import com.persilab.angrygregapp.R;
@@ -52,8 +53,8 @@ public class LoginFragment extends BaseFragment {
     EditText loginPassword;
     @Bind(R.id.login_continue)
     TextView loginContinue;
-    @Bind(R.id.login_message)
-    TextView loginMessage;
+    @Bind(R.id.login_remember_password)
+    TextView rememberPassword;
     @Bind(R.id.load_progress)
     protected ProgressBar progressBar;
     @Bind(R.id.loading_text)
@@ -98,6 +99,12 @@ public class LoginFragment extends BaseFragment {
         prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
         loadingText.setText(R.string.login_loading);
         progress.setVisibility(View.GONE);
+        rememberPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         return rootView;
     }
 
@@ -109,6 +116,7 @@ public class LoginFragment extends BaseFragment {
         } else if (TextUtils.isEmpty(loginPassword.getText())) {
             loginPassword.setError(getString(R.string.login_password_error));
         } else {
+            rememberPassword.setVisibility(View.GONE);
             acceptEvents = true;
             RestClient.serviceApi().accessToken(loginPhone.getText().toString(), loginPassword.getText().toString()).enqueue();
             progress.setVisibility(View.VISIBLE);
@@ -143,7 +151,13 @@ public class LoginFragment extends BaseFragment {
                     }
                 }
                 if (updateEvent.status.equals(ResponseEvent.Status.FAILURE)) {
-                    loginMessage.setVisibility(View.VISIBLE);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getActivity(), getString(R.string.login_wrong), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    rememberPassword.setVisibility(View.VISIBLE);
                 }
             }
         }
