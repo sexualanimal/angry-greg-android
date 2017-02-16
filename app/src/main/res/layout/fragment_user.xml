@@ -1,63 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:orientation="vertical"
-            android:fillViewport="true"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/user_card_refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:orientation="vertical">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-    <LinearLayout android:orientation="vertical"
-                  android:gravity="center_horizontal"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content">
-        <LinearLayout android:orientation="vertical"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
-            <android.support.percent.PercentRelativeLayout
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.percent.PercentRelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                <ImageView android:id="@+id/user_card_qr"
-                           android:layout_width="match_parent"
-                           android:src="@drawable/ms90"
-                           android:scaleType="centerCrop"
-                           android:adjustViewBounds="true"
-                           android:layout_height="wrap_content"
-                           app:layout_widthPercent="100%"
-                           app:layout_aspectRatio="100%"/>
-            </android.support.percent.PercentRelativeLayout>
-        </LinearLayout>
 
-        <TextView android:layout_width="200dp"
-                  android:layout_height="wrap_content"
-                  android:gravity="center"
-                  android:textSize="@dimen/text_large"
-                  android:layout_margin="@dimen/spacing_xlarge"
-                  android:text="@string/user_show_qr"/>
+                    <ImageView
+                        android:id="@+id/user_card_qr"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/anonim_user"
+                        app:layout_aspectRatio="100%"
+                        app:layout_widthPercent="100%" />
+                </android.support.percent.PercentRelativeLayout>
+            </LinearLayout>
 
-        <LinearLayout android:orientation="vertical"
-                      android:layout_width="match_parent"
-                      android:layout_marginRight="@dimen/spacing_medium"
-                      android:layout_marginLeft="@dimen/spacing_medium"
-                      android:gravity="center_horizontal"
-                      android:layout_height="wrap_content">
-            <!--<TextView android:layout_width="wrap_content"-->
-                      <!--android:layout_height="wrap_content"-->
-                      <!--android:gravity="center"-->
-                      <!--android:textSize="@dimen/text_large"-->
-                      <!--android:textColor="@color/blue_middle"-->
-                      <!--android:text="@string/user_points"-->
-                      <!--android:id="@+id/user_points"/>-->
-            <com.whinc.widget.ratingbar.RatingBar
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_xlarge"
+                android:gravity="center"
+                android:text="@string/user_show_qr"
+                android:textSize="@dimen/text_large" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/spacing_medium"
+                android:layout_marginRight="@dimen/spacing_medium"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+                <!--<TextView android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center"-->
+                <!--android:textSize="@dimen/text_large"-->
+                <!--android:textColor="@color/blue_middle"-->
+                <!--android:text="@string/user_points"-->
+                <!--android:id="@+id/user_points"/>-->
+                <com.whinc.widget.ratingbar.RatingBar
                     android:id="@+id/user_rating"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_margin="0dp"
-                    app:rb_max_count="5"
+                    app:rb_click_rating="false"
                     app:rb_count="0"
                     app:rb_empty="@drawable/gray_star"
                     app:rb_fill="@drawable/red_star"
+                    app:rb_max_count="5"
                     app:rb_space="0dp"
-                    app:rb_click_rating="false"
-                    app:rb_touch_rating="false"/>
+                    app:rb_touch_rating="false" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+
+</android.support.v4.widget.SwipeRefreshLayout>
