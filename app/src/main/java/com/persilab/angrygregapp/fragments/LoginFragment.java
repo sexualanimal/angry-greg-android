@@ -20,6 +20,7 @@ import com.persilab.angrygregapp.database.SnappyHelper;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.event.ResponseEvent;
+import com.persilab.angrygregapp.domain.event.SendTimerEvent;
 import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.FragmentBuilder;
@@ -35,6 +36,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.Bind;
 import butterknife.OnClick;
 
+import static com.persilab.angrygregapp.domain.Constants.ArgsName.IS_WAIT;
+import static com.persilab.angrygregapp.domain.Constants.ArgsName.TIMER;
 import static com.persilab.angrygregapp.domain.Constants.Net.RESET_TOKEN;
 
 /**
@@ -62,6 +65,8 @@ public class LoginFragment extends BaseFragment {
     @Bind(R.id.progress_layout)
     protected RelativeLayout progress;
 
+    int timerCount = 90;
+    boolean isWait = false;
 
     private boolean acceptEvents = false;
 
@@ -102,7 +107,10 @@ public class LoginFragment extends BaseFragment {
         rememberPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getMainActivity().replaceFragment(RememberPasswordFragment.class);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(IS_WAIT, isWait);
+                bundle.putInt(TIMER, timerCount);
+                RememberPasswordFragment.show(LoginFragment.this, bundle);
             }
         });
         return rootView;
@@ -127,39 +135,44 @@ public class LoginFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(TokenUpdateEvent updateEvent) {
         progress.setVisibility(View.GONE);
-            if (acceptEvents) {
-                acceptEvents = false;
-                if (updateEvent.status.equals(ResponseEvent.Status.SUCCESS)) {
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString(RESET_TOKEN, updateEvent.message.getRefreshToken());
-                    editor.commit();
-                    App.setActualToken(updateEvent.message);
-                    SnappyHelper helper = new SnappyHelper(getContext(), "login");
-                    try {
-                        helper.storeString(PHONE, loginPhone.getText().toString());
-                    } catch (SnappydbException e) {
-                        Cat.e("Unknown exception", e);
-                    } finally {
-                        helper.close();
-                    }
-                    if (updateEvent.message.getAccount().getIs_admin()) {
-                        getMainActivity().replaceFragment(UserListFragment.class);
-                    } else {
-                        FragmentBuilder builder = new FragmentBuilder(getFragmentManager());
-                        builder.putArg(Constants.ArgsName.USER, updateEvent.message.getAccount());
-                        getMainActivity().replaceFragment(UserFragment.class, builder);
-                    }
+        if (acceptEvents) {
+            acceptEvents = false;
+            if (updateEvent.status.equals(ResponseEvent.Status.SUCCESS)) {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(RESET_TOKEN, updateEvent.message.getRefreshToken());
+                editor.commit();
+                App.setActualToken(updateEvent.message);
+                SnappyHelper helper = new SnappyHelper(getContext(), "login");
+                try {
+                    helper.storeString(PHONE, loginPhone.getText().toString());
+                } catch (SnappydbException e) {
+                    Cat.e("Unknown exception", e);
+                } finally {
+                    helper.close();
                 }
-                if (updateEvent.status.equals(ResponseEvent.Status.FAILURE)) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getActivity(), getString(R.string.login_wrong), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    rememberPassword.setVisibility(View.VISIBLE);
+                if (updateEvent.message.getAccount().getIs_admin()) {
+                    getMainActivity().replaceFragment(UserListFragment.class);
+                } else {
+                    FragmentBuilder builder = new FragmentBuilder(getFragmentManager());
+                    builder.putArg(Constants.ArgsName.USER, updateEvent.message.getAccount());
+                    getMainActivity().replaceFragment(UserFragment.class, builder);
                 }
             }
+            if (updateEvent.status.equals(ResponseEvent.Status.FAILURE)) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), getString(R.string.login_wrong), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                rememberPassword.setVisibility(View.VISIBLE);
+            }
         }
+    }
 
+    @Subscribe
+    public void onEvent(SendTimerEvent event) {
+        this.timerCount = event.timerCount;
+        this.isWait = event.isWait;
+    }
 }

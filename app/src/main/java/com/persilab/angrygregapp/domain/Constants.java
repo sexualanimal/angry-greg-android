@@ -22,6 +22,9 @@ public class Constants {
         public static final String LOGOUT = "logout";
         public static final String MESSAGE = "message";
         public static final String USER = "user";
+        public static final String BUNDLE = "bundle";
+        public static final String TIMER = "timer";
+        public static final String IS_WAIT = "is_wait";
         public static final String USER_ID = "user_id";
         public static final String RESOURCE_ID = "resource_id";
         public static final String CONFIG_CHANGE = "config_change";
