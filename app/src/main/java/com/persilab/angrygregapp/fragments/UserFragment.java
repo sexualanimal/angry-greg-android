@@ -18,6 +18,7 @@ import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.Token;
 import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
+import com.persilab.angrygregapp.domain.event.UserFoundEvent;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.GuiUtils;
 import com.whinc.widget.ratingbar.RatingBar;
@@ -45,7 +46,6 @@ public class UserFragment extends BaseFragment {
     ImageView cardQr;
     @Bind(R.id.user_card_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
-    Token newToken;
     Handler handler;
     private User user;
     int width;
@@ -72,7 +72,7 @@ public class UserFragment extends BaseFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                RestClient.serviceApi().refreshToken(App.getActualToken().getRefreshToken()).enqueue();
+                RestClient.serviceApi().getAccount(App.getActualToken().getAccessToken(),App.getActualToken().getAccount().getId()).enqueue();
             }
         });
 
@@ -97,27 +97,22 @@ public class UserFragment extends BaseFragment {
 
 
     @Subscribe
-    public void onEvent(TokenUpdateEvent event) {
-        newToken = event.message;
-        if (newToken != null) {
-            App.setActualToken(newToken);
-            user = newToken.getAccount();
+    public void onEvent(UserFoundEvent event) {
+        user = event.message;
+        if (user != null) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     initPoints();
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            });
-        }else{
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getActivity(), "Network error! Check connection...", Toast.LENGTH_SHORT).show();
-                    swipeRefreshLayout.setRefreshing(false);
                 }
             });
         }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override
