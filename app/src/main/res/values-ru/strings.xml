@@ -31,7 +31,7 @@
     <string name="wait_code1">Повторно запросить СМС можно будет через</string>
     <string name="wait_code2">секунд</string>
     <string name="send">Отправить</string>
-    <string name="empty_code">Введите код из СМС</string>
+    <string name="empty_code">Введите код из СМС-сообщения</string>
     <string name="profile_save">Сохранить</string>
     <string name="qr_scanner_camera_not_found">Камера не найдена</string>
     <string name="qr_scanner_qr_not_found">QR код не найден</string>

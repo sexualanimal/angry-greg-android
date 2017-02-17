@@ -60,6 +60,38 @@ public class RememberPasswordFragment extends BaseFragment {
         waitTxt1 = getString(R.string.wait_code1);
         waitTxt2 = getString(R.string.wait_code2);
 
+        sendCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (enterPhone.getText().length() > 0) {
+                    phoneLayout.setVisibility(View.GONE);
+                    passwordLayout.setVisibility(View.VISIBLE);
+                    isWait = true;
+                    countDownTimer.start();
+                } else {
+                    Toast.makeText(getActivity(), R.string.login_phone_error, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        submitCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (enterPassword.getText().length() > 0) {
+                    //add password request
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.empty_code), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
         countDownTimer = new CountDownTimer((timerCount + 1) * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -75,44 +107,11 @@ public class RememberPasswordFragment extends BaseFragment {
                 passwordLayout.setVisibility(View.GONE);
             }
         };
-
-        sendCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (enterPhone.getText().length() > 0) {
-                    phoneLayout.setVisibility(View.GONE);
-                    passwordLayout.setVisibility(View.VISIBLE);
-                    isWait = true;
-                    countDownTimer.start();
-                } else {
-                    Toast.makeText(getActivity(), R.string.login_phone_error, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
         if (isWait) {
             phoneLayout.setVisibility(View.GONE);
             passwordLayout.setVisibility(View.VISIBLE);
             countDownTimer.start();
         }
-
-        submitCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (enterPassword.getText().length()>0) {
-                    //add password request
-                } else {
-                    Toast.makeText(getActivity(), getString(R.string.empty_code), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        return rootView;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
 //        EventBus.getDefault().register(this);
     }
 
@@ -126,6 +125,7 @@ public class RememberPasswordFragment extends BaseFragment {
                         postEvent(new SendTimerEvent(timerCount, isWait));
                     }
                 }, 500);
+
 //        EventBus.getDefault().unregister(this);
         super.onStop();
     }
