@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.persilab.angrygregapp.App;
 import com.persilab.angrygregapp.R;
@@ -31,10 +32,14 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import butterknife.Bind;
 import butterknife.OnClick;
 
 import static com.persilab.angrygregapp.domain.Constants.Net.RESET_TOKEN;
+import static com.persilab.angrygregapp.domain.Constants.Pattern.PHONE_CHECK_REGEX;
 
 /**
  * Created by 0shad on 17.06.2016.
@@ -103,8 +108,9 @@ public class LoginFragment extends BaseFragment {
 
     @OnClick(R.id.login_continue)
     public void onClick() {
-        User user = new User();
-        if (TextUtils.isEmpty(loginPhone.getText())) {
+        Pattern pattern = Pattern.compile(PHONE_CHECK_REGEX);
+        Matcher matcher = pattern.matcher(loginPhone.getText());
+        if (!matcher.matches()) {
             loginPhone.setError(getString(R.string.login_phone_error));
         } else if (TextUtils.isEmpty(loginPassword.getText())) {
             loginPassword.setError(getString(R.string.login_password_error));

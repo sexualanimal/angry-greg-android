@@ -53,9 +53,9 @@
     <string name="back_to_exit">Нажмите назад для выхода</string>
     <string name="choose_file">Выберите Файл</string>
     <string name="login_phone">Phone Number</string>
-    <string name="login_phone_error">Need phone</string>
+    <string name="login_phone_error">Enter correct phone</string>
     <string name="login_password">Password</string>
-    <string name="login_password_error">Need password</string>
+    <string name="login_password_error">Enter password</string>
     <string name="login_continue">Continue</string>
     <string name="login_wrong">Wrong phone or password!</string>
     <string name="login_loading">Authorization…</string>
