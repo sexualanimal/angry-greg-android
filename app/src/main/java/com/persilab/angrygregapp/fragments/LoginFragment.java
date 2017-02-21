@@ -118,7 +118,7 @@ public class LoginFragment extends BaseFragment {
             Matcher matcherSend = patternSend.matcher(loginPhone.getText());
             if (matcherSend.find()) {
                 acceptEvents = true;
-                RestClient.serviceApi().accessToken("+7"+matcherSend.group(), loginPassword.getText().toString()).enqueue(); //можно использовать любой формат
+                RestClient.serviceApi().accessToken("8"+matcherSend.group(), loginPassword.getText().toString()).enqueue(); //можно использовать любой формат
                 progress.setVisibility(View.VISIBLE);
             }
         }
