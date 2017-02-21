@@ -107,18 +107,18 @@ public class LoginFragment extends BaseFragment {
 
     @OnClick(R.id.login_continue)
     public void onClick() {
-        Pattern patternCheck = Pattern.compile(PHONE_CHECK_REGEX);
+        Pattern patternCheck = Pattern.compile(PHONE_CHECK_REGEX);              //проверяем номер, может быть с +7, с 8 или просто десятизначный
         Matcher matcherCheck = patternCheck.matcher(loginPhone.getText());
         if (!matcherCheck.matches()) {
             loginPhone.setError(getString(R.string.login_phone_error));
         } else if (TextUtils.isEmpty(loginPassword.getText())) {
             loginPassword.setError(getString(R.string.login_password_error));
         } else {
-            Pattern patternSend = Pattern.compile(PHONE_SEND_REGEX);
+            Pattern patternSend = Pattern.compile(PHONE_SEND_REGEX);    //выделяю из любого введённого номера десятизначную основу, чтобы потом сохранить в любом удобном формате
             Matcher matcherSend = patternSend.matcher(loginPhone.getText());
             if (matcherSend.find()) {
                 acceptEvents = true;
-                RestClient.serviceApi().accessToken(matcherSend.group(), loginPassword.getText().toString()).enqueue();
+                RestClient.serviceApi().accessToken("+7"+matcherSend.group(), loginPassword.getText().toString()).enqueue(); //можно использовать любой формат
                 progress.setVisibility(View.VISIBLE);
             }
         }
