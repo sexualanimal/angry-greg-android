@@ -64,7 +64,7 @@ public class LoginFragment extends BaseFragment {
     protected TextView loadingText;
     @Bind(R.id.progress_layout)
     protected RelativeLayout progress;
-
+    String validPhone="";
 
     private boolean acceptEvents = false;
 
@@ -117,8 +117,9 @@ public class LoginFragment extends BaseFragment {
             Pattern patternSend = Pattern.compile(PHONE_SEND_REGEX);    //выделяю из любого введённого номера десятизначную основу, чтобы потом сохранить в любом удобном формате
             Matcher matcherSend = patternSend.matcher(loginPhone.getText());
             if (matcherSend.find()) {
+                validPhone = "+7"+matcherSend.group();
                 acceptEvents = true;
-                RestClient.serviceApi().accessToken("+7"+matcherSend.group(), loginPassword.getText().toString()).enqueue(); //можно использовать любой формат
+                RestClient.serviceApi().accessToken(validPhone, loginPassword.getText().toString()).enqueue(); //можно использовать любой формат
                 progress.setVisibility(View.VISIBLE);
             }
         }
@@ -137,7 +138,7 @@ public class LoginFragment extends BaseFragment {
                 App.setActualToken(updateEvent.message);
                 SnappyHelper helper = new SnappyHelper(getContext(), "login");
                 try {
-                    helper.storeString(PHONE, loginPhone.getText().toString());
+                    helper.storeString(PHONE, validPhone);
                 } catch (SnappydbException e) {
                     Cat.e("Unknown exception", e);
                 } finally {
