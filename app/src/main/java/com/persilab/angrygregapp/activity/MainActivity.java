@@ -21,7 +21,6 @@ import com.persilab.angrygregapp.domain.entity.UserNeedCoffee;
 import com.persilab.angrygregapp.domain.entity.json.JsonError;
 import com.persilab.angrygregapp.domain.event.AddRateEvent;
 import com.persilab.angrygregapp.domain.event.FragmentAttachedEvent;
-import com.persilab.angrygregapp.domain.event.LoadedRefreshTokenEvent;
 import com.persilab.angrygregapp.domain.event.NetworkEvent;
 import com.persilab.angrygregapp.domain.event.PostLoadEvent;
 import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
@@ -29,7 +28,9 @@ import com.persilab.angrygregapp.domain.event.UserDeletedEvent;
 import com.persilab.angrygregapp.domain.event.UserFoundEvent;
 import com.persilab.angrygregapp.fragments.LoginFragment;
 import com.persilab.angrygregapp.fragments.LogoFragment;
+import com.persilab.angrygregapp.fragments.UserListFragment;
 import com.persilab.angrygregapp.net.RestClient;
+import com.persilab.angrygregapp.util.FragmentBuilder;
 import com.persilab.angrygregapp.util.GuiUtils;
 
 import net.vrallev.android.cat.Cat;
@@ -120,47 +121,56 @@ public class MainActivity extends BaseActivity {
                 if (path.matches(RestClient.ACCOUNTS + "/[a-z0-9]+")) {
                     if (method.equals("GET")) {
                         postEvent(new UserFoundEvent(networkEvent.status, null));
+                        return;
                     }
                     if (method.equals("DELETE")) {
                         postEvent(new UserDeletedEvent(networkEvent.status, null));
+                        return;
                     }
                 }
             }
-            if(((Response)networkEvent.message).code()==403){
-                Response response = (Response) networkEvent.message;
-                postEvent(new TokenUpdateEvent(networkEvent.status, (Token) response.body()));
+            if (((Response) networkEvent.message).code() == 403) {
+                postEvent(new TokenUpdateEvent(networkEvent.status, null));
+                return;
             }
 //            ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error); //think about add another errors
         } else {
             if (networkEvent.message instanceof Response) {
                 Response response = (Response) networkEvent.message;
-                if (path.contains("refresh")) {
-                    postEvent(new LoadedRefreshTokenEvent(((Token) ((Response) networkEvent.message).body())));
-                }
                 if (response.body() instanceof Token) {
                     postEvent(new TokenUpdateEvent(networkEvent.status, (Token) response.body()));
+                    return;
                 }
                 if (path.contains("points")) {
                     postEvent(new AddRateEvent(networkEvent.status, (UserNeedCoffee) response.body()));
+                    return;
                 }
                 if (path.matches(RestClient.ACCOUNTS + "/[a-z0-9]+")) {
                     if (method.equals("GET")) {
                         postEvent(new UserFoundEvent(networkEvent.status, (User) response.body()));
+                        return;
                     }
                     if (method.equals("DELETE")) {
                         postEvent(new UserDeletedEvent(networkEvent.status, path.substring(path.indexOf('/') + 1)));
+                        return;
                     }
                     if (method.equals("PUT")) {
                         GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
+                        return;
                     }
                 }
                 if (path.matches(RestClient.ACCOUNTS)) {
                     if (method.equals("POST")) {
+                        FragmentBuilder builder = new FragmentBuilder(getSupportFragmentManager());
+                        builder.putArg(Constants.ArgsName.USER, App.getActualToken().getAccount());
+                        replaceFragment(UserListFragment.class, builder);
                         GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
+                        return;
                     }
                 }
-                if (path.contains("accounts") && !(((Response) networkEvent.message).body() instanceof User)) {
+                if (path.contains("accounts") && ((Response) networkEvent.message).body() instanceof List) {
                     postEvent(new PostLoadEvent((List<User>) ((Response) networkEvent.message).body()));
+                    return;
                 }
             }
         }

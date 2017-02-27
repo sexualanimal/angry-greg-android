@@ -18,7 +18,6 @@ import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.activity.MainActivity;
 import com.persilab.angrygregapp.database.SnappyHelper;
 import com.persilab.angrygregapp.domain.Constants;
-import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.event.ResponseEvent;
 import com.persilab.angrygregapp.domain.event.SendTimerEvent;
 import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
@@ -33,12 +32,17 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import butterknife.Bind;
 import butterknife.OnClick;
 
 import static com.persilab.angrygregapp.domain.Constants.ArgsName.IS_WAIT;
 import static com.persilab.angrygregapp.domain.Constants.ArgsName.TIMER;
 import static com.persilab.angrygregapp.domain.Constants.Net.RESET_TOKEN;
+import static com.persilab.angrygregapp.domain.Constants.Pattern.PHONE_CHECK_REGEX;
+import static com.persilab.angrygregapp.domain.Constants.Pattern.PHONE_SEND_REGEX;
 
 /**
  * Created by 0shad on 17.06.2016.
@@ -67,6 +71,7 @@ public class LoginFragment extends BaseFragment {
 
     int timerCount = 90;
     boolean isWait = false;
+    String validPhone="";
 
     private boolean acceptEvents = false;
 
@@ -118,16 +123,22 @@ public class LoginFragment extends BaseFragment {
 
     @OnClick(R.id.login_continue)
     public void onClick() {
-        User user = new User();
-        if (TextUtils.isEmpty(loginPhone.getText())) {
+        Pattern patternCheck = Pattern.compile(PHONE_CHECK_REGEX);              //проверяем номер, может быть с +7, с 8 или просто десятизначный
+        Matcher matcherCheck = patternCheck.matcher(loginPhone.getText());
+        if (!matcherCheck.matches()) {
             loginPhone.setError(getString(R.string.login_phone_error));
         } else if (TextUtils.isEmpty(loginPassword.getText())) {
             loginPassword.setError(getString(R.string.login_password_error));
         } else {
-            rememberPassword.setVisibility(View.GONE);
-            acceptEvents = true;
-            RestClient.serviceApi().accessToken(loginPhone.getText().toString(), loginPassword.getText().toString()).enqueue();
-            progress.setVisibility(View.VISIBLE);
+            Pattern patternSend = Pattern.compile(PHONE_SEND_REGEX);    //выделяю из любого введённого номера десятизначную основу, чтобы потом сохранить в любом удобном формате
+            Matcher matcherSend = patternSend.matcher(loginPhone.getText());
+            if (matcherSend.find()) {
+                rememberPassword.setVisibility(View.GONE);
+                validPhone = "+7"+matcherSend.group();
+                acceptEvents = true;
+                RestClient.serviceApi().accessToken(validPhone, loginPassword.getText().toString()).enqueue(); //можно использовать любой формат
+                progress.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -144,7 +155,7 @@ public class LoginFragment extends BaseFragment {
                 App.setActualToken(updateEvent.message);
                 SnappyHelper helper = new SnappyHelper(getContext(), "login");
                 try {
-                    helper.storeString(PHONE, loginPhone.getText().toString());
+                    helper.storeString(PHONE, validPhone);
                 } catch (SnappydbException e) {
                     Cat.e("Unknown exception", e);
                 } finally {

@@ -40,6 +40,10 @@ public class AddPointsUserFragment extends BaseFragment {
     RatingBar ratingBar;
     @Bind(R.id.edit_user_tick)
     ImageView tick;
+    @Bind(R.id.points_name)
+    TextView uName;
+    @Bind(R.id.points_phone)
+    TextView uPhone;
 
     User user;
 
@@ -60,7 +64,9 @@ public class AddPointsUserFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_points_user, container, false);
         bind(rootView);
-        user = (User) getArguments().getSerializable(Constants.ArgsName.USER);
+        if (user == null) {
+            user = (User) getArguments().getSerializable(Constants.ArgsName.USER);
+        }
         getActivity().setTitle("");
         setHasOptionsMenu(true);
         updateUi(user);
@@ -83,6 +89,8 @@ public class AddPointsUserFragment extends BaseFragment {
     private void updateUi(User user) {
         if (user != null) {
             ratingBar.setCount(user.getAmountOfPoints());
+            uName.setText(user.getName());
+            uPhone.setText(user.getPhone());
         }
     }
 

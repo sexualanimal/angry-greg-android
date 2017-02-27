@@ -2,7 +2,7 @@ package com.persilab.angrygregapp.fragments;
 
 
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -46,6 +46,7 @@ public class UserListFragment extends ListFragment<User> {
 
     private List<User> users = new ArrayList<>();
 
+    Handler handler = new Handler();
     int userListSize = pageSize;
     List<User> loadedUserList = new ArrayList<>();
 
@@ -109,7 +110,8 @@ public class UserListFragment extends ListFragment<User> {
                 adapter.notifyDataSetChanged();
                 break;
             case R.id.user_list_add:
-                System.out.println(findLastVisibleItemPosition(false));
+                userListSize = 10;
+                loadedUserList = new ArrayList<>();
                 ProfileFragment.show(this, new User());
                 break;
         }
@@ -147,7 +149,7 @@ public class UserListFragment extends ListFragment<User> {
                         .accounts(App.getActualToken().getAccessToken(), pageSize).execute().body();
 
             } else {
-                System.out.println("123");
+                System.out.println("not empty");
             }
             return Stream.of(users).skip(skip).limit(size).collect(Collectors.toList());
         };
@@ -156,6 +158,7 @@ public class UserListFragment extends ListFragment<User> {
     @Override
     public void onStart() {
         super.onStart();
+        refreshData(false);
         EventBus.getDefault().register(this);
     }
 
@@ -240,11 +243,18 @@ public class UserListFragment extends ListFragment<User> {
 
     @Subscribe
     public void onEvent(LoadEvent event) throws Exception {
-        RestClient.serviceApi().accounts(App.getActualToken().getAccessToken(), userListSize + pageSize).enqueue();
+        Runnable getListRunnable = new Runnable() {
+            @Override
+            public void run() {
+                RestClient.serviceApi().accounts(App.getActualToken().getAccessToken(), userListSize + pageSize).enqueue();
+            }
+        };
+        handler.post(getListRunnable);
     }
 
     @Subscribe
     public void onEvent(PostLoadEvent event) {
+        loadedUserList = new ArrayList<>();
         if (event.userList.size() > (users.size() + loadedUserList.size())) {
             userListSize += pageSize;
             for (int i = userListSize - pageSize; i < event.userList.size(); i++) {
@@ -257,14 +267,13 @@ public class UserListFragment extends ListFragment<User> {
                 }
             });
         }
-        Thread nThread = new Thread(new Runnable() {
+        Runnable waitRunnable = new Runnable() {
             @Override
             public void run() {
-                SystemClock.sleep(500);
                 postEvent(new AllowLoadEvent());
             }
-        });
-        nThread.run();
+        };
+        handler.postDelayed(waitRunnable, 500);
     }
 
 }
