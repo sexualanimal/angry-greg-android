@@ -22,7 +22,6 @@ import com.persilab.angrygregapp.domain.entity.json.JsonError;
 import com.persilab.angrygregapp.domain.event.AddRateEvent;
 import com.persilab.angrygregapp.domain.event.FragmentAttachedEvent;
 import com.persilab.angrygregapp.domain.event.GoToLoginEvent;
-import com.persilab.angrygregapp.domain.event.LoadedRefreshTokenEvent;
 import com.persilab.angrygregapp.domain.event.NetworkEvent;
 import com.persilab.angrygregapp.domain.event.PostLoadEvent;
 import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
@@ -44,7 +43,6 @@ import java.util.List;
 import retrofit2.Response;
 
 import static com.persilab.angrygregapp.domain.Constants.Net.RESET_TOKEN;
-import retrofit2.Response;
 
 
 public class MainActivity extends BaseActivity {
@@ -110,7 +108,7 @@ public class MainActivity extends BaseActivity {
 
     @Subscribe
     public void onEvent(NetworkEvent networkEvent) {
-        if (networkEvent.request!=null) {
+        if (networkEvent.request != null) {
             System.out.println(networkEvent.message.toString());
             String path = networkEvent.request.url().encodedPath().substring(5);
             String method = networkEvent.request.method();
@@ -139,9 +137,6 @@ public class MainActivity extends BaseActivity {
             } else {
                 if (networkEvent.message instanceof Response) {
                     Response response = (Response) networkEvent.message;
-                    if (path.contains("refresh")) {
-                        postEvent(new LoadedRefreshTokenEvent(((Token) ((Response) networkEvent.message).body())));
-                    }
                     if (response.body() instanceof Token) {
                         postEvent(new TokenUpdateEvent(networkEvent.status, (Token) response.body()));
                     }

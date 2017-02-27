@@ -116,8 +116,6 @@ public class UserListFragment extends ListFragment<User> {
                 adapter.notifyDataSetChanged();
                 break;
             case R.id.user_list_add:
-                userListSize = 10;
-                loadedUserList = new ArrayList<>();
                 ProfileFragment.show(this, new User());
                 break;
         }
