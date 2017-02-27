@@ -51,7 +51,7 @@ public class RestClient{
     public interface RestServiceApi {
 
         @GET(ACCOUNTS)
-        Call<List<User>> accounts(@Header("Authorization") String authentication, @Query("limit") Integer limit);
+        Call<List<User>> accounts(@Header("Authorization") String authentication, @Query("limit") Integer limit, @Query("offset") Integer offset);
 
         @GET(ACCOUNTS + "/{id}")
         Call<User> getAccount(@Header("Authorization") String authentication, @Path("id") Integer id);

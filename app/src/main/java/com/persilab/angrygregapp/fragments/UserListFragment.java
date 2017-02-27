@@ -46,10 +46,9 @@ public class UserListFragment extends ListFragment<User> {
 
     private List<User> users = new ArrayList<>();
 
-    Handler handler = new Handler();
-    int userListSize = pageSize;
     Runnable waitRunnable;
-    List<User> loadedUserList = new ArrayList<>();
+    Handler handler = new Handler();
+    int skipCount = pageSize;
 
     private boolean editMode = false;
 
@@ -142,9 +141,7 @@ public class UserListFragment extends ListFragment<User> {
     @Override
     public void refreshData(boolean showProgress) {
         users.clear();
-        userListSize = 10;
-        loadedUserList = new ArrayList<>();
-        handler.post(waitRunnable);
+        skipCount=pageSize;
         super.refreshData(showProgress);
     }
 
@@ -154,7 +151,7 @@ public class UserListFragment extends ListFragment<User> {
             if (users.isEmpty()) {
                 users = RestClient
                         .serviceApi()
-                        .accounts(App.getActualToken().getAccessToken(), pageSize).execute().body();
+                        .accounts(App.getActualToken().getAccessToken(), pageSize,0).execute().body();
 
             } else {
                 System.out.println("not empty");
@@ -254,7 +251,7 @@ public class UserListFragment extends ListFragment<User> {
         Runnable getListRunnable = new Runnable() {
             @Override
             public void run() {
-                RestClient.serviceApi().accounts(App.getActualToken().getAccessToken(), userListSize + pageSize).enqueue();
+                RestClient.serviceApi().accounts(App.getActualToken().getAccessToken(), pageSize, skipCount).enqueue();
             }
         };
         handler.post(getListRunnable);
@@ -263,18 +260,16 @@ public class UserListFragment extends ListFragment<User> {
 
     @Subscribe
     public void onEvent(PostLoadEvent event) {
-        loadedUserList = new ArrayList<>();
-        if (event.userList.size() > (users.size() + loadedUserList.size())) {
-            userListSize += pageSize;
-            for (int i = userListSize - pageSize; i < event.userList.size(); i++) {
-                loadedUserList.add(event.userList.get(i));
-            }
+
+        if(!event.userList.isEmpty()){
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adapter.addItems(loadedUserList);
+//                    users.addAll(event.userList);
+                    adapter.addItems(event.userList);
                 }
             });
+            skipCount+=pageSize;
         }
     }
 
