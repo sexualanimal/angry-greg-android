@@ -1,6 +1,8 @@
 package com.persilab.angrygregapp.fragments;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -15,14 +17,20 @@ import android.widget.Toast;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.domain.event.SendTimerEvent;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import butterknife.Bind;
 
 import static com.persilab.angrygregapp.domain.Constants.ArgsName.BUNDLE;
 import static com.persilab.angrygregapp.domain.Constants.ArgsName.IS_WAIT;
+import static com.persilab.angrygregapp.domain.Constants.ArgsName.PHONE_PREFS;
 import static com.persilab.angrygregapp.domain.Constants.ArgsName.TIMER;
+import static com.persilab.angrygregapp.domain.Constants.Pattern.PHONE_CHECK_REGEX;
 
 public class RememberPasswordFragment extends BaseFragment {
 
+    private SharedPreferences prefs;
     @Bind(R.id.remember_send)
     TextView sendCode;
     @Bind(R.id.remember_enter)
@@ -43,6 +51,7 @@ public class RememberPasswordFragment extends BaseFragment {
     boolean isWait;
     int timerCount;
     final Handler handler = new Handler();
+    Pattern patternCheck = Pattern.compile(PHONE_CHECK_REGEX);
 
     public static RememberPasswordFragment show(BaseFragment fragment, Bundle bundle) {
         return show(fragment, RememberPasswordFragment.class, BUNDLE, bundle);
@@ -54,6 +63,14 @@ public class RememberPasswordFragment extends BaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_remember_password, container, false);
         bind(rootView);
 
+
+        prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+        String phone = prefs.getString(PHONE_PREFS, "");
+        if (!phone.isEmpty()) {
+            enterPhone.setText(phone);
+        }
+
         isWait = getArguments().getBundle(BUNDLE).getBoolean(IS_WAIT);
         timerCount = getArguments().getBundle(BUNDLE).getInt(TIMER);
 
@@ -63,7 +80,8 @@ public class RememberPasswordFragment extends BaseFragment {
         sendCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (enterPhone.getText().length() > 0) {
+                Matcher matcherCheck = patternCheck.matcher(enterPhone.getText());
+                if (matcherCheck.matches()) {
                     phoneLayout.setVisibility(View.GONE);
                     passwordLayout.setVisibility(View.VISIBLE);
                     isWait = true;
