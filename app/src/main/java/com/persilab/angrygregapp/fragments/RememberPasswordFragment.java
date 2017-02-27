@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.persilab.angrygregapp.R;
-import com.persilab.angrygregapp.domain.event.SendTimerEvent;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,7 +23,7 @@ import butterknife.Bind;
 
 import static com.persilab.angrygregapp.domain.Constants.ArgsName.BUNDLE;
 import static com.persilab.angrygregapp.domain.Constants.ArgsName.IS_WAIT;
-import static com.persilab.angrygregapp.domain.Constants.ArgsName.PHONE_PREFS;
+import static com.persilab.angrygregapp.domain.Constants.ArgsName.PHONE;
 import static com.persilab.angrygregapp.domain.Constants.ArgsName.TIMER;
 import static com.persilab.angrygregapp.domain.Constants.Pattern.PHONE_CHECK_REGEX;
 
@@ -52,9 +51,10 @@ public class RememberPasswordFragment extends BaseFragment {
     int timerCount;
     final Handler handler = new Handler();
     Pattern patternCheck = Pattern.compile(PHONE_CHECK_REGEX);
+    Runnable timerRunnable;
 
-    public static RememberPasswordFragment show(BaseFragment fragment, Bundle bundle) {
-        return show(fragment, RememberPasswordFragment.class, BUNDLE, bundle);
+    public static RememberPasswordFragment show(BaseFragment fragment) {
+        return show(fragment, RememberPasswordFragment.class);
     }
 
     @Override
@@ -66,13 +66,10 @@ public class RememberPasswordFragment extends BaseFragment {
 
         prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
 
-        String phone = prefs.getString(PHONE_PREFS, "");
+        String phone = prefs.getString(PHONE, "");
         if (!phone.isEmpty()) {
             enterPhone.setText(phone);
         }
-
-        isWait = getArguments().getBundle(BUNDLE).getBoolean(IS_WAIT);
-        timerCount = getArguments().getBundle(BUNDLE).getInt(TIMER);
 
         waitTxt1 = getString(R.string.wait_code1);
         waitTxt2 = getString(R.string.wait_code2);
@@ -110,41 +107,50 @@ public class RememberPasswordFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
 
-        countDownTimer = new CountDownTimer((timerCount + 1) * 1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timerCount--;
-                waitNewSms.setText(waitTxt1 + " " + Math.round(millisUntilFinished / 1000) + " " + waitTxt2);
-            }
+        isWait = prefs.getBoolean(IS_WAIT,false);
+        if(isWait) {
+            timerCount = prefs.getInt(TIMER, 90);
+        }else{
+            timerCount = 90;
+        }
 
+        timerRunnable = new Runnable() {
             @Override
-            public void onFinish() {
-                timerCount = 90;
-                isWait = false;
-                phoneLayout.setVisibility(View.VISIBLE);
-                passwordLayout.setVisibility(View.GONE);
+            public void run() {
+                countDownTimer = new CountDownTimer((timerCount + 1) * 1000, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        timerCount--;
+                        waitNewSms.setText(waitTxt1 + " " + Math.round(millisUntilFinished / 1000) + " " + waitTxt2);
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        timerCount = 90;
+                        isWait = false;
+                        timerRunnable.run();
+                        phoneLayout.setVisibility(View.VISIBLE);
+                        passwordLayout.setVisibility(View.GONE);
+                    }
+                };
             }
         };
+        timerRunnable.run();
+
         if (isWait) {
             phoneLayout.setVisibility(View.GONE);
             passwordLayout.setVisibility(View.VISIBLE);
             countDownTimer.start();
         }
-//        EventBus.getDefault().register(this);
     }
 
     @Override
     public void onStop() {
         countDownTimer.cancel();
-        handler.postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        postEvent(new SendTimerEvent(timerCount, isWait));
-                    }
-                }, 500);
-
-//        EventBus.getDefault().unregister(this);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(IS_WAIT, isWait);
+        editor.putInt(TIMER, timerCount);
+        editor.commit();
         super.onStop();
     }
 }

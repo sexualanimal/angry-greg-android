@@ -18,7 +18,6 @@ import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.activity.MainActivity;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.event.ResponseEvent;
-import com.persilab.angrygregapp.domain.event.SendTimerEvent;
 import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.FragmentBuilder;
@@ -34,9 +33,7 @@ import java.util.regex.Pattern;
 import butterknife.Bind;
 import butterknife.OnClick;
 
-import static com.persilab.angrygregapp.domain.Constants.ArgsName.IS_WAIT;
-import static com.persilab.angrygregapp.domain.Constants.ArgsName.PHONE_PREFS;
-import static com.persilab.angrygregapp.domain.Constants.ArgsName.TIMER;
+import static com.persilab.angrygregapp.domain.Constants.ArgsName.PHONE;
 import static com.persilab.angrygregapp.domain.Constants.Net.RESET_TOKEN;
 import static com.persilab.angrygregapp.domain.Constants.Pattern.PHONE_CHECK_REGEX;
 import static com.persilab.angrygregapp.domain.Constants.Pattern.PHONE_SEND_REGEX;
@@ -64,8 +61,6 @@ public class LoginFragment extends BaseFragment {
     @Bind(R.id.progress_layout)
     protected RelativeLayout progress;
 
-    int timerCount = 90;
-    boolean isWait = false;
     String validPhone = "";
     Pattern patternCheck = Pattern.compile(PHONE_CHECK_REGEX);              //проверяем номер, может быть с +7, с 8 или просто десятизначный
     Pattern patternSend = Pattern.compile(PHONE_SEND_REGEX);    //выделяю из любого введённого номера десятизначную основу, чтобы потом сохранить в любом удобном формате
@@ -94,7 +89,7 @@ public class LoginFragment extends BaseFragment {
 
         prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
 
-        String phone = prefs.getString(PHONE_PREFS, "");
+        String phone = prefs.getString(PHONE, "");
         if (!phone.isEmpty()) {
             loginPhone.setText(phone);
             loginPassword.requestFocus();
@@ -105,10 +100,7 @@ public class LoginFragment extends BaseFragment {
         rememberPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putBoolean(IS_WAIT, isWait);
-                bundle.putInt(TIMER, timerCount);
-                RememberPasswordFragment.show(LoginFragment.this, bundle);
+                RememberPasswordFragment.show(LoginFragment.this);
             }
         });
         return rootView;
@@ -142,7 +134,7 @@ public class LoginFragment extends BaseFragment {
             if (updateEvent.status.equals(ResponseEvent.Status.SUCCESS)) {
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString(RESET_TOKEN, updateEvent.message.getRefreshToken());
-                editor.putString(PHONE_PREFS, validPhone);
+                editor.putString(PHONE, validPhone);
                 editor.commit();
                 App.setActualToken(updateEvent.message);
                 if (updateEvent.message.getAccount().getIs_admin()) {
@@ -163,11 +155,5 @@ public class LoginFragment extends BaseFragment {
                 rememberPassword.setVisibility(View.VISIBLE);
             }
         }
-    }
-
-    @Subscribe
-    public void onEvent(SendTimerEvent event) {
-        this.timerCount = event.timerCount;
-        this.isWait = event.isWait;
     }
 }

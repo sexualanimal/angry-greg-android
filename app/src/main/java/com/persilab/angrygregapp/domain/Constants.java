@@ -28,7 +28,7 @@ public class Constants {
         public static final String USER_ID = "user_id";
         public static final String RESOURCE_ID = "resource_id";
         public static final String CONFIG_CHANGE = "config_change";
-        public static final String PHONE_PREFS = "phone_prefs";
+        public static final String PHONE = "phone";
     }
 
     public static class Net {
