@@ -48,8 +48,8 @@
     <string name="profile_birthdate_pattern">%1$02d-%2$02d-%3$04d</string>
     <string name="profile_birthdate">Дата Рождения</string>
     <string name="points_cups">%1$d очков, %2$d чашек</string>
-    <string name="login_password_error">Нужен пароль</string>
-    <string name="login_phone_error">Нужен телефон</string>
+    <string name="login_password_error">Введите пароль</string>
+    <string name="login_phone_error">Введите корректный телефон</string>
     <string name="login_wrong">Неверный телефон или пароль!</string>
     <string name="filter_hint">Фильтр..</string>
     <string name="error_network">Проврьте соединение с\nинтернетом...</string>

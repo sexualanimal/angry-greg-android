@@ -56,6 +56,8 @@ public class Constants {
         public static final String DATA_TIME_PATTERN = "dd-MM-yyyy HH:mm";
         public static final String DATA_ISO_8601_24H_FULL_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
         public static final String DATA_ISO_8601_SHORT_FORMAT = "yyyy-MM-dd";
+        public static final String PHONE_CHECK_REGEX = "^(\\+7|8)?\\d{10}$";
+        public static final String PHONE_SEND_REGEX = "(?<=(\\+7|8|^))\\d{10}$";
     }
 
 }
