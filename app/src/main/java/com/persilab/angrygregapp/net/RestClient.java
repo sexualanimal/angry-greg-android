@@ -2,17 +2,24 @@ package com.persilab.angrygregapp.net;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Handler;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.persilab.angrygregapp.App;
+import com.persilab.angrygregapp.activity.MainActivity;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.Token;
 import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.entity.UserNeedCoffee;
 import com.persilab.angrygregapp.domain.entity.json.JsonEntity;
+import com.persilab.angrygregapp.domain.event.GoToLoginEvent;
+import com.persilab.angrygregapp.fragments.BaseFragment;
+import com.persilab.angrygregapp.fragments.LoginFragment;
 import com.persilab.angrygregapp.net.adapter.BigDecimalTypeAdapter;
 import com.persilab.angrygregapp.net.adapter.UriTypeAdapter;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;
@@ -35,7 +42,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-public class RestClient {
+public class RestClient{
 
     private static final String TAG = RestClient.class.getSimpleName();
     public static final String ACCOUNTS = "accounts";
@@ -120,10 +127,21 @@ public class RestClient {
     }
 
     private static class TokenAuthenticator implements Authenticator {
+        boolean letLoad = true;
+        Handler mHandler = new Handler();
+        Runnable mRunnable = new Runnable() {
+            @Override
+            public void run() {
+                letLoad = true;
+            }
+        };
         @Override
         public Request authenticate(Route route, Response response) throws IOException {
             Context context = App.getInstance();
-            if (context != null) {
+            System.out.println(letLoad);
+            if (context != null && letLoad) {
+                letLoad = false;
+                mHandler.postDelayed(mRunnable,2000);
                 Token oldToken = App.getActualToken();
 
                 // Refresh your access_token using a synchronous api request
@@ -131,7 +149,8 @@ public class RestClient {
                 if (newAccessToken != null) {
                     App.setActualToken(newAccessToken);
                 } else {
-                    return null;//todo
+                    EventBus.getDefault().post(new GoToLoginEvent());
+                    return null;
                 }
 
                 // Add new header to rejected request and retry it

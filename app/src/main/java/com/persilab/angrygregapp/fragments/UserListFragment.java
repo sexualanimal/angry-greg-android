@@ -48,6 +48,7 @@ public class UserListFragment extends ListFragment<User> {
 
     Handler handler = new Handler();
     int userListSize = pageSize;
+    Runnable waitRunnable;
     List<User> loadedUserList = new ArrayList<>();
 
     private boolean editMode = false;
@@ -68,6 +69,12 @@ public class UserListFragment extends ListFragment<User> {
         root.addView(button);
         button.setOnClickListener(v -> QRScannerFragment.show(UserListFragment.this));
         setHasOptionsMenu(true);
+        waitRunnable = new Runnable() {
+            @Override
+            public void run() {
+                postEvent(new AllowLoadEvent());
+            }
+        };
         return root;
     }
 
@@ -137,6 +144,7 @@ public class UserListFragment extends ListFragment<User> {
         users.clear();
         userListSize = 10;
         loadedUserList = new ArrayList<>();
+        handler.post(waitRunnable);
         super.refreshData(showProgress);
     }
 
@@ -250,6 +258,7 @@ public class UserListFragment extends ListFragment<User> {
             }
         };
         handler.post(getListRunnable);
+        handler.postDelayed(waitRunnable, 500);
     }
 
     @Subscribe
@@ -267,13 +276,6 @@ public class UserListFragment extends ListFragment<User> {
                 }
             });
         }
-        Runnable waitRunnable = new Runnable() {
-            @Override
-            public void run() {
-                postEvent(new AllowLoadEvent());
-            }
-        };
-        handler.postDelayed(waitRunnable, 500);
     }
 
 }
