@@ -144,8 +144,7 @@ public class LoginFragment extends BaseFragment {
                     builder.putArg(Constants.ArgsName.USER, updateEvent.message.getAccount());
                     getMainActivity().replaceFragment(UserFragment.class, builder);
                 }
-            }
-            if (updateEvent.status.equals(ResponseEvent.Status.FAILURE)) {
+            } else {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

@@ -60,6 +60,7 @@ public class DefaultCallback<T> implements Callback<T> {
                 break;
             case HttpURLConnection.HTTP_BAD_REQUEST:
                 System.out.println("400: Bad Request");
+                postErrorEvent(response, response.raw().request());
                 break;
             case HttpURLConnection.HTTP_CLIENT_TIMEOUT:
                 System.out.println("408: Client Timeout");
@@ -153,6 +154,7 @@ public class DefaultCallback<T> implements Callback<T> {
                 break;
             case HttpURLConnection.HTTP_UNAUTHORIZED:
                 System.out.println("401: Unauthorized");
+                postErrorEvent(response, response.raw().request());
                 break;
             case HttpURLConnection.HTTP_UNSUPPORTED_TYPE:
                 System.out.println("415: Unsupported type");
@@ -163,7 +165,8 @@ public class DefaultCallback<T> implements Callback<T> {
             case HttpURLConnection.HTTP_VERSION:
                 System.out.println("505: Version not supported");
                 break;
-            default: postErrorEvent(response, response.raw().request());
+            default:
+                postErrorEvent(response, response.raw().request());
         }
     }
 

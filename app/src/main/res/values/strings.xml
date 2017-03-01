@@ -103,5 +103,7 @@
     <string name="profile_save">Save </string>
     <string name="save">Save </string>
     <string name="edit_user_add_points">Add points</string>
+    <string name="edit_user_remove_coffee">Give free coffee</string>
     <string name="free_coffee_got_it">Got it</string>
+    <string name="user_already">User with this phone number \n already exists</string>
 </resources>

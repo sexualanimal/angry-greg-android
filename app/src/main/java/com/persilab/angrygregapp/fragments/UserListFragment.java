@@ -139,7 +139,7 @@ public class UserListFragment extends ListFragment<User> {
     @Override
     public void refreshData(boolean showProgress) {
         users.clear();
-        skipCount=pageSize;
+        skipCount = pageSize;
         super.refreshData(showProgress);
     }
 
@@ -149,7 +149,7 @@ public class UserListFragment extends ListFragment<User> {
             if (users.isEmpty()) {
                 users = RestClient
                         .serviceApi()
-                        .accounts(App.getActualToken().getAccessToken(), pageSize,0).execute().body();
+                        .accounts(App.getActualToken().getAccessToken(), pageSize, 0).execute().body();
 
             } else {
                 System.out.println("not empty");
@@ -259,7 +259,7 @@ public class UserListFragment extends ListFragment<User> {
     @Subscribe
     public void onEvent(PostLoadEvent event) {
 
-        if(!event.userList.isEmpty()){
+        if (!event.userList.isEmpty()) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -267,7 +267,7 @@ public class UserListFragment extends ListFragment<User> {
                     adapter.addItems(event.userList);
                 }
             });
-            skipCount+=pageSize;
+            skipCount += pageSize;
         }
     }
 

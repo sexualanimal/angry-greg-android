@@ -7,15 +7,11 @@ import android.os.Handler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.persilab.angrygregapp.App;
-import com.persilab.angrygregapp.activity.MainActivity;
 import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.Token;
 import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.entity.UserNeedCoffee;
-import com.persilab.angrygregapp.domain.entity.json.JsonEntity;
 import com.persilab.angrygregapp.domain.event.GoToLoginEvent;
-import com.persilab.angrygregapp.fragments.BaseFragment;
-import com.persilab.angrygregapp.fragments.LoginFragment;
 import com.persilab.angrygregapp.net.adapter.BigDecimalTypeAdapter;
 import com.persilab.angrygregapp.net.adapter.UriTypeAdapter;
 
@@ -42,7 +38,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-public class RestClient{
+public class RestClient {
 
     private static final String TAG = RestClient.class.getSimpleName();
     public static final String ACCOUNTS = "accounts";
@@ -57,7 +53,7 @@ public class RestClient{
         Call<User> getAccount(@Header("Authorization") String authentication, @Path("id") Integer id);
 
         @DELETE(ACCOUNTS + "/{id}")
-        Call<JsonEntity> deleteAccount(@Header("Authorization") String authentication, @Path("id") Integer id);
+        Call<String> deleteAccount(@Header("Authorization") String authentication, @Path("id") Integer id);
 
         @PUT(ACCOUNTS + "/{id}")
         Call<User> changeAccount(@Header("Authorization") String authentication,
@@ -135,13 +131,14 @@ public class RestClient{
                 letLoad = true;
             }
         };
+
         @Override
         public Request authenticate(Route route, Response response) throws IOException {
             Context context = App.getInstance();
             System.out.println(letLoad);
             if (context != null && letLoad) {
                 letLoad = false;
-                mHandler.postDelayed(mRunnable,2000);
+                mHandler.postDelayed(mRunnable, 2000);
                 Token oldToken = App.getActualToken();
 
                 // Refresh your access_token using a synchronous api request

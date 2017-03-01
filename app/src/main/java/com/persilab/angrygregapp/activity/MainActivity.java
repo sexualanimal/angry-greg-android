@@ -18,7 +18,6 @@ import com.persilab.angrygregapp.domain.Constants;
 import com.persilab.angrygregapp.domain.entity.Token;
 import com.persilab.angrygregapp.domain.entity.User;
 import com.persilab.angrygregapp.domain.entity.UserNeedCoffee;
-import com.persilab.angrygregapp.domain.entity.json.JsonError;
 import com.persilab.angrygregapp.domain.event.AddRateEvent;
 import com.persilab.angrygregapp.domain.event.FragmentAttachedEvent;
 import com.persilab.angrygregapp.domain.event.GoToLoginEvent;
@@ -27,14 +26,14 @@ import com.persilab.angrygregapp.domain.event.PostLoadEvent;
 import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
 import com.persilab.angrygregapp.domain.event.UserDeletedEvent;
 import com.persilab.angrygregapp.domain.event.UserFoundEvent;
+import com.persilab.angrygregapp.fragments.BaseFragment;
+import com.persilab.angrygregapp.fragments.ErrorFragment;
 import com.persilab.angrygregapp.fragments.LoginFragment;
 import com.persilab.angrygregapp.fragments.LogoFragment;
 import com.persilab.angrygregapp.fragments.UserListFragment;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.FragmentBuilder;
 import com.persilab.angrygregapp.util.GuiUtils;
-
-import net.vrallev.android.cat.Cat;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -43,6 +42,7 @@ import java.util.List;
 import retrofit2.Response;
 
 import static com.persilab.angrygregapp.domain.Constants.Net.RESET_TOKEN;
+import static com.persilab.angrygregapp.net.RestClient.ACCOUNTS;
 
 
 public class MainActivity extends BaseActivity {
@@ -109,64 +109,73 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void onEvent(NetworkEvent networkEvent) {
         if (networkEvent.request != null) {
-            System.out.println(networkEvent.message.toString());
-            String path = networkEvent.request.url().encodedPath().substring(5);
             String method = networkEvent.request.method();
+            Response response = (Response) networkEvent.message;
+            int code = ((Response) networkEvent.message).code();
+
             if (networkEvent.status == NetworkEvent.Status.FAILURE) {
-                Cat.e(networkEvent.message.toString());
-                if (networkEvent.message instanceof JsonError) {
-                    JsonError error = (JsonError) networkEvent.message;
-                    if (path.contains(RestClient.AUTH)) {
+                if (code == 400) {
+                    if (networkEvent.request.url().toString().contains(ACCOUNTS)) {
+                        GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.user_already));
+                        return;
+                    }
+                }
+                if (code == 401) {
+                    System.out.println("401: Unautorized");
+                    return;
+                }
+                if (code == 403) {
+                    if (networkEvent.request.url().toString().contains(RestClient.AUTH + "/access")) {
                         postEvent(new TokenUpdateEvent(networkEvent.status, null));
                         return;
                     }
-                    if (path.matches(RestClient.ACCOUNTS + "/[a-z0-9]+")) {
-                        if (method.equals("GET")) {
-                            postEvent(new UserFoundEvent(networkEvent.status, null));
-                        }
-                        if (method.equals("DELETE")) {
-                            postEvent(new UserDeletedEvent(networkEvent.status, null));
-                        }
+                    if (networkEvent.request.url().toString().contains(RestClient.AUTH + "/refresh")) {
+                        System.out.println("403: Refresh token invalid");
+                        return;
                     }
                 }
-                if (((Response) networkEvent.message).code() == 403) {
-                    Response response = (Response) networkEvent.message;
-                    postEvent(new TokenUpdateEvent(networkEvent.status, (Token) response.body()));
+                if (code == 404) {
+                    System.out.println("404: User not found");
+                    return;
                 }
-//            ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error); //think about add another errors
             } else {
-                if (networkEvent.message instanceof Response) {
-                    Response response = (Response) networkEvent.message;
-                    if (response.body() instanceof Token) {
-                        postEvent(new TokenUpdateEvent(networkEvent.status, (Token) response.body()));
+                if (response.body() instanceof Token) {
+                    postEvent(new TokenUpdateEvent(networkEvent.status, (Token) response.body()));
+                    return;
+                }
+                if (response.body() instanceof UserNeedCoffee) {
+                    postEvent(new AddRateEvent(networkEvent.status, (UserNeedCoffee) response.body()));
+                    return;
+                }
+                if (response.body() instanceof List) {
+                    postEvent(new PostLoadEvent((List<User>) ((Response) networkEvent.message).body()));
+                    return;
+                }
+                if (response.body() instanceof User) {
+                    if (method.equals("POST")) {
+                        FragmentBuilder builder = new FragmentBuilder(getSupportFragmentManager());
+                        builder.putArg(Constants.ArgsName.USER, App.getActualToken().getAccount());
+                        replaceFragment(UserListFragment.class, builder);
+                        GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
+                        return;
                     }
-                    if (path.contains("points")) {
-                        postEvent(new AddRateEvent(networkEvent.status, (UserNeedCoffee) response.body()));
+                    if (method.equals("GET")) {
+                        postEvent(new UserFoundEvent(networkEvent.status, (User) response.body()));
+                        return;
                     }
-                    if (path.matches(RestClient.ACCOUNTS + "/[a-z0-9]+")) {
-                        if (method.equals("GET")) {
-                            postEvent(new UserFoundEvent(networkEvent.status, (User) response.body()));
-                        }
-                        if (method.equals("DELETE")) {
-                            postEvent(new UserDeletedEvent(networkEvent.status, path.substring(path.indexOf('/') + 1)));
-                        }
-                        if (method.equals("PUT")) {
-                            GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
-                        }
+                    if (method.equals("PUT")) {
+                        GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
+                        return;
                     }
-                    if (path.matches(RestClient.ACCOUNTS)) {
-                        if (method.equals("POST")) {
-                            FragmentBuilder builder = new FragmentBuilder(getSupportFragmentManager());
-                            builder.putArg(Constants.ArgsName.USER, App.getActualToken().getAccount());
-                            replaceFragment(UserListFragment.class, builder);
-                            GuiUtils.runInUI(this, var -> GuiUtils.toast(MainActivity.this, R.string.profile_save_success));
-                        }
-                    }
-                    if (path.contains("accounts") && ((Response) networkEvent.message).body() instanceof List) {
-                        postEvent(new PostLoadEvent((List<User>) ((Response) networkEvent.message).body()));
-                    }
+                }
+                if (response.body().equals("ok")) {
+                    postEvent(new UserDeletedEvent(networkEvent.status, null));
+                    return;
                 }
             }
+        } else {
+            ErrorFragment.show((BaseFragment) getCurrentFragment(), R.string.error_network);
+            return;
         }
     }
 

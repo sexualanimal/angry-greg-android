@@ -21,7 +21,6 @@ import java.util.regex.Pattern;
 
 import butterknife.Bind;
 
-import static com.persilab.angrygregapp.domain.Constants.ArgsName.BUNDLE;
 import static com.persilab.angrygregapp.domain.Constants.ArgsName.IS_WAIT;
 import static com.persilab.angrygregapp.domain.Constants.ArgsName.PHONE;
 import static com.persilab.angrygregapp.domain.Constants.ArgsName.TIMER;
@@ -107,10 +106,10 @@ public class RememberPasswordFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
 
-        isWait = prefs.getBoolean(IS_WAIT,false);
-        if(isWait) {
+        isWait = prefs.getBoolean(IS_WAIT, false);
+        if (isWait) {
             timerCount = prefs.getInt(TIMER, 90);
-        }else{
+        } else {
             timerCount = 90;
         }
 

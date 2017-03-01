@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.persilab.angrygregapp.App;
 import com.persilab.angrygregapp.R;
@@ -29,8 +30,12 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.Bind;
+
+import static com.persilab.angrygregapp.domain.Constants.Pattern.PHONE_CHECK_REGEX;
 
 /**
  * Created by 0shad on 04.03.2016.
@@ -154,16 +159,22 @@ public class ProfileFragment extends BaseFragment {
     }
 
     public void save() {
-        int isAdmin;
-        if (user.getIs_admin()) {
-            isAdmin = 1;
+        Pattern patternCheck = Pattern.compile(PHONE_CHECK_REGEX);
+        Matcher matcherCheck = patternCheck.matcher(phone.getText());
+        if (matcherCheck.matches()) {
+            int isAdmin;
+            if (user.getIs_admin()) {
+                isAdmin = 1;
+            } else {
+                isAdmin = 0;
+            }
+            if (user.getId() > 0) {
+                RestClient.serviceApi().changeAccount(App.getActualToken().getAccessToken(), user.getId(), user.getName(), user.getPhone(), user.getBirthday(), null, isAdmin, user.getPassword()).enqueue();
+            } else {
+                RestClient.serviceApi().createAccount(App.getActualToken().getAccessToken(), user.getName(), user.getPhone(), user.getBirthday(), null, isAdmin, user.getPassword()).enqueue();
+            }
         } else {
-            isAdmin = 0;
-        }
-        if (user.getId() > 0) {
-            RestClient.serviceApi().changeAccount(App.getActualToken().getAccessToken(), user.getId(), user.getName(), user.getPhone(), user.getBirthday(), null, isAdmin, user.getPassword()).enqueue();
-        } else {
-            RestClient.serviceApi().createAccount(App.getActualToken().getAccessToken(), user.getName(), user.getPhone(), user.getBirthday(), null, isAdmin, user.getPassword()).enqueue();
+            Toast.makeText(getActivity(), R.string.login_phone_error, Toast.LENGTH_SHORT).show();
         }
     }
 }

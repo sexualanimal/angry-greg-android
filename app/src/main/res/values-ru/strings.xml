@@ -62,6 +62,7 @@
     <string name="edit">Редактировать</string>
     <string name="free_coffee_got_it">Понял</string>
     <string name="edit_user_add_points">Добавить очки</string>
+    <string name="edit_user_remove_coffee">Выдать бесплатную чашку кофе</string>
     <string name="user_list_add">Добавть пользователя</string>
     <string name="user_list_delete">Удалть пользователей</string>
     <string name="input_code">Введите код из СМС</string>
@@ -70,4 +71,5 @@
     <string name="send">Отправить</string>
     <string name="restore">Восстановить</string>
     <string name="empty_code">Введите код из СМС-сообщения</string>
+    <string name="user_already">Пользователь с таким номером \n уже существует</string>
 </resources>

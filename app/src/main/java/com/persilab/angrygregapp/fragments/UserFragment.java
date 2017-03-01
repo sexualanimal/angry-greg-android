@@ -10,14 +10,11 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.persilab.angrygregapp.App;
 import com.persilab.angrygregapp.R;
 import com.persilab.angrygregapp.domain.Constants;
-import com.persilab.angrygregapp.domain.entity.Token;
 import com.persilab.angrygregapp.domain.entity.User;
-import com.persilab.angrygregapp.domain.event.TokenUpdateEvent;
 import com.persilab.angrygregapp.domain.event.UserFoundEvent;
 import com.persilab.angrygregapp.net.RestClient;
 import com.persilab.angrygregapp.util.GuiUtils;
@@ -72,7 +69,7 @@ public class UserFragment extends BaseFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                RestClient.serviceApi().getAccount(App.getActualToken().getAccessToken(),App.getActualToken().getAccount().getId()).enqueue();
+                RestClient.serviceApi().getAccount(App.getActualToken().getAccessToken(), App.getActualToken().getAccount().getId()).enqueue();
             }
         });
 
