@@ -25,12 +25,14 @@ import butterknife.ButterKnife;
 public class AddPointsDialog extends BaseDialog {
 
     private int userId;
+    boolean isRemove;
 
-    public static void show(FragmentManager fragmentManager, User user) {
+    public static void show(FragmentManager fragmentManager, User user, boolean isRemove) {
         AddPointsDialog dialog = (AddPointsDialog) fragmentManager.findFragmentByTag(AddPointsDialog.class.getSimpleName());
         if (dialog == null) {
             dialog = new AddPointsDialog();
             dialog.setUserId(user.getId());
+            dialog.setIsRemove(isRemove);
             dialog.show(fragmentManager, AddPointsDialog.class.getSimpleName());
         }
     }
@@ -40,6 +42,10 @@ public class AddPointsDialog extends BaseDialog {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public void setIsRemove(boolean isRemove) {
+        this.isRemove = isRemove;
     }
 
     @NonNull
@@ -60,7 +66,11 @@ public class AddPointsDialog extends BaseDialog {
 
     @Override
     public void onButtonPositive(DialogInterface dialog) {
-        RestClient.serviceApi().addPoints(App.getActualToken().getAccessToken(), userId, numberPicker.getValue()).enqueue();
+        if (isRemove) {
+//            RestClient.serviceApi().addPoints(App.getActualToken().getAccessToken(), userId, numberPicker.getValue()).enqueue();
+        } else {
+            RestClient.serviceApi().addPoints(App.getActualToken().getAccessToken(), userId, numberPicker.getValue()).enqueue();
+        }
     }
 
 }

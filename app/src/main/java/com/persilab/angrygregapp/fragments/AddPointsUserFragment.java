@@ -44,6 +44,8 @@ public class AddPointsUserFragment extends BaseFragment {
     TextView uName;
     @Bind(R.id.points_phone)
     TextView uPhone;
+    @Bind(R.id.edit_user_remove_coffee)
+    TextView removeCoffee;
 
     User user;
 
@@ -70,8 +72,13 @@ public class AddPointsUserFragment extends BaseFragment {
         getActivity().setTitle("");
         setHasOptionsMenu(true);
         updateUi(user);
+        removeCoffee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddPointsDialog.show(getFragmentManager(), user, true);
+            }
+        });
         return rootView;
-
     }
 
     @Override
@@ -108,6 +115,6 @@ public class AddPointsUserFragment extends BaseFragment {
 
     @OnClick(R.id.edit_user_add)
     public void onClick() {
-        AddPointsDialog.show(getFragmentManager(), user);
+        AddPointsDialog.show(getFragmentManager(), user, false);
     }
 }
